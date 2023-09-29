@@ -1,0 +1,1426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>CPP进阶-线段树</title>
+      <link href="/2022/07/09/CPP%E8%BF%9B%E9%98%B6-%E7%BA%BF%E6%AE%B5%E6%A0%91/"/>
+      <url>/2022/07/09/CPP%E8%BF%9B%E9%98%B6-%E7%BA%BF%E6%AE%B5%E6%A0%91/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-进阶"><a href="#C-进阶" class="headerlink" title="C++进阶"></a>C++进阶</h1><h2 id="线段树"><a href="#线段树" class="headerlink" title="线段树"></a>线段树</h2><blockquote><p>例题ACWING242</p></blockquote><pre class=" language-c++"><code class="language-c++">const int N=1e5+5;ll a[N],m,n;struct tree&#123;ll l,r,sum;&#125;t[4*N];</code></pre><p>建树(预处理)</p><pre class=" language-c++"><code class="language-c++">void build(ll k,ll l,ll r)&#123;    t[k].l=l,t[k].r=r;    if(l==r)return;    ll mid=l+r>>1;    build(k<<1,l,mid);build((k<<1)+1,mid+1,r);&#125;</code></pre><p>询问</p><pre class=" language-c++"><code class="language-c++">ll quest(ll l,ll r,ll k)&#123;    ll res=0;    if(t[k].l>=l&&t[k].r<=r)return t[k].sum;    ll mid=(t[k].l+t[k].r)/2;    if(l<=mid)res=quest(l,r,k<<1);    if(r>mid)res+=quest(l,r,k<<1|1);    return res;&#125;</code></pre><p>修改</p><pre class=" language-c++"><code class="language-c++">void change(ll nk,ll k,ll d)&#123;    t[nk].sum+=d;    if(t[nk].l==t[nk].r)return;    ll mid=(t[nk].l+t[nk].r)/2;    if(k<=mid)change(nk<<1,k,d);    else change((nk<<1)+1,k,d);&#125;</code></pre><pre class=" language-c++"><code class="language-c++">int main()&#123;    cin>>n>>m;    for(ll i=1;i<=n;i++)cin>>a[i];    build(1,1,n);    while(m--)&#123;        char op[2];        ll x,l,r,d;        scanf("%s",op);        if(op[0]=='Q')&#123;cin>>x;cout<<a[x]+quest(1,x,1)<<endl;&#125;        else &#123;cin>>l>>r>>d;change(1,l,d);if(r<n)change(1,r+1,-d);&#125;            &#125;    return 0;&#125;</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> c++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP进阶-树状数组</title>
+      <link href="/2022/07/09/CPP%E8%BF%9B%E9%98%B6-%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/"/>
+      <url>/2022/07/09/CPP%E8%BF%9B%E9%98%B6-%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/</url>
+      
+        <content type="html"><![CDATA[<h1 id="CPP进阶"><a href="#CPP进阶" class="headerlink" title="CPP进阶"></a>CPP进阶</h1><h2 id="树状数组"><a href="#树状数组" class="headerlink" title="树状数组"></a>树状数组</h2><blockquote><p>例题ACWING242</p></blockquote><pre class=" language-c++"><code class="language-c++">const int N=1e5+5;typedef long long ll;int n,m,x;ll c[N],a[N];</code></pre><p>lowbit函数,实际上是查询x在二进制下最后一个1的位数(?)</p><pre class=" language-c++"><code class="language-c++">int lowbit(int x)&#123;return x&-x;&#125;</code></pre><p>修改</p><pre class=" language-c++"><code class="language-c++">void add(int i,int x)&#123;    while(i<=n)    &#123;        c[i]+=x;        i+=lowbit(i);    &#125;&#125;</code></pre><p>求解</p><pre class=" language-c++"><code class="language-c++">ll sum(int x)&#123;    ll res=0;    while(x)    &#123;        res+=c[x];        x-=lowbit(x);    &#125;    return res;&#125;</code></pre><pre class=" language-c++"><code class="language-c++">int main()&#123;    cin>>n>>m;    for(int i=1;i<=n;i++)        scanf("%d",&a[i]);    while(m--)    &#123;        char op[2];        scanf("%s%d",op,&x);        if(op[0]=='Q')            printf("%d\n",sum(x)+a[x]);        else&#123;            int r,b;            scanf("%d%d",&r,&b);            add(x,b);add(r+1,-b);        &#125;    &#125;    return 0;&#125;</code></pre>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP习题-LCA</title>
+      <link href="/2022/07/09/CPP%E8%BF%9B%E9%98%B6-LCA/"/>
+      <url>/2022/07/09/CPP%E8%BF%9B%E9%98%B6-LCA/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-进阶"><a href="#C-进阶" class="headerlink" title="C++进阶"></a>C++进阶</h1><h2 id="LCA（最近公共祖先）（树上问题）"><a href="#LCA（最近公共祖先）（树上问题）" class="headerlink" title="LCA（最近公共祖先）（树上问题）"></a>LCA（最近公共祖先）（树上问题）</h2><blockquote><p>例题ACWING1172</p></blockquote><pre class=" language-c++"><code class="language-c++">const int N = 1e5 + 5;int h[N], cnt, nxt[N], to[N], f[N][20], dep[N], rt, n, m;</code></pre><p>邻接表部分</p><pre class=" language-c++"><code class="language-c++">void add(int a, int b) &#123;    to[++cnt] = b, nxt[cnt] = h[a], h[a] = cnt;&#125;</code></pre><p>一遍dfs预处理深度和从u向上走2^i深度到达的点是什么</p><pre class=" language-c++"><code class="language-c++">void dfs(int u, int fa) &#123;    dep[u] = dep[fa] + 1;    f[u][0] = fa;    for (int i = 1; i < 17; i++)        f[u][i] = f[f[u][i - 1]][i - 1];    for (int i = h[u]; i; i = nxt[i]) &#123;        int v = to[i];        if (v == fa)            continue;        dfs(v, u);    &#125;&#125;</code></pre><p>真正LCA</p><pre class=" language-c++"><code class="language-c++">int lca(int a, int b) &#123;    if (dep[b] > dep[a])//统一将a变成更深的        swap(a, b);    for (int i = 16; i >= 0; i--)//先让a,b在统一高度,再同时向上走        if (dep[f[a][i]] >= dep[b])            a = f[a][i];    if (a == b)        return a;    for (int i = 16; i >= 0; i--)        if (f[a][i] != f[b][i])            a = f[a][i], b = f[b][i];    return f[a][0];&#125;</code></pre><pre class=" language-c++"><code class="language-c++">int main() &#123;    int n;    cin >> n;    while (n--) &#123;        int a, b;        scanf("%d%d", &a, &b);        add(a, b);        add(b, a);    &#125;    dfs(rt, 0);    cin >> m;    while (m--) &#123;        int a, b;        scanf("%d%d", &a, &b);        int l = lca(a, b);        if (l == a)            cout << 1;        else if (l == b)            cout << 2;        else            cout << 0;        cout << endl;    &#125;    return 0;&#125;</code></pre>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP习题-树型DP</title>
+      <link href="/2022/07/09/CPP%E8%BF%9B%E9%98%B6-%E6%A0%91%E5%9E%8BDP/"/>
+      <url>/2022/07/09/CPP%E8%BF%9B%E9%98%B6-%E6%A0%91%E5%9E%8BDP/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-进阶"><a href="#C-进阶" class="headerlink" title="C++ 进阶"></a>C++ 进阶</h1><h2 id="树型DP（动态规划）"><a href="#树型DP（动态规划）" class="headerlink" title="树型DP（动态规划）"></a>树型DP（动态规划）</h2><blockquote><p>例题ACWING285</p></blockquote><pre class=" language-c++"><code class="language-c++">const int N = 1e4 + 5;int h[N], cnt, nxt[N], to[N], f[N][2], w[N], fa[N];int  l, k, rt, n;</code></pre><p>邻接表</p><pre class=" language-c++"><code class="language-c++">void add(int a, int b) &#123;    to[++cnt] = b, nxt[cnt] = h[a], h[a] = cnt;&#125;</code></pre><p>以邻接表dfs为基础</p><pre class=" language-c++"><code class="language-c++">void dfs(int u) &#123;    f[u][1] = w[u]; //如果自己要来先把自己的快乐加上    for (int i = h[u]; i; i = nxt[i]) &#123;        int v = to[i];        //DP的部分        dfs(v);//先递归，因为上面要使用下面的结果        f[u][1] += f[v][0]; //自己要来        f[u][0] += max(f[v][0], f[v][1]); //自己不来    &#125;&#125;</code></pre><pre class=" language-c++"><code class="language-c++">int main() &#123;    cin >> n;    for (int i = 1; i <= n; i++) &#123;        cin >> w[i];    &#125;    for (int i = 1; i < n; i++) &#123;//请勿用while(n--)        cin >> l >> k;        add(k, l);        fa[l] = k;    &#125;    for (int i = 1; i <= n; i++)        if (fa[i] == 0)            rt = i;    dfs(rt);    cout << max(f[rt][1], f[rt][0]);    return 0;&#125;</code></pre>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>ASS介绍</title>
+      <link href="/2022/04/05/ASS%E4%BB%8B%E7%BB%8D/"/>
+      <url>/2022/04/05/ASS%E4%BB%8B%E7%BB%8D/</url>
+      
+        <content type="html"><![CDATA[<h1 id="在线程序"><a href="#在线程序" class="headerlink" title="在线程序"></a>在线程序</h1><p><code>请耐心等待加载</code></p><iframe src='https://ntsc-yrx.github.io/sb3/nass.html' style="width:100%; height:800px"></iframe><hr><h1 id="介绍-amp-相关信息"><a href="#介绍-amp-相关信息" class="headerlink" title="介绍&amp;相关信息"></a>介绍&amp;相关信息</h1><p><strong>最近更新</strong><br><img src="https://asset.gitblock.cn/Media?name=AA2A4ABAB3D9DA39B2BE851DC28EF6F9.png"><br>{.alert .alert-info}<br>#<br><strong>服务器不稳定！</strong><br>因为服务器不稳定，请玩家勤备份数据！（设置&gt;数据链导出）<br>{.alert .alert-danger}<br>#</p><p><strong>限流解决方法</strong><br>我们很抱歉如果您因为<strong>限流</strong>而无法游玩突击方舟,您可以登录<a href="https://ntsc-yrx.github.io/sb3/nass.html">ASS·GIT节点</a>体验.<br>如果认可我们的作品请贡献免费的爱心和收藏!<br>{.alert .alert-danger}<br>#<br><strong>全平台更新公告</strong><br>“记忆链登录”已经更新，请详阅下面的蓝色区域（下面的下面）<br>记忆链已经在全平台部署，使用记忆链登录的玩家可以跨平台登录了！！<br>{.alert .alert-info}<br>#<br><strong>打个广告qwq</strong><br>来看看我的最新作品吧!!<br><a href="https://aerfaying.com/Projects/927998">ColorDrop(音游</a><br><a href="https://aerfaying.com/Projects/935063">ABlog(所有人的博客</a>  {.alert .alert-warning} </p><hr><blockquote><p>目前已经适配手机,电脑!</p></blockquote><blockquote><p>有账户系统的版本(旧版)👉<a href="https://aerfaying.com/Projects/921767">突击方舟HD</a>不推荐!</p></blockquote><p><img src="https://asset.gitblock.cn/Media?name=0F872103F2A0BB3CE4732FC9F7972B16.png">  </p><p><strong>【求中精票（ <del>得寸进尺</del> 】突击·方舟 - 明日方舟A服-Arknights</strong>    </p><hr><p>👇 简介 👇</p><h1 id="突击·方舟（NU版）"><a href="#突击·方舟（NU版）" class="headerlink" title="突击·方舟（NU版）"></a><em>突击·方舟（NU版）</em></h1><blockquote><p>Doctor，欢迎来到 <em>突击·方舟</em></p></blockquote><h1 id="【展示】"><a href="#【展示】" class="headerlink" title="【展示】"></a>【展示】</h1><p><img src="https://asset.gitblock.cn/Media?name=474380E43477CE73F0BC9B72650B381F.png" alt="1"><br><img src="https://asset.gitblock.cn/Media?name=4EF327DCA117C0553877531E91EA833E.png" alt="1"></p><blockquote><p>快速访问本作品（复制此链接 加入收藏栏）👉<a href="https://aerfaying.com/Projects/847744">突击方舟HD</a><br>##<br>我们的目标是：做一个<strong>大游戏</strong> <strong>网游</strong>  堪称<strong>明日方舟 阿尔法服（A服）</strong></p></blockquote><hr><h1 id="【NEWS】"><a href="#【NEWS】" class="headerlink" title="【NEWS】"></a>【NEWS】</h1><h2 id="消息"><a href="#消息" class="headerlink" title="消息"></a>消息</h2><p><code>应急修复补丁：none</code></p><pre><code>UI正在调整中……）干员增加中……作者正在疯狂增加干员突击·方舟 `更新阶段` 已更名为 `NU`————2022，2，1</code></pre><h2 id="活动"><a href="#活动" class="headerlink" title="活动"></a>活动</h2><p><strong>曙光训练场</strong>   <em>new</em><br>曙光，or 余光？你可以使用任何一个干员，并且不用在意成败与否，但能不能从中取得经验就不得而知了<br>{.alert .alert-info} </p><hr><h1 id="【说明·重要】"><a href="#【说明·重要】" class="headerlink" title="【说明·重要】"></a>【说明·重要】</h1><pre><code>UI装载中……UI装载完毕功能加载中……功能加载完毕！</code></pre><pre><code>喜欢的话先收藏！点赞！</code></pre><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p><code>请详细阅读本说明！</code></p><h2 id="游戏内注意事项"><a href="#游戏内注意事项" class="headerlink" title="游戏内注意事项"></a>游戏内注意事项</h2><pre><code>1.只有在跳转页面时会相云端同步数据，所以建议如果不想玩了请按“退出”以再保存一次（请等加载结束后关闭标签页）</code></pre><h1 id=""><a href="#" class="headerlink" title=""></a></h1><p><strong>快捷登录说明</strong><br>(云端功能只在阿尔法营可用）<br>账号系统使用阿尔法营账号  (<a href="https://aerfaying.com/Projects/935063">https://aerfaying.com/Projects/935063</a>)  {.alert .alert-info}<br>#</p><hr><h1 id="【注册账号与数据存储】"><a href="#【注册账号与数据存储】" class="headerlink" title="【注册账号与数据存储】"></a>【注册账号与数据存储】</h1><p><strong>记忆链说明</strong><br>(全平台通用）<br>1.注册账号请输入以下记忆链:<br> <code>\0\0\0\0\0\-1\3/\\</code>   附带初始干员*1<br>2.退出游戏前请在设置里导出新的记忆链!  重要!!!!<br>无法同步至云端!请留意!使用记忆链的优缺点如下:<br>优点:<br>1.数据更安全<br>2.可以跨平台使用<br>缺点:<br>1.麻烦<br>注意!使用记忆链的用户需要在退出游戏之前在设置里导出数据!下次输入新的记忆链!<br> {.alert .alert-info}<br>#<br><strong>使用记忆链警告</strong><br>一旦您使用记忆链登录，您的阿尔法云的数据将不会更新，您的数据不会同步到云，意味着你以后只能用记忆链登录！<br> {.alert .alert-info}<br>#<br><strong>快捷登录转记忆链登录方法</strong><br>您只需要在设置里导出记忆链，下次使用记忆链登录就行了<br> {.alert .alert-info} </p><h2 id="已知BUG（请不要利用它们）"><a href="#已知BUG（请不要利用它们）" class="headerlink" title="已知BUG（请不要利用它们）"></a>已知BUG（请不要利用它们）</h2><pre><code>很多bug</code></pre><h2 id="更新阶段"><a href="#更新阶段" class="headerlink" title="更新阶段"></a>更新阶段</h2><pre><code>---2021from7.22--V阶段from7.28--TS阶段from7.31--SE阶段from8.3--HD阶段---20224.0&gt;&gt;5.0from1.24--NU进度from3.12--MA进度稳定运行中</code></pre><p><strong>致谢</strong><br> MoeCat<br> -X-<br> 未知-LHRNB<br> 血小ban<br> 晨曦SUNRISE<br> （审核）繁水<br>{.alert .alert-warning}<br>#<br><strong>大谢</strong><br> <strong>LyricEpic</strong><br> <strong>SinoVexyph</strong><br> <strong>SisST</strong><br> <strong>云海之子</strong><br>{.alert .alert-warning}<br>#<br><strong>贡献提示</strong><br>请勿在本作品浪费扫帚!作者有ATM!但还是要为你们致谢!<br>{.alert .alert-warning}</p><h1 id="内购统计"><a href="#内购统计" class="headerlink" title="内购统计"></a>内购统计</h1><pre><code>第一次ATM:404  第二次ATM:244</code></pre><hr><p>©2021-2022 Ntsc All rights reserved;{.footer-bar_wrapper_10YKs bg-gray-dark}</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-筛法</title>
+      <link href="/2022/04/04/CPP%E6%95%99%E7%A8%8B-%E7%AD%9B%E6%B3%95/"/>
+      <url>/2022/04/04/CPP%E6%95%99%E7%A8%8B-%E7%AD%9B%E6%B3%95/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="筛法"><a href="#筛法" class="headerlink" title="筛法"></a>筛法</h2><blockquote><p>对应练习:ACWING868</p></blockquote><p>代码1:埃氏筛法</p><pre class=" language-c++"><code class="language-c++">    ans//素数个数,     n//上限,    f[1000001]//是否是素数(0是),    void pre(int n) &#123;    f[1] = 1;    for (int i = 2; i <= n; i++) &#123;        if (!f[i]) &#123;            ans++;//计数:质数的个数            for (int j = i * 2;  j <= n; j += i)                f[j] = 1;        &#125;    &#125;&#125;</code></pre><p>代码2:线性筛法</p><pre class=" language-c++"><code class="language-c++">    ans//素数个数,     n//上限,    p[1000001]//是否是素数(0是),    vis[1000005];void pre() &#123;    p[1] = 1;    for (int i = 2; i <= n; i++) &#123;        if (!vis[i])            p[++ans] = i; //新的素数，加入素数表        for (int j = 1; i * p[j] <= n; j++) &#123;            vis[i * p[j]] = 1;            if (i % p[j] == 0)                break;        &#125;    &#125;&#125;</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP函数-字符（串）函数</title>
+      <link href="/2022/02/02/CPP%E5%87%BD%E6%95%B0-%E5%AD%97%E7%AC%A6%EF%BC%88%E4%B8%B2%EF%BC%89%E5%87%BD%E6%95%B0/"/>
+      <url>/2022/02/02/CPP%E5%87%BD%E6%95%B0-%E5%AD%97%E7%AC%A6%EF%BC%88%E4%B8%B2%EF%BC%89%E5%87%BD%E6%95%B0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-函数"><a href="#C-函数" class="headerlink" title="C++函数"></a>C++函数</h1><h2 id="char字符函数"><a href="#char字符函数" class="headerlink" title="char字符函数"></a><code>char</code>字符函数</h2><pre class=" language-c++"><code class="language-c++">toupper() //函数用来将小写字母转换为大写字母。</code></pre><h2 id="char模拟字符串"><a href="#char模拟字符串" class="headerlink" title="char模拟字符串"></a><code>char</code>模拟字符串</h2><pre class=" language-c++"><code class="language-c++">atof(s);    //将字符串s转换为double的浮点数 </code></pre><h2 id="string字符串函数"><a href="#string字符串函数" class="headerlink" title="string字符串函数"></a><code>string</code>字符串函数</h2><pre class=" language-c++"><code class="language-c++">s.size();    //字符串长度 </code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 函数 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-转进制</title>
+      <link href="/2022/02/02/CPP%E6%95%99%E7%A8%8B-%E8%BD%AC%E8%BF%9B%E5%88%B6/"/>
+      <url>/2022/02/02/CPP%E6%95%99%E7%A8%8B-%E8%BD%AC%E8%BF%9B%E5%88%B6/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="转进制"><a href="#转进制" class="headerlink" title="转进制"></a>转进制</h2><p>模板咯：</p><blockquote><p>从<code>b</code>进制转为10进值</p></blockquote><pre class=" language-c++"><code class="language-c++">int turn(int b, int n) &#123;    int v = 1, b_n = 0;    while (n != 0) &#123;        if (n % 10 >= b)            return 2e9;        b_n += (n % 10) * v;        v *= b;        n /= 10;    &#125;    return b_n;&#125;</code></pre><blockquote><p>从10进制转为<code>b</code>进值</p></blockquote><pre class=" language-c++"><code class="language-c++">int turn(int b, int n) &#123;    int v = 1, b_n = 0;    while (n != 0) &#123;        if (n % b >= 10)            return 2e9;        b_n += (n % b) * v;        v *= 10;        n /= b;    &#125;    return b_n;&#125;</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>FineOS</title>
+      <link href="/2022/01/26/FineOS/"/>
+      <url>/2022/01/26/FineOS/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Fine-OS-主页发布！"><a href="#Fine-OS-主页发布！" class="headerlink" title="Fine OS 主页发布！"></a>Fine OS 主页发布！</h1><p>欢迎访问<a href="https://ntsc-yrx.github.io/File/fos%EF%BC%81%EF%BC%81">https://ntsc-yrx.github.io/File/fos！！</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 软件 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-最短路径</title>
+      <link href="/2022/01/21/CPP%E6%95%99%E7%A8%8B-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/"/>
+      <url>/2022/01/21/CPP%E6%95%99%E7%A8%8B-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++ 教程"></a>C++ 教程</h1><h2 id="最短路径"><a href="#最短路径" class="headerlink" title="最短路径"></a>最短路径</h2><blockquote><p>问题描述:</p></blockquote><p>在一个图中,求从s到t的最短路径</p><blockquote><p>解决办法</p></blockquote><h3 id="方法一-弗洛伊德法"><a href="#方法一-弗洛伊德法" class="headerlink" title="方法一:弗洛伊德法"></a>方法一:弗洛伊德法</h3><p>介绍:<br>这是最简单的方法,时间复杂度为n^3<br>代码:</p><pre class=" language-c++"><code class="language-c++">for(int k=1;k<=n;k++)    //枚举中间点    for(int i=1;i<=n;i++)    //枚举起点        for(int j=1;j<=n;j++)    //枚举终点            diss[i][j]=min(diss[i][j],diss[i][k]+diss[k][j]);    //diss[i][j]表示i到j的距离(权值)</code></pre><p>运行完后直接读取你需要的<code>diss[s][t]</code></p><h3 id="方法2-bellman-ford"><a href="#方法2-bellman-ford" class="headerlink" title="方法2:bellman-ford"></a>方法2:bellman-ford</h3><p>介绍:</p><p>代码:</p><pre class=" language-c++"><code class="language-c++">void ford()&#123;    d[s]=0;    //s是起点    for(int i=1;i<n;i++)      for(int j=1;j<=m;j++)      &#123;        d[b[j]]=min(d[b[j]],d[a[j]]+c[j]);//双向边        d[a[j]]=min(d[a[j]],d[b[j]]+c[j]);      &#125;&#125;</code></pre><p>读取<code>d[t]</code><br>运行完后读取你想要的</p><h3 id="方法4-spfa"><a href="#方法4-spfa" class="headerlink" title="方法4:spfa"></a>方法4:spfa</h3><p>特别之处:<br>可以处理含有负权值的图<br>代码:</p><pre class=" language-c++"><code class="language-c++">void spfa()&#123;    q.push(s);    //s是起点    vis[s]=1;    d[s]=0;    while(q.size())    &#123;        int u=q.front();q.pop();        for(int i=h[u];i;i=nxt[i])        &#123;            int v=to[i];            double w=val[i];            if(d[v]<d[u]+w)continue;            d[v]=d[u]+w;            if(vis[v]==0)vis[v]=1,q.push(v);        &#125;        vis[u]=0;    &#125;&#125;</code></pre><p>读取你要的<code>d[t]</code></p><h3 id="方法3-Dijkastra"><a href="#方法3-Dijkastra" class="headerlink" title="方法3:Dijkastra"></a>方法3:Dijkastra</h3><p>特别之处:<br>只能处理正权值,但速度快且稳定,必须确定起点在哪<br>代码:</p><pre class=" language-c++"><code class="language-c++">void dijkstra(int s)//输入起点&#123;    d[s]=0;    for(int i=1;i<=n;i++)    &#123;        int k=0;        for(int j=1;j<=n;j++)          if(!vis[j]&&(d[j]<d[k]||k==0))            k=j;//找最小的        vis[k]=1;        for(int j=h[k];j;j=nxt[j])          d[to[j]]=min(d[to[j]],d[k]+w[j]);    &#125;&#125;</code></pre><p>运行完后读取你需要的<code>d[s]</code></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 高级教程 </tag>
+            
+            <tag> c++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-拓扑排序</title>
+      <link href="/2022/01/21/CPP%E6%95%99%E7%A8%8B-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/"/>
+      <url>/2022/01/21/CPP%E6%95%99%E7%A8%8B-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/</url>
+      
+        <content type="html"><![CDATA[<h1 id="CPP教程"><a href="#CPP教程" class="headerlink" title="CPP教程"></a>CPP教程</h1><h2 id="拓扑排序（topsort）"><a href="#拓扑排序（topsort）" class="headerlink" title="拓扑排序（topsort）"></a>拓扑排序（topsort）</h2><blockquote><p>例题ACWING848</p></blockquote><pre class=" language-c++"><code class="language-c++">const int N=1e5+5;int h[N],nxt[N],to[N],cnt,du[N],n,m;</code></pre><p>邻接表</p><pre class=" language-c++"><code class="language-c++">void add(int a,int b)&#123;    to[++cnt]=b;nxt[cnt]=h[a];h[a]=cnt;&#125;int q[N],hh,tt;</code></pre><p>拓扑排序</p><pre class=" language-c++"><code class="language-c++">void topsort()&#123;    for(int i=1;i<=n;i++)      if(du[i]==0)        q[++tt]=i;    while(hh<tt)    &#123;        int u=q[++hh];        for(int i=h[u];i;i=nxt[i])        &#123;            int v=to[i];            if(--du[v]==0)q[++tt]=v;        &#125;    &#125;    if(tt<n)cout<<-1<<endl;    else&#123;        for(int i=1;i<=n;i++)          printf("%d ",q[i]);    &#125;&#125;</code></pre><pre class=" language-c++"><code class="language-c++">int main()&#123;    cin>>n>>m;    for(int i=1;i<=m;i++)    &#123;        int a,b;        scanf("%d%d",&a,&b);        add(a,b);        du[b]++;    &#125;    topsort();    return 0;&#125;</code></pre>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-邻接表</title>
+      <link href="/2022/01/21/CPP%E6%95%99%E7%A8%8B-%E9%82%BB%E6%8E%A5%E8%A1%A8/"/>
+      <url>/2022/01/21/CPP%E6%95%99%E7%A8%8B-%E9%82%BB%E6%8E%A5%E8%A1%A8/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="邻接表"><a href="#邻接表" class="headerlink" title="邻接表"></a>邻接表</h2><p>序言：目前最主流的手写存图方式是什么？——<code>邻接表</code></p><p>今天我们就来介绍以下什么是<code>邻接表</code></p><blockquote><p>概念</p></blockquote><blockquote><p>代码</p></blockquote><p>存储</p><pre class=" language-c++"><code class="language-c++">void add(int a, int b) &#123;    to[++cnt] = b;        //新建节点的目标    nxt[cnt] = h[a];    //头插法    h[a] = cnt;        //接上&#125;</code></pre><p>遍历</p><pre class=" language-c++"><code class="language-c++">for(int i=h[u];i;i=nxt[i])    //u是起点//这个代码可以遍历点u的出边;</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> c++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-堆</title>
+      <link href="/2022/01/16/CPP%E6%95%99%E7%A8%8B-%E5%A0%86/"/>
+      <url>/2022/01/16/CPP%E6%95%99%E7%A8%8B-%E5%A0%86/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h2><blockquote><p>请在学习完<code>二叉树</code>后学习堆!</p></blockquote><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><blockquote><p>堆是一个比较有序的二叉树,但只有从父节点到子节点之间有序,左右节点是没有顺序的</p></blockquote><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>1.大根堆</p><blockquote><p>即 这个二叉树从父节点到子节点是从大到小的</p></blockquote><p>2.小根堆</p><blockquote><p>即这个二叉树从父节点到子节点是从小到大的</p></blockquote><h3 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数:"></a>相关函数:</h3><p><code>priority_queue</code>优先序列<br>相关操作:</p><pre class=" language-c++"><code class="language-c++">(p为任意名称)p.pop();     //弹出顶端的数p.push();     //插入一个数并且自动排序p.top();     //读取顶端的数</code></pre><p>说明:<br>优先序列默认是一个大根堆</p><p>定义方式:</p><p>1.大根堆</p><pre class=" language-c++"><code class="language-c++">priority_queue<int> q;    //简写priority_queue<int,vector<int>,less<int> > q;    //全写</code></pre><p>2.小根堆</p><pre class=" language-c++"><code class="language-c++">方法一:你可以把数值变成负数,然后用大根堆的方法,读取时再转换回来方法2:priority_queue<int,vector<int>,greater<int> > q;</code></pre><h3 id="用处"><a href="#用处" class="headerlink" title="用处:"></a>用处:</h3><p>1.堆排序<br>2.快速找第n个最大/小值</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> c++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-高精度</title>
+      <link href="/2022/01/03/CPP%E6%95%99%E7%A8%8B-%E9%AB%98%E7%B2%BE%E5%BA%A6/"/>
+      <url>/2022/01/03/CPP%E6%95%99%E7%A8%8B-%E9%AB%98%E7%B2%BE%E5%BA%A6/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="高精度"><a href="#高精度" class="headerlink" title="高精度"></a>高精度</h2><blockquote><p>介绍:</p></blockquote><p>我们有些时候要对很大的数(超出longlong范围)进行加减乘除,普通的运算符无法完成,我们就需要使用高精度</p><blockquote><p>代码</p></blockquote><pre class=" language-c++"><code class="language-c++">#include <bits/stdc++.h>using namespace std;</code></pre><p>//请将函数复制在你的程序里,不用直接从本文件调用!)</p><pre class=" language-c++"><code class="language-c++">//前置（定义变量）（将此代码复制在主函数外）string sa, sb;int la, lb, lc;int a[99999], b[99999], c[99999];//前置（输入并处理）（放在运算函数的前面）cin >> sa >> sb;la = sa.size();lb = sb.size();lc = max(la, lb);for (int i = 0; i < la; i++)    a[la - i] = sa[i] - '0';for (int i = 0; i < lb; i++)    b[lb - i] = sb[i] - '0';//输出结果的代码for (int i = lc; i > 0; i--)    cout << c[i];</code></pre><h3 id="大数加法"><a href="#大数加法" class="headerlink" title="大数加法"></a>大数加法</h3><p>//参数(加数,加数,进制(&lt;=10))</p><pre class=" language-c++"><code class="language-c++">void add(int B) &#123;    for (int i = 0; i <= lc; i++) //先加        c[i] = a[i] + b[i];    for (int i = 0; i <= lc; i++) &#123; //进位        c[i + 1] += c[i] / B;        c[i] %= B;    &#125;    if (c[lc + 1] != 0)        lc++;    while (c[lc] == 0 && lc > 1)        lc--;//去前导0&#125;</code></pre><h3 id="大数减法"><a href="#大数减法" class="headerlink" title="大数减法"></a>大数减法</h3><pre class=" language-c++"><code class="language-c++">void sub() &#123;    for (int i = 0; i <= lc; i++)        c[i] = a[i] - b[i];    for (int i = 0; i <= lc; i++) &#123;        if (c[i] < 0) &#123;            c[i] += 10;            c[i + 1]--;        &#125;    &#125;    while (c[lc] == 0 && lc > 1)        lc--;&#125;</code></pre><h3 id="大数乘法"><a href="#大数乘法" class="headerlink" title="大数乘法"></a>大数乘法</h3><p>//因数：sa，x（int）</p><pre class=" language-c++"><code class="language-c++">void mul_small(int x) &#123;    for (int i = 0; i <= lc; i++) //先加        c[i] = a[i] * x;    for (int i = 0; i <= lc; i++) &#123; //进位        c[i + 1] += c[i] / 10;        c[i] %= 10;    &#125;    if (c[lc + 1] != 0)        lc++;    while (c[lc] == 0 && lc > 1)        lc--;//去前导0&#125;</code></pre><p>//双大数乘法</p><pre class=" language-c++"><code class="language-c++">string s1, s2;string mul() &#123;    int n1 = s1.size(), n2 = s2.size();    string res(n1 + n2, '0');    for (int i = n1 - 1; i >= 0; i--) &#123;        for (int j = n2 - 1; j >= 0; j--) &#123;            int t = res[i + j + 1] - '0' + (s1[i] - '0') * (s2[j] - '0'); //加本位            res[i + j] += t / 10;            res[i + j + 1] = t % 10 + '0';        &#125;    &#125;    for (int i = 0; i < n1 + n2; i++)        if (res[i] != '0')            return res.substr(i);    return "0";&#125;int main() &#123;    cin >> s1 >> s2;    cout << mul() << endl;    return 0;&#125;</code></pre><h3 id="大数除法-大数-单精度"><a href="#大数除法-大数-单精度" class="headerlink" title="大数除法(大数/单精度)"></a>大数除法(大数/单精度)</h3><pre class=" language-c++"><code class="language-c++">void div_small(int x) &#123;    lc = la;    for (int i = 0; i < lc; i++) &#123;        c[i] = a[i] / x;        a[i + 1] += (a[i] % x) * 10;    &#125;    c[lc] = a[lc] / x;    int yu = a[lc] % x;&#125;</code></pre><p>//大数除法(大数/大数)<br>void div_big() {</p><p>}</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP有用的函数2</title>
+      <link href="/2022/01/03/CPP%E6%9C%89%E7%94%A8%E7%9A%84%E5%87%BD%E6%95%B02/"/>
+      <url>/2022/01/03/CPP%E6%9C%89%E7%94%A8%E7%9A%84%E5%87%BD%E6%95%B02/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP有用的函数-判断&amp;计算</title>
+      <link href="/2022/01/03/CPP%E6%9C%89%E7%94%A8%E7%9A%84%E5%87%BD%E6%95%B0(%E9%9D%9E%E8%87%AA%E5%B8%A6)/"/>
+      <url>/2022/01/03/CPP%E6%9C%89%E7%94%A8%E7%9A%84%E5%87%BD%E6%95%B0(%E9%9D%9E%E8%87%AA%E5%B8%A6)/</url>
+      
+        <content type="html"><![CDATA[<h1 id="有用的函数（非自带）"><a href="#有用的函数（非自带）" class="headerlink" title="有用的函数（非自带）"></a>有用的函数（非自带）</h1><h2 id="1-计算GND"><a href="#1-计算GND" class="headerlink" title="1.计算GND"></a>1.计算GND</h2><p>方法：辗转相除法<br>代码</p><pre class=" language-c++"><code class="language-c++">int gcd(int a, int b) &#123;    if (b == 0)        return a;    return gcd(b, a % b);&#125;</code></pre><h2 id="2-判断质数"><a href="#2-判断质数" class="headerlink" title="2.判断质数"></a>2.判断质数</h2><p>//返回值,是返回true,不是返回false</p><pre class=" language-c++"><code class="language-c++">bool if_prime(int x) &#123;    if (x < 2)        return false;    for (int i = 2; i <= sqrt(x); i++) &#123;        if (x % i == 0)            return false;    &#125;    return true;&#125;</code></pre><h2 id="3-阶乘"><a href="#3-阶乘" class="headerlink" title="3.阶乘"></a>3.阶乘</h2><p>//参数(开始,结尾,间隔)</p><pre class=" language-c++"><code class="language-c++">int fac_torial(int a, int b, int n) &#123;    int sum = 1;    for (int i = a; i <= b; i += n) &#123;        sum *= i;    &#125;    return sum;&#125;</code></pre><h2 id="4-求倒序数"><a href="#4-求倒序数" class="headerlink" title="4.求倒序数"></a>4.求倒序数</h2><pre class=" language-c++"><code class="language-c++">int dao(int n) &#123;    int sum = 0;    while(n > 0)    &#123;        sum = sum * 10 + n % 10;        n /= 10;    &#125;    return sum;&#125;</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 函数 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>我的MC服务器</title>
+      <link href="/2021/12/12/ntscyrx-mc-server/"/>
+      <url>/2021/12/12/ntscyrx-mc-server/</url>
+      
+        <content type="html"><![CDATA[<h1 id="MOD服务器正式上线！"><a href="#MOD服务器正式上线！" class="headerlink" title="MOD服务器正式上线！"></a>MOD服务器正式上线！</h1><h2 id="端口"><a href="#端口" class="headerlink" title="端口"></a>端口</h2><pre><code>play.simpfun.cn:26185</code></pre><h2 id="要求"><a href="#要求" class="headerlink" title="要求"></a>要求</h2><pre><code>mc版本:1.12.2正版账号:不需要含Mod:有</code></pre><h2 id="mod文件："><a href="#mod文件：" class="headerlink" title="mod文件："></a>mod文件：</h2><pre><code>https://ntsc-yrx.github.io/2021/12/12/ntscyrx-mc-server/mods.7z</code></pre><h1 id="Ntsc服务器正式上线！"><a href="#Ntsc服务器正式上线！" class="headerlink" title="Ntsc服务器正式上线！"></a>Ntsc服务器正式上线！</h1><h2 id="端口-1"><a href="#端口-1" class="headerlink" title="端口"></a>端口</h2><pre><code>play.simpfun.cn:20182</code></pre><h2 id="要求-1"><a href="#要求-1" class="headerlink" title="要求"></a>要求</h2><pre><code>mc版本:1.12.2正版账号:不需要含Mod:无</code></pre><h2 id="内容-amp-简介"><a href="#内容-amp-简介" class="headerlink" title="内容&amp;简介"></a>内容&amp;简介</h2><p>在是一个低性能的mc生存服务器,支持5人以下同时在线</p><h2 id="开服时间"><a href="#开服时间" class="headerlink" title="开服时间"></a>开服时间</h2><p>每周六8：00~周日21：00<br>如果有大佬要play，QQ或发邮件或在留言板中告诉我，我另外开服务器</p><hr><h2 id="注意！"><a href="#注意！" class="headerlink" title="注意！"></a>注意！</h2><blockquote><p>在无mod服务器下：</p></blockquote><pre><code>若客户端安装了有物品的mod，则无法使用若客户端安装了无物品（辅助）mod，无影响</code></pre><blockquote><p>在有无物品mod服务器下：</p></blockquote><pre><code>若客户端没有安装forge无法进入若客户端不安装mod可以正常上线</code></pre><blockquote><p>在有有物品mod服务器下：</p></blockquote><pre><code>若客户端没有安装forge无法进入若客户端不安装mod不可以正常上线</code></pre><p> qq[qq] 56863066</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 游戏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MD教程</title>
+      <link href="/2021/11/20/MD%E6%95%99%E7%A8%8B/"/>
+      <url>/2021/11/20/MD%E6%95%99%E7%A8%8B/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Markdown-教程"><a href="#Markdown-教程" class="headerlink" title="Markdown 教程"></a>Markdown 教程</h1><table><thead><tr><th><em><strong>*Markdown语法*</strong></em></th><th><em><strong>*详解*</strong></em></th><th><em><strong>*快捷键*</strong></em></th><th><em><strong>*效果*</strong></em></th></tr></thead><tbody><tr><td><em>斜体</em></td><td>无</td><td>Ctrl/⌘ + I</td><td><strong>斜体</strong></td></tr><tr><td><strong>粗体</strong></td><td>无</td><td>Ctrl/⌘ + B</td><td><em><strong>*粗体*</strong></em></td></tr><tr><td># 一级标题</td><td>“#”后需加空格</td><td>无</td><td>无</td></tr><tr><td>## 二级标题</td><td>以此类推三级标题为三个“#”</td><td>无</td><td>无</td></tr><tr><td><a href="http://a/">链接</a></td><td>“[ ]”间为显示的超文本</td><td>Ctrl/⌘ + K</td><td><a href="https://baike.baidu.com/item/%E9%93%BE%E6%8E%A5/2665501">链接</a></td></tr><tr><td><img src="http://url/a.png" alt="图片"></td><td>“[ ]”间为图片名</td><td>Ctrl/⌘ + Shift + I</td><td><img src="file:///C:\Users\WYH\AppData\Local\Temp\ksohtml\wps45A5.tmp.jpg" alt="img"></td></tr><tr><td>“ &gt; ”引用</td><td>“ &gt; “后需加空格</td><td>Ctrl + Q</td><td>无</td></tr><tr><td>* 无序列表</td><td>无</td><td>Ctrl + L</td><td>无</td></tr><tr><td>1. 有序列表</td><td>无</td><td>无</td><td>无</td></tr><tr><td>—</td><td>水平分割线</td><td>无</td><td>————</td></tr><tr><td><code>内联代码</code> 的使用</td><td>无</td><td>Ctrl/⌘ + Shift + K</td><td>无</td></tr><tr><td><code>代码块</code></td><td>无</td><td>无</td><td>无</td></tr><tr><td>颜色代码</td><td></td><td>无</td><td>无</td></tr><tr><td><em><strong>斜体+粗体</strong></em></td><td>无</td><td>无</td><td>**<em>*<em>斜体+粗体*</em>*</em>*</td></tr><tr><td>居中格式</td><td>文字</td><td>无</td><td>文字</td></tr><tr><td>自动换行</td><td>例：1234567890</td><td>Enter</td><td>1234567890</td></tr><tr><td>输入框</td><td>例：1234</td><td>无</td><td>输入框内的1234</td></tr><tr><td>颜色第二种</td><td>文字</td><td>无</td><td>无</td></tr><tr><td>文字大小</td><td>文字</td><td>无</td><td>无</td></tr><tr><td>字体</td><td></td><td>无</td><td>无</td></tr></tbody></table>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>STL-stack</title>
+      <link href="/2021/11/14/STL-stack/"/>
+      <url>/2021/11/14/STL-stack/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-之STL"><a href="#C-之STL" class="headerlink" title="C++之STL"></a>C++之STL</h1><h2 id="stack栈"><a href="#stack栈" class="headerlink" title="stack栈"></a><code>stack</code>栈</h2><blockquote><p>含义</p></blockquote><p>只能先进后出</p><blockquote><p>定义</p></blockquote><pre class=" language-c++"><code class="language-c++">stack<存储数据的类型> 栈名//egstack<int> sta;</code></pre><blockquote><p>操作</p></blockquote><pre class=" language-c++"><code class="language-c++">sta.pop()//弹出sta.top()//读取栈顶sta.push()//压入sta.empty()//判断是否为空</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> STL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>STL-map</title>
+      <link href="/2021/11/14/STL-map/"/>
+      <url>/2021/11/14/STL-map/</url>
+      
+        <content type="html"><![CDATA[<h1 id="之STL"><a href="#之STL" class="headerlink" title="++之STL"></a>++之STL</h1><h2 id="map无限桶"><a href="#map无限桶" class="headerlink" title="map无限桶"></a><code>map</code>无限桶</h2><blockquote><p>语法:</p></blockquote><pre class=" language-c++"><code class="language-c++">map<桶的下标的类型,桶的内容的类型> 桶名;//egmap<long long,int> p定义了一个最高支持下标为longlong大小的int桶</code></pre><blockquote><p>插入:</p></blockquote><pre class=" language-c++"><code class="language-c++">q[num]=num2;</code></pre><p>注<br>如果读取了一个不存在的项目,则值为0;</p><blockquote><p>遍历方法</p></blockquote><p>定义一个<code>迭代器</code></p><pre class=" language-c++"><code class="language-c++">map<类型(与上方的保持一致)>::iterator 迭代器名//egmap<int>::iterator it</code></pre><p>然后</p><pre class=" language-c++"><code class="language-c++">for(int it=map.begin();it<map.end();it++)&#123;    p[it]....操作&#125;</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> STL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>STL-set</title>
+      <link href="/2021/11/14/STL-set/"/>
+      <url>/2021/11/14/STL-set/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-之STL"><a href="#C-之STL" class="headerlink" title="C++之STL"></a>C++之STL</h1><h2 id="set顺序不重复数列"><a href="#set顺序不重复数列" class="headerlink" title="set顺序不重复数列"></a><code>set</code>顺序不重复数列</h2><blockquote><p>含义</p></blockquote><p>存入<code>set</code>中的数组是升序的,不重复的(自动去重)</p><blockquote><p>定义</p></blockquote><pre class=" language-c++"><code class="language-c++">set<存储数据的类型> 数列名//egset<int> s</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> STL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>奇怪的字符-自带字体的字符</title>
+      <link href="/2021/11/11/%E5%A5%87%E6%80%AA%E7%9A%84%E5%AD%97%E7%AC%A6-%E8%87%AA%E5%B8%A6%E5%AD%97%E4%BD%93%E7%9A%84%E5%AD%97%E7%AC%A6/"/>
+      <url>/2021/11/11/%E5%A5%87%E6%80%AA%E7%9A%84%E5%AD%97%E7%AC%A6-%E8%87%AA%E5%B8%A6%E5%AD%97%E4%BD%93%E7%9A%84%E5%AD%97%E7%AC%A6/</url>
+      
+        <content type="html"><![CDATA[<h1 id="奇怪的字符"><a href="#奇怪的字符" class="headerlink" title="奇怪的字符"></a>奇怪的字符</h1><hr><h2 id="零散的"><a href="#零散的" class="headerlink" title="零散的"></a>零散的</h2><p>【𝟒𝐊/𝟔𝟎𝐅𝐏𝐒】</p><p>ℳ₯㎕</p><p>𝓐𝓵𝓸𝓷𝓮</p><p>ᵐᵒʳᵉ ᵗʰⁱⁿᵍ</p><hr><h2 id="整齐的"><a href="#整齐的" class="headerlink" title="整齐的"></a>整齐的</h2><p>𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙</p><p>𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳</p><p>𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍</p><p>𝑎𝑏𝑐𝑑𝑒𝑓𝑔𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧</p><p>𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁</p><p>𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛</p><p>𝒜𝒞𝒟𝒢𝒥𝒦𝒩𝒪𝒫𝒬𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵</p><p>𝒶𝒷𝒸𝒹𝒻𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏</p><p>𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩  𝓝𝓽𝓼𝓬.</p><p>𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃</p><p>𝔄𝔅𝔇𝔈𝔉𝔊𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔𝔖𝔗𝔘𝔙𝔚𝔛𝔜</p><p>𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷</p><p>𝔸 𝔹 ℂ 𝔻 𝔼 𝔽 𝔾 ℍ 𝕀 𝕁 𝕂 𝕃 𝕄 ℕ 𝕆 ℙ ℚ ℝ 𝕊 𝕋 𝕌 𝕍 𝕎 𝕏 𝕐 ℤ</p><p>𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫</p><p>𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅</p><p>𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟</p><p>𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹</p><p>𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓</p><p>𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭</p><p>𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇</p><p>𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡</p><p>𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻</p><p>𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕</p><p>𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯</p><p>𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉</p><p>𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝚤𝚥</p><p>𝚨𝚩𝚪𝚫𝚬𝚭𝚮𝚯𝚰𝚱𝚲𝚳𝚴𝚵𝚶𝚷𝚸𝚹𝚺𝚻𝚼𝚽𝚾𝚿𝛀𝛁</p><p>𝛂𝛃𝛄𝛅𝛆𝛇𝛈𝛉𝛊𝛋𝛌𝛍𝛎𝛏𝛐𝛑𝛒𝛓𝛔𝛕𝛖𝛗𝛘𝛙𝛚𝛛𝛜𝛝𝛞𝛟𝛠𝛡</p><p>𝛢𝛣𝛤𝛥𝛦𝛧𝛨𝛩𝛪𝛫𝛬𝛭𝛮𝛯𝛰𝛱𝛲𝛳𝛴𝛵𝛶𝛷𝛸𝛹𝛺𝛻</p><p>𝛼𝛽𝛾𝛿𝜀𝜁𝜂𝜃𝜄𝜅𝜆𝜇𝜈𝜉𝜊𝜋𝜌𝜍𝜎𝜏𝜐𝜑𝜒𝜓𝜔𝜕𝜖𝜗𝜘𝜙𝜚𝜛</p><p>𝜜𝜝𝜞𝜟𝜠𝜡𝜢𝜣𝜤𝜥𝜦𝜧𝜨𝜩𝜪𝜫𝜬𝜭𝜮𝜯𝜰𝜱𝜲𝜳𝜴𝜵</p><p>𝜶𝜷𝜸𝜹𝜺𝜻𝜼𝜽𝜾𝜿𝝀𝝁𝝂𝝃𝝄𝝅𝝆𝝇𝝈𝝉𝝊𝝋𝝌𝝍𝝎𝝏𝝐𝝑𝝒𝝓𝝔𝝕</p><p>𝝖𝝗𝝘𝝙𝝚𝝛𝝜𝝝𝝞𝝟𝝠𝝡𝝢𝝣𝝤𝝥𝝦𝝧𝝨𝝩𝝪𝝫𝝬𝝭𝝮𝝯</p><p>𝝰𝝱𝝲𝝳𝝴𝝵𝝶𝝷𝝸𝝹𝝺𝝻𝝼𝝽𝝾𝝿𝞀𝞁𝞂𝞃𝞄𝞅𝞆𝞇𝞈𝞉𝞊𝞋𝞌𝞍𝞎𝞏</p><p>𝞐𝞑𝞒𝞓𝞔𝞕𝞖𝞗𝞘𝞙𝞚𝞛𝞜𝞝𝞞𝞟𝞠𝞡𝞢𝞣𝞤𝞥𝞦𝞧𝞨𝞩</p><p>𝞪𝞫𝞬𝞭𝞮𝞯𝞰𝞱𝞲𝞳𝞴𝞵𝞶𝞷𝞸𝞹𝞺𝞻𝞼𝞽𝞾𝞿𝟀𝟁𝟂𝟃𝟄𝟅𝟆𝟇𝟈𝟉𝟊𝟋</p><p>𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗</p><p>𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡</p><p>𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫</p><p>𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵</p><p>𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿</p><p>𝓣𝓱𝓮 𝓫𝓸𝓾𝓷𝓭𝓪𝓻𝔂 𝓵𝓲𝓷𝓮 𝔀𝓱𝓲𝓬𝓱 𝓲𝓼𝓷’𝓽 𝓼𝓮𝓮𝓷.</p><p>𝓣𝓱𝓮 𝓷𝓮𝔀 𝔀𝓸𝓻𝓵𝓭 𝓘 𝓫𝓮𝓰𝓲𝓷 𝓽𝓸 𝓬𝓻𝓮𝓪𝓽𝓮.</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-快速幂</title>
+      <link href="/2021/11/06/CPP%E6%95%99%E7%A8%8B-%E5%BF%AB%E9%80%9F%E5%B9%82/"/>
+      <url>/2021/11/06/CPP%E6%95%99%E7%A8%8B-%E5%BF%AB%E9%80%9F%E5%B9%82/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="快速幂"><a href="#快速幂" class="headerlink" title="快速幂"></a>快速幂</h2><p>代码实现：<br>第一种：</p><pre class=" language-c++"><code class="language-c++">#include <bits/stdc++.h>using namespace std;int f(int m, int n) &#123; //m^n    if (n == 1)        return m;    int temp = f(m, n / 2);    return (n % 2 == 0 ? 1 : m) * temp * temp;&#125;int main() &#123;    long long a, b;    cin >> a >> b;    cout << f(a, b);&#125;</code></pre><p>第二种： </p><pre class=" language-c++"><code class="language-c++">ll ksm(int a,int b,int p)&#123;    ll res=1;    while(b)    &#123;        if(b&1)res=(res*a)%p;        a=(a*a)%p;        b>>=1;    &#125;    return res;&#125;</code></pre><h2 id="快速乘"><a href="#快速乘" class="headerlink" title="快速乘"></a>快速乘</h2><pre class=" language-c++"><code class="language-c++">ll mul()&#123;    ll res=0;    while(b)    &#123;        if(b&1)res=(res+a)%p;        a=(a+a)%p;        b>>=1;    &#125;    return res;&#125;</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 高级教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>上P站</title>
+      <link href="/2021/11/01/%E4%B8%8AP%E7%AB%99/"/>
+      <url>/2021/11/01/%E4%B8%8AP%E7%AB%99/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>这年头不会还有人不会上P站把?<br>注:P站指蓝P(pixiv)<del>pronhub</del></p></blockquote><p><img src="http://pic.qqtf.com/up/2020-9/16011748018328260.jpg"></p><h1 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a>方法1</h1><h2 id="软件准备"><a href="#软件准备" class="headerlink" title="软件准备"></a>软件准备</h2><p>1.Steam++ <a href="https://steampp.net/">https://steampp.net/</a><br>2.igg谷歌助手(浏览器插件)</p><h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>1.启动Steam++中的Pixiv加速<br>2.登录P站即可 <a href="https://www.pixiv.net/">https://www.pixiv.net/</a><br>3.如果要使用谷歌登录,请使用igg谷歌助手</p><h1 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a>方法2</h1><p>挂一个VPN翻墙（不推荐）</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP-常见错误</title>
+      <link href="/2021/10/30/CPP-%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF/"/>
+      <url>/2021/10/30/CPP-%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-程序纠错手册"><a href="#C-程序纠错手册" class="headerlink" title="C++程序纠错手册"></a>C++程序纠错手册</h1><p>本手册面向参加C++竞赛的学员</p><h2 id="Accepted-通过"><a href="#Accepted-通过" class="headerlink" title="Accepted 通过"></a><code>Accepted</code> 通过</h2><p>释义</p><ul><li>你的程序通过了!</li></ul><p>解决办法</p><ul><li>快点做下一题吧!</li></ul><h2 id="Wrong-Answer-答案错误"><a href="#Wrong-Answer-答案错误" class="headerlink" title="Wrong Answer 答案错误"></a><code>Wrong Answer</code> 答案错误</h2><p>释义</p><ul><li>你的程序没问题,但是运行结果错了</li></ul><p>解决办法</p><ul><li>检查程序逻辑</li><li>检查数组越界</li><li>检查变量数据访问</li><li>检查括号匹配(自动匹配括号的可忽略)</li></ul><h2 id="Time-Limit-Exceed-超时"><a href="#Time-Limit-Exceed-超时" class="headerlink" title="Time Limit Exceed 超时"></a><code>Time Limit Exceed</code> 超时</h2><p>释义</p><ul><li>你的程序陷入了死循环,或者循环次数过多,反正就是超时了</li></ul><p>解决办法</p><ul><li>检查所有循环</li><li>检查有无符合死循环逻辑</li><li>检查数组越界</li><li>如果一切无误,请尝试换一种算法</li></ul><h2 id="Runtime-Error-运行库错误"><a href="#Runtime-Error-运行库错误" class="headerlink" title="Runtime Error 运行库错误"></a><code>Runtime Error</code> 运行库错误</h2><p>释义</p><ul><li>运行库错误</li></ul><p>解决办法</p><ul><li>查看是否使用了未知代码</li><li>检查库文件引入</li><li>检查程序基本结构</li><li>检查代码运行软件(如果是比赛则不可能是这个原因)</li></ul><h2 id="Compile-Error-编译错误"><a href="#Compile-Error-编译错误" class="headerlink" title="Compile Error 编译错误"></a><code>Compile Error</code> 编译错误</h2><p>释义</p><ul><li>你的程序输错啦!(指程序的语法)</li></ul><p>解决办法</p><ul><li>检查所有代码</li><li>检查括号匹配</li><li>检查关键字</li></ul>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CSP-j/s知识点一览</title>
+      <link href="/2021/10/30/CSP-j-s%E7%9F%A5%E8%AF%86%E7%82%B9%E4%B8%80%E8%A7%88/"/>
+      <url>/2021/10/30/CSP-j-s%E7%9F%A5%E8%AF%86%E7%82%B9%E4%B8%80%E8%A7%88/</url>
+      
+        <content type="html"><![CDATA[<h1 id="CSP-J-S-知识点一览（C-）"><a href="#CSP-J-S-知识点一览（C-）" class="headerlink" title="CSP-J/S 知识点一览（C++）"></a>CSP-J/S 知识点一览（C++）</h1><p><img src="http://upload.51nod.com/User_Upload/187586/root/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20211029160953.png"></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CSP2021</title>
+      <link href="/2021/10/24/CSP2021/"/>
+      <url>/2021/10/24/CSP2021/</url>
+      
+        <content type="html"><![CDATA[<p>庆祝CSP-J/S 2021顺利结束!</p><hr><p>希望我考个好成绩…</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-走迷宫</title>
+      <link href="/2021/10/22/CPP%E6%95%99%E7%A8%8B-%E8%B5%B0%E8%BF%B7%E5%AE%AB/"/>
+      <url>/2021/10/22/CPP%E6%95%99%E7%A8%8B-%E8%B5%B0%E8%BF%B7%E5%AE%AB/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="走迷宫问题"><a href="#走迷宫问题" class="headerlink" title="走迷宫问题"></a>走迷宫问题</h2><p>题目描述</p><blockquote><p>一个迷宫由R行C列格子组成，有的格子里有障碍物，不能走；有的格子是空地，可以走。<br>给定一个迷宫，求从左上角走到右下角最少需要走多少步(数据保证一定能走到)。只能在水平方向或垂直方向走，不能斜着走。</p></blockquote><p>图例</p><blockquote><p>. . ###<br>#. . . .<br>#. #. #<br>#. #. #<br>#. # . .</p></blockquote><p>结题思路</p><blockquote><p>使用广度优先搜索(扩散搜索并标记),并使用STL中的队列(也可以自己写)</p></blockquote><p>代码分析</p><pre class=" language-c++"><code class="language-c++">#include<bits/stdc++.h>using namespace std;const int N=105;int a[N][N],n,m,ans,d[N][N];int dx[4]=&#123;-1,0,1,0&#125;,dy[4]=&#123;0,1,0,-1&#125;;queue<pair<int,int> >q;void bfs()&#123;    d[1][1]=1;a[1][1]=0;    q.push(make_pair(1,1));    while(q.size())    &#123;        pair<int,int> u=q.front();q.pop();        if(u.first==n&&u.second==m)break;        for(int i=0;i<4;i++)        &#123;            int xx=u.first+dx[i],yy=u.second+dy[i];            if(xx<1||xx>n||yy<1||yy>m||a[xx][yy]==0)continue;            q.push(make_pair(xx,yy));            d[xx][yy]=d[u.first][u.second]+1;            a[xx][yy]=0;        &#125;    &#125;    cout<<d[n][m];&#125;int main()&#123;    cin>>n>>m;    for(int i=1;i<=n;i++)      for(int j=1;j<=m;j++)      &#123;        char c;cin>>c;        if(c=='.')a[i][j]=1;      &#125;    bfs();    return 0;&#125;</code></pre><p>知识扩展</p><blockquote><p>广度优先搜索</p></blockquote><p>含义</p><blockquote><p>使用类似递推的概念从一个点扩散到所有可扩散的点</p></blockquote><p>图例</p><blockquote><p>从左上角扩散到右下角,最少步数如下</p><table><thead><tr><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead><tbody><tr><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><td>4</td><td>5</td><td>6</td><td>7</td></tr></tbody></table></blockquote>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 高级教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP资料</title>
+      <link href="/2021/10/21/CPP%E8%B5%84%E6%96%99/"/>
+      <url>/2021/10/21/CPP%E8%B5%84%E6%96%99/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-资料"><a href="#C-资料" class="headerlink" title="C++资料"></a>C++资料</h1><p>恭喜你解锁了C++独家资料，请不要随意传播哦！</p><pre class=" language-url"><code class="language-url">https://ntsc-yrx.github.io/File/cppstudy/...</code></pre><ul><li>01-高精度.doc</li><li>02-递推.doc</li><li>06-排序.doc</li><li>09.队列.doc</li><li>10-广搜.doc</li><li>课程计划.xls</li></ul>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>名  人  名  言</title>
+      <link href="/2021/10/20/%E5%90%8D-%E4%BA%BA-%E5%90%8D-%E8%A8%80/"/>
+      <url>/2021/10/20/%E5%90%8D-%E4%BA%BA-%E5%90%8D-%E8%A8%80/</url>
+      
+        <content type="html"><![CDATA[<h1 id="名-人-名-言"><a href="#名-人-名-言" class="headerlink" title="名  人  名  言"></a>名  人  名  言</h1><p>1.过年了祝群里女的：<br>万事如意 落雁沉鱼 兰质蕙心 明眸皓齿 靡颜腻理 清词丽句 清辞丽曲 琪花瑶草 曲眉丰颊 螓首蛾眉 水木清华 爽心悦目 天生丽质 天香国色 我见犹怜 宛转蛾眉 霞光万道 小家碧玉 杏脸桃腮 煦色韶光 杏腮桃脸 雄伟壮观 杏雨梨云 涎玉沫珠 妍蚩好恶 鱼沉雁落 宜嗔宜喜 旖旎风光 远山芙蓉 艳色绝世 余霞成绮 宜喜宜嗔 瘗玉埋香 艳紫妖红 朱唇皓齿 左家娇女 章台杨柳 阿娇金屋 闭月羞花 逞娇呈美 春暖花香 春色满园 春深似海 彩云易散 姹紫嫣红 斗美夸丽 尽态极妍 斗艳争辉 蛾眉皓齿飞阁流丹 国色天香 胡天胡帝 花颜月貌 绝色佳人天生丽质 慧质兰心 秀外慧中 暗香盈袖 闭月羞花 沉鱼落雁 倾国倾城 温婉娴淑 千娇百媚 仪态万千 美艳绝世 国色天香 花容月貌 明目皓齿 淡扫峨眉 清艳脱 俗香肌玉肤 清丽绝俗 仪态万端 婉风流转 美撼凡尘 聘婷秀雅 娥娜翩跹 俏丽多姿 如花似月 风姿卓越 顾盼流转 清丝纠缠 举步轻摇 美若天仙 美愈天人 清秀高雅 艳冠群芳 剪水双瞳 美艳绝伦 神仙玉骨 楚楚动人 貌赛西施 姿容绝代 如花似玉 窈窕淑女 气质高雅 美丽四射 樱桃小口 静若处子 动若脱兔 小鸟宜人 善解人意 明眸善睐 娇艳妩媚 玲珑剔透 玉指如葱 肤如凝脂 眉如新月 秋波流转 樱桃小口 粉妆玉琢 桃腮杏脸 亭亭玉立 楚楚动人 贤良淑德 秀色可餐 水灵秀气 小家碧玉 完美无暇 娇羞可爱 婀娜多姿 美丽动人 人面桃花 柳眉杏眼 温文尔雅 明艳动人 天生尤物 芙蓉如面 娇艳惊人 冠压群芳 风华绝代 绝代佳人 一代佳人 一代容华 绝色美人 月里嫦娥 华如桃李 桃羞杏让 </p><p>祝群里的男孩子：<br>能娶到这样的女孩子</p><p>2.</p><pre><code>你才十几岁，却打算等她一辈子；她才十几岁，却让我等了一辈子。</code></pre><p>3.宜人玫瑰怡人随， 流此芳馨留此归。 良辰美景沁心醉， 不知花我更甚谁。  (๑^︶^๑)先生，是在等人吗？</p><p>4.十年OI一场空，不写long long见祖宗</p><p>5.幸会，</p><p>希望有人觉得认识我是件幸运的事</p><p>幻听，</p><p>所有的失望都源于凭空的期待</p><p>避风港，</p><p>人人都想避风，谁来当港啊，总要有人付出的呀</p><p>无人知，</p><p>哪怕无人知我，她安好亦可</p><p>那双眼睛，</p><p>我曾以为那份目光是我天生的，直到失去她之后，我才发现</p><p>不再动心，</p><p>明知道结果，可还是忍不住动心</p><p>也故作轻松，</p><p>反正我会一直装不在意，假装到我真不在乎</p><p>难入你眼眸，</p><p>记得刚开始，我只是好奇你叫什么名字</p><p>等不到晚安，</p><p>你觉得连消息都不回你的人能有多在乎你</p><p>是她食言了，</p><p>干嘛让我猜不透，你说语句不爱我马上就走</p><p>感动不了她，</p><p>感受不到爱意的时候记得全身而退</p><p>换意又难平，</p><p>你给了我什么，一场空欢喜，一场意难平</p><p>陪你逢场作戏，</p><p>原来意料之中的事，也会难过很久</p><p>别再靠近了，</p><p>你别后退了，我不向前就是了</p><p>不再打扰你，</p><p>放弃一个人从来不是一瞬间的事</p><p>挺没意思的，</p><p>没意义的人和事也该丢掉了</p><p>还是不等了，</p><p>没有人会理所当然的回应你的期待</p><p>再也不伸手，</p><p>没有能力抓住，伸手都是多余的</p><p>能再见一面吗？</p><p>说了再见才发现再也见不到</p><p>再也回不去，</p><p>有的东西丢了，就再也找不回来了。</p><p>那仰望的人，心里的孤独和叹息。</p><p>4.胡烟白草日光暖<br>桃李花开覆井栏<br>她宫婵娟多花梨<br>老去自惊秦塞雁<br>公府从容谈婉婉<br>点检如今无一半<br>个行何似武陵赋<br>赞桥歌酒今朝散</p><p>5.水晶里面没有水对吧，<br>牛奶里面没有牛对吧，<br>雪花里面没有花对吧，<br>矿泉水里没有矿对吧，<br>雪碧里面没有雪对吧，<br>我有真正的好朋友里面没有好朋友对吧<br>长大后才发现，<br>太顾及别人的感受委屈的是自己。<br>:世界上最荒谬的五件事<br>第一:砍了树做成纸，在纸上写上“爱护森林”<br>第二:拿着父母的血汗钱，在ktv里唱父亲你幸苦了。<br>第三:女人每天和很多男人暖昧，却说着世界上没有好男人。<br>第四:用辛苦挣来的钱，换成烟，再烧了!换成酒，喝醉了吐了!还说钱难挣。<br>为什么每个喜剧演员，都逃避不了抑郁症，每个喜剧演员逗笑了别人，弄哭了自己，每个喜剧演员都是伟大的，让我们向他们致敬。<br>镜子是我最好的朋友，因为我哭的时候它从来不会笑。<br>——卓别林<br>“如何亲手毁掉一个人？” “无条件的给她全部，再一次性收回来。”<br>小时候，摔倒了，旁边没人就自己爬起来，旁边有人就哭。长大后，摔倒了，旁边有人就爬起来，旁边没人就哭。<br>我最喜欢的歌词是:“纯音乐，请欣赏。”<br>我才十几岁，就开始厌倦这枯燥的生活；<br>我才十几岁，就知道了不该知道的东西；<br>我才十几岁，就开始讨厌这虚伪的世界；<br>我才十几岁，就知道金钱有多重要；<br>我才十几岁，就要过上面具下的生活；<br>我才十几岁，却很累。<br>身未残，心已碎。<br>以笑的方式哭，在死亡的伴随下活着。<br>——余华《活着》<br>周星驰：我演了一辈子悲剧，你们却叫我喜剧之王。<br>时间在走 年龄在长 懂得多了 看透的多了 快乐越来越少了 可能这就是长大的代价吧<br>——光头强<br>没有一个人可以陪你到最后<br>往往压倒你最后一个希望的<br>是家长<br>是朋友<br>是老师<br>用假的名字<br>说最真的话<br>用真的名字<br>说最假的话<br>每天带着面具生活<br>很累<br>对着家长微笑<br>女孩天真活泼，很善良；<br>但是有一天妈妈生下了一个弟弟，一家人可开心<br>天天为着弟弟转来转去，女孩只能躲在角落默默的看着；<br>时间过的很快，弟弟一岁了，女孩一直和弟弟玩的很好；<br>女孩的生日到了，但生日那天变成了女孩永久的记忆；<br>生日那天，女孩开开心心的去找爸爸妈妈；<br>发现爸爸妈妈一直围着弟弟转，她根本没有存在感；<br>但女孩觉得弟弟那么小，被照顾是应该的；<br>女孩跑了过去，和弟弟开心的玩耍；<br>弟弟一不小心把杯子摔了，“啪”掉在地上变成了玻璃碎渣；<br>但弟弟却一个站不稳，差不多要摔了，那还有很多碎碎的玻璃；<br>女孩竭尽全力的扑过去，抱住了弟弟，自己却被摔伤了；<br>手，脚，膝盖，脸上，全都是伤，全都血；<br>爸爸妈妈来了，看到了嚎啕大哭的弟弟和摔碎的杯子；<br>对女孩不停的打骂，没人看到女孩的伤；<br>也没人看到她的眼泪，她的生日也没了，因为那天，女孩跑了出去；<br>在街道上的椅子上坐着，血不停的流着，很快没有了痛苦；<br>女孩慢慢的闭上了双眼，微笑着离开了……<br>她的爸爸妈妈，看的女孩这样，哭的很伤心；<br>但挽回不了什么了，女孩已走了；<br>生日也变成了祭日……<br>你有试过，明明很害怕，却还要装勇敢？<br>你有试过帮助别人却被泼当头冷水吗？<br>你有试过，明明想依赖却还要装坚强吗？<br>你有试过被诬陷却反驳不了吗？<br>你有试过不明不白背了黑锅吗？<br>你可以输，但不能哭<br>即使输的一败涂地，也要笑着接受。<br>小丑为什么一直笑？”<br>“因为他们的嘴巴被缝成微笑的样子”<br>家长剪下了我们的翅膀，却还要我们飞翔，呵，多可笑啊!<br>小时候与现在的区别:<br>1.小时候喜欢白天；现在却喜欢黑夜<br>2.小时候喜欢热闹；现在却喜欢冷清<br>3.小时候害怕流血；现在却害怕流泪<br>4.小时候总会偷偷地笑；现在却会偷偷的哭<br>5.小时候不想被遗忘；现在却喜欢被忽略<br>6.小时候喜欢天使；长大却喜欢恶魔<br>7.小时候怕鬼；长大后却怕人心<br>8.小时候哭着哭着就笑了；长大后笑着笑着就哭了<br>9.小时候渴望长大；现在却只想回到小时候<br>10.小时候多么天真；现在就连走一步也得考虑很久<br>成长的路上会发生很多很多，也会改变很多很多<br>女孩5岁:妈妈，小丑笑得好开心啊<br>女孩7岁:妈妈，小丑为什么要戴面具呢<br>女孩9岁:妈妈，小丑什么时候才能把面具脱下呀<br>女孩11岁:妈妈，小丑在笑，可是我觉得他并不开心啊<br>女孩13岁:妈妈，你看到了吗，小丑哭了，我看到他哭了<br>女孩15岁:妈妈，我们再也不看不要看马戏表演了好吗<br>…… ……<br>女孩20岁:亲爱的，马戏表演真有意思<br>女孩30岁:宝贝女儿，我们不看马戏表演好吗<br>女孩40岁:女儿啊，不要去马戏团，不要学狐步舞啊<br>女孩50岁:女儿啊，不要变成戴面具的小丑啊<br>女孩60岁:老伴儿，咱下次别带孙儿到马戏团来<br>女孩70岁:乖孙儿，姥姥明白了，人人都会变成小丑，走金马戏团，但是姥姥希望每个人在自己的亲人面前，能脱下面具<br>女孩80岁:这是我第一次，可能也是最后一次自己看马戏表演了，曾经我好奇，恐惧，厌恶小丑，到自己也成为了小丑，又到拒绝亲人变成小丑，我看透了，也明白了，小丑需要爱，需要别人脱下他的面具<br>…… ……<br>某一天，面具后的小丑终于发出了会心的笑容，他丢掉了面具:小时候我向往当一个无所不能的小丑，姥姥阻止我，后来却支持我，她告诉我要活得真实，不要戴着面具，今天是她去世5周年，我脱下了面具，也愿每一个人都不要戴着面具<br>…如雷的掌声响起…<br>三个人的闺蜜中，总有一个是被排挤的。<br>三个人的闺蜜中，总有一个是最累的。<br>三个人的闺蜜中，总有一个是富有心机的。<br>三个人的闺蜜中，总有一个是虚伪的。<br>三个人的闺蜜中，总有一个是被利用的。<br>所以，闺蜜，只是笑话而已。<br>那就是我<br>女孩“小丑，我不想回家”<br>小丑“为什么？”<br>女孩“回家就失去了自由，”<br>小丑“把我的面具给你吧”<br>女孩“要面具干嘛？”<br>小丑“至少不会受伤，”<br>女孩“好，那你给我吧，”<br>小丑“戴上就拿不下来了”<br>女孩“至少不会受伤了”<br>大过年的我竟然把 : 百鬼夜行，百鬼夜行抄，嫁衣，妹妹背着洋娃娃，百鬼阴阳抄，黑色星期五，跳房子，女孩你为何踮脚尖，黑暗童话，腐烂的童话。听了个遍<br>童话都是骗人的，<br>王子为什么会把白雪公主的尸体带回去呢？是不是有恋尸癖？<br>如果灰姑娘的鞋合脚<br>她又怎会掉？<br>如果王子真的爱灰姑娘，<br>那怎会不记得灰姑娘的模样？<br>成天在学校嘻嘻哈哈的笑的像个傻子，别人都说我笑点很低。但是你们没想过吗，如果我不笑，难道我要一直哭下去?眼泪真的是最没用的东西，身为女生，戴上被刻着笑脸的面具，才是最好的选择<br>为什么怕鬼，因为鬼恐怖，但又不怕鬼，因为它们的脸，就是他们的内心所想，相比之下，有些人虽衣冠楚楚，但内心却禽兽不如；有些人虽可憎可怖，但内心却是一个世外桃源，那些衣冠楚楚的人，表面上站在道德制高点，背地里却做着泯灭人性之事，那些可憎可怖的人，表面上做着道德沦丧之事，实际上，不也是生活所逼吗？ /小时候怕鬼，因为他们狰狞可怖。<br>长大后怕人，哪怕他们衣冠楚。</p><p>6.白茫茫的天空，在那这一片白茫茫的天空中，下起了无数朵晶莹般白色的雪花。呼呼呼…吹起了一阵刺骨的寒风，在这一片天地之中拍打着无数“物”的那好似干枯的身体一条条枝干的树木，被雪花呵护的房屋，“柔软”冰寒的小路……雪升温化成水，从房屋顶慢而流落下，温又下落，水成冰，凝结之久，成了一条条长短不一样齐而尖锐的小冰柱，固定在这屋檐下。在这一片风雪之地中，街上已经没有什么人在这片恶劣的天气中行走了，但，仔细在这被雪白的“花朵”所掩盖的世界中，有一个穿着又厚又旧的衣服，背着一个中型的被子袋的流浪汉正在牵着一位也是穿着一样又厚又旧的衣服，大概八九岁的小女孩在这片雪地中行走着，天真无邪的思想，幼稚可爱的脸颊，很讨人喜欢。对流浪汉身份来说，他是一位特殊的存在，他从不抱有不劳而获的行动，一路来都是走到哪劳动到哪，什么样的苦工都干过，睡过的地方不计其数。 “浪心天涯之尽，为寻无痕之境” 现在，他的生命时间已经不多了，因为，肝癌将阻止他向前迈进的步伐。<br>他回想起，这也是他两年前中的今天的这里附近的地方捡到小女孩的，同样恶劣的天气，孩子当时就被包袱在一张中适的被子里，差不多也被雪盖住了。如果不是小女孩发出轻微的哭声，他也不会知道。捡到小女孩时，情况并不太乐观，他带着小女孩到附近诊所检查时，发现已经发烧42度了，由于当时情况和身份和条件特殊，去不了其他地方医治，就只能在这个偏小的地方匆匆忙忙。四天后的艰辛终于从死神夺回了小女孩，也花光了流浪汉全部的积蓄，甚至还欠了一股医生一些医药费用。工作后个二十来天，还完债务，带着小女孩在附近地方旋视一下，小女孩说并不是她家周围的环境。一提到家她就很害怕，她的妈妈已经去世了，后来来了个继母，继母对她一点也不友好，经常逼她干些重活，特别是冬天洗碗时那幼嫩温暖的手在这寒冷刺骨的水里洗着那沉重的碗，记忆尤为深刻，而且什么也不管她会出了什么事情，有大事了，就直接把她丢到了千里之外的地方，包裹她这破被子也不知道哪来的，只记得扔她时什么都没有被盖住，就昏迷过去了。说到这她都不由自主哭了起来，她不想回去，她想她自己的妈妈了。流浪汉听了就打消送她回家的念头了，就想送她去孤儿院的想法，但小女孩坚决否定他做的决定，对她来说，他是这世界上赐予她第二次生命的人，是世界上唯一的亲人了，她不想再失去对她这么好的人了，他就是她的一道照耀黑暗的光芒。经过多次劝阻无用后，最终他跟她说了另一个想法:“确定跟着我？生活会很脏很辛苦的。” “嗯”小女孩毫不犹豫答应下来，就一个简简单单的字，开始了他和她的天涯之旅<br>两年的一路风风雨雨，那经历过无数的挫折、饥饿、艰辛……人心的那狠狠地“鞭打”，唾弃之言，手脚之意，眼神，语言上的种种，无不是让他们的上生活痛苦不堪，特别是小女孩，年龄太小就开始遭受着成年人的磨难之苦，豪豪大哭，一腔一腔哽咽在哭，心中安静地哭……但是不管有着怎样子的苦难，她依然坚持和流浪汉一起并行。当然，有罪恶的捶打，也会有善良依靠在他们身边，呵护、爱心、温暖、鼓励…无不是让他们一直迎难而上，春天之雨、夏天之炎、秋天之风、冬天之雪，一年四季，形影不离。那曾经留下过足迹靓丽的背影，终究也成为了一种深沉情义过去的历史中微不足道的记忆。<br>今天之日，是她被继母遗弃的日子，是她生命诞生之日，也是她人生最痛苦的一天。每到生辰这一天，她就忍不住就热泪盈眶，那源源不断思念着已故母亲的情绪，已经哭到呼吸声一梗一梗了。流浪汉看着小女孩，自己却无可奈何，只能安慰安慰她一下，然后用着他的那粗糙老旧的双手去紧紧抱住哭得已经满脸通红的小女孩，在这附近找到了一个以前老式破旧的护墙板，用木材做的护门暂住了下来，上面有个小屋檐，可以遮挡些雪落下来。这间破旧的房子早已没有人住了，护门也牢牢被锁住了，所以他们就只能呆在那个窄小的地方休息。找到这一个地方，已经是黑夜当主权的时候了，流浪汉抱着已经满身是雪的小女孩，打扫了一下之后，在被子袋里面拿出了一个中小型的蛋糕，外加几条有颜色的小蜡烛，因为可能是放在被子袋里，而且又走走动动的原因，蛋糕在有些地方已经凹凸不平了。再拿出一条大蜡烛固定在地面板上。雪在下，但没风，蛋糕放在了已经打扫干净的地板上，插上小蜡烛，拿出打火机，咔，咔，咔，焰黄色的小火苗顿时出现在眼前，点燃了小蜡烛和大白色蜡烛，火光照亮了附近周围的黑暗，两个一大一小的身影也出现在火光之中，随而响起一道粗壮的声音:<br>“生日快乐！”<br>“谢谢叔叔！”小女孩擦了擦已经凝固在眼皮中的泪水，微笑道。呼～ 一小阵暖风，吹灭了快要燃烧完的小蜡烛。<br>“棉花”慢慢飘落而下，在这黑夜之中就有大白蜡烛发出的火光，那两张欢乐的笑脸，吃着那冻得有点僵硬的蛋糕，用手指把蛋糕油卷成一小团，各互轻点到对面脸上，笑成一团。黑夜寒冷的环境中，吃着蛋糕闹成一团欢笑的他们，蜡烛，在这无人无光冰寒的地方中照映出一片温暖、温馨的画面…吃完蛋糕，听着流浪汉讲的故事，慢慢挨在门前睡着了。见状，流浪汉抱住了小女孩幼小的身躯，拿出被子袋中带着几处补过窟窿的被子，盖在了自己和小女孩身上，小女孩挨在他温暖的身上，流浪汉的背则挨在冰冷的门上，就这样，安安静静，睡着了。生日过后，也是流浪汉最后一次机会和她过的生日。<br>半夜之时，突然之间，撕裂般的疼痛把流浪汉给狠狠地弄醒了，身体慢慢开始流着那酸酸的汗水，转眼间底层的衣服被打湿了。肝部位传出来那疼痛感不得不自觉伸出一只手来捂住。他很想大喊一声，但怀中熟睡的小女孩不得不让他把痛苦的喊声硬生生地憋回去。逐渐地，呼吸的痛声音慢慢地从细微变得沉重，速度也由慢转为快。残忍的病魔所造就出来生不如死的痛苦就这样了，一个小时了，两个小时…他一直看着自己身怀中睡的安稳的小女孩，直到天亮。<br>天亮了，小女孩从自己的那奇特般的梦境中苏醒过来，看见了满脸大汉的流浪汉，寻问到怎么了，流浪汉装作无动于衷的神态找了个理由说着自己没有什么事情，小女孩不知道流浪汉事情真正原因。既然已经醒来了，该做他为小女孩最后的一件事了——回到曾经带小女孩去诊病的场所。把小女孩带到医生的面前，小女孩看到医生也就是看到自家亲人一样，兴致勃勃冲到他面前，伸开两双小手臂。医生见状也伸出自己的大手臂就把她抱起来，两人互笑一翻。见彼此都非常思念，当时只在他诊所住了个二十来天，之后有时候还来探望他，他人也非常欢迎他们俩，小女孩对他的印象是不可磨灭的。美好的人遇到了美好的人，很是一件幸运的事，那就是一种缘分吧。医生看见他满身大汗的状态过来，大概知道什么情况了，不多交流了，简简单单对话:<br>“孩子，交给你了。”<br>“嗯”。<br>就这样，强忍着巨痛，找了个理由，离开了小女孩和医生的视眼中了。这一离就是阳间和阴间之别，这无尽的疼痛间，他看到了自己生命之火即将熄灭的结局……<br>几天后，有人在一个小巷中发现了一具被冰雪差不多完全覆盖的遗体，听到了这个消息，医生带着心情忐忑不安的小女孩去看了看情况，发现就是他人，面目带着些什么哀伤的神情，手里还拿着一个棒棒糖。医生早意料到此刻之事，他无能为力去改变。摇了摇头，叹了一口“浑浊”的气。她，又一次豪豪大哭的声音响彻起来，小女孩抱着那早已冻僵的他，不知所措。唤醒，复活，早已是无用的哭喊和幻想……<br>糖，其实是流浪汉想送给小女孩的最后一次礼物，回去的路程，昏迷感，无力感顿时爆发出来。昏昏沉沉，挨到小巷的墙中，想着她:“要离开了吗？很不甘心。糖，真的带不回去了。跟我一路受了这么多苦，很对不起她啊，我的那一团温暖的小火苗，走了…”之后，半睁开的眼睛永远关上了通往人间的大门。<br>他是她人生的一束光芒，她是他人生的一团小火苗，照耀着，温暖着这一个黑暗冰寒的世间……</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-汉诺塔问题</title>
+      <link href="/2021/10/16/CPP%E6%95%99%E7%A8%8B-%E6%B1%89%E8%AF%BA%E5%A1%94%E9%97%AE%E9%A2%98/"/>
+      <url>/2021/10/16/CPP%E6%95%99%E7%A8%8B-%E6%B1%89%E8%AF%BA%E5%A1%94%E9%97%AE%E9%A2%98/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="汉诺塔问题"><a href="#汉诺塔问题" class="headerlink" title="汉诺塔问题"></a>汉诺塔问题</h2><p>汉诺塔问题描述：</p><blockquote><p>汉诺塔由三根柱子（分别用A、B、C表示）和n个大小互不相同的空心盘子组成。一开始n个盘子都摞在柱子A上，大的在下面，小的在上面，形成了一个塔状的锥形体。 对汉诺塔的一次合法的操作是指：从一根柱子的最上层拿一个盘子放到另一根柱子的最上层，同时要保证被移动的盘子一定放在比它更大的盘子上面（如果移动到空柱子上就不需要满足这个要求）。我们可以用两个字母来描述一次操作：第一个字母代表起始柱子，第二个字母代表目标柱子。例如，AB就是把柱子A最上面的那个盘子移到柱子B。汉诺塔的游戏目标是将所有的盘子从柱子A移动到柱子B或柱子C上面。 有一种非常简洁而经典的策略可以帮助我们完成这个游戏。</p></blockquote><p>提示</p><blockquote><p>首先，在任何操作执行之前，我们以任意的次序为六种操作（AB、AC、BA、BC、CA和CB）赋予不同的优先级，然后，我们总是选择符合以下两个条件的操作来移动盘子，直到所有的盘子都从柱子A移动到另一根柱子： （1）这种操作是所有合法操作中优先级最高的； （2）这种操作所要移动的盘子不是上一次操作所移动的那个盘子。 可以证明，上述策略一定能完成汉诺塔游戏。现在你的任务就是假设给定了每种操作的优先级，计算按照上述策略操作汉诺塔移动所需要的步骤数。</p></blockquote><p>图片</p><p><img src="https://cdn.luogu.com.cn/upload/pic/21997.png"></p><p>题干分析:</p><blockquote><p>1.无论什么情况下,满足大盘子在下,小盘子在上<br>2.一次仅能移动1个盘子<br>3.可以使用中转柱C<br>4.目标是把A柱子的所有盘按原来顺序移动到B柱子</p></blockquote><p>算法分析</p><blockquote><p>递归</p></blockquote><p>代码实现</p><pre class=" language-c++"><code class="language-c++">#include <bits/stdc++.h>using namespace std;int n;char a,b,c;void d(int n,char a,char b,char c)&#123;    if(n<1)return ;    d(n-1,a,c,b);//递归    printf("%c->%d->%c\n",a,n,b);//表示一次移动    d(n-1,c,b,a);//递归&#125;int main() &#123;    cin>>n>>a>>b>>c;//输入盘数,三个柱子的编号    d(n,a,b,c);    return 0;&#125;</code></pre><p>同类扩展：<br>题目:</p><blockquote><p>这是一个天文数字，若每一微秒可能计算(并不输出)一次移动，那么也需要几乎一百万年。我们仅能找出问题的解决方法并解决较小N值时的汉诺塔，但很难用计算机解决64层的汉诺塔。若有一个常规汉诺塔问题,但要求是输出移动次数,并且数据大于64,小于200,普通递归算法无法胜任</p></blockquote><p><img src="https://cdn.luogu.com.cn/upload/pic/33.png"></p><p>思路:</p><blockquote><p>从递归中可以总结出,移动次数是有规律的,共n层的汉诺塔最少需要2^n -1次移动,如果是双重汉诺塔(及有n组两个大小相同的盘相叠)则需要2^(n+1) -2次<br>数据量很大,需要使用高精度算法</p></blockquote><p>代码实现</p><pre class=" language-c++"><code class="language-c++">#include <bits/stdc++.h>using namespace std;long long n, lc;int a[222];void chen() &#123;    for (int i = 0; i < lc; i++) //先加        a[i] = a[i] * 2;    for (int i = 0; i < lc; i++) &#123; //进位        a[i + 1] += a[i] / 10;        a[i] %= 10;    &#125;    if (a[lc] != 0)        lc++;&#125;void pre(int n) &#123;    a[0] = 1;    lc = 1;    //计算2^(n+1)-2    for (int i = 1; i <= n + 1 ; i++) &#123;        chen();    &#125; a[0] -= 2;    //借位    for (int i = 0; i < lc; i++) &#123;        if (a[i] < 0) &#123;            a[i + 1] -= 1;            a[i] += 10;        &#125; else            break;    &#125;&#125;int main() &#123;    //freopen("hanoi.in", "r", stdin);    //freopen("hanoi.out", "w", stdout);    cin >> n;    pre(n);    for (int i = lc-1; i>=0; i--) &#123;        cout << a[i];    &#125;    return 0;&#125;</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 高级教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>考试成绩</title>
+      <link href="/2021/10/15/%E6%88%90%E7%BB%A9/"/>
+      <url>/2021/10/15/%E6%88%90%E7%BB%A9/</url>
+      
+        <content type="html"><![CDATA[<h1 id="历史成绩-初中部分"><a href="#历史成绩-初中部分" class="headerlink" title="历史成绩 - 初中部分"></a>历史成绩 - 初中部分</h1><blockquote><p>如有勘误请私信邮箱或QQ</p></blockquote><h2 id="20220117初二期末考试"><a href="#20220117初二期末考试" class="headerlink" title="20220117初二期末考试"></a>20220117初二期末考试</h2><p>班级排名</p><table><thead><tr><th>排名</th><th>学号</th><th>姓名</th><th>成绩</th></tr></thead><tbody><tr><td>1</td><td>1</td><td>陈众望</td><td>737</td></tr><tr><td>2</td><td>6</td><td>洪子轩</td><td>726.5</td></tr><tr><td>3</td><td>5</td><td>余依璇</td><td>720</td></tr><tr><td>4</td><td>2</td><td>王梓翔</td><td>716</td></tr><tr><td>5</td><td>10</td><td>姚逸涵</td><td>713</td></tr><tr><td>6</td><td>4</td><td>陈泽宇</td><td>712.5</td></tr><tr><td>7</td><td>3</td><td>占铭涛</td><td>701</td></tr><tr><td>8</td><td>18</td><td>王含笑</td><td>700</td></tr><tr><td>9</td><td>25</td><td>翁伟维</td><td>697</td></tr><tr><td>10</td><td>9</td><td>郑诗雨</td><td>696</td></tr><tr><td>11</td><td>11</td><td>李欣蓉</td><td>693</td></tr><tr><td>12</td><td>13</td><td>吴柏霖</td><td>693</td></tr><tr><td>13</td><td>12</td><td>张安青</td><td>690</td></tr><tr><td>14</td><td>38</td><td>缪奕恒</td><td>688</td></tr><tr><td>15</td><td>28</td><td>严婧依</td><td>686</td></tr><tr><td>16</td><td>42</td><td>郑佳炜</td><td>673</td></tr><tr><td>17</td><td>7</td><td>郏子安</td><td>671</td></tr><tr><td>18</td><td>45</td><td>夏圆圆</td><td>663</td></tr><tr><td>19</td><td>16</td><td>祝俊熙</td><td>662</td></tr><tr><td>20</td><td>8</td><td>艾馨</td><td>659</td></tr><tr><td>21</td><td>34</td><td>苏念庭</td><td>657</td></tr><tr><td>22</td><td>30</td><td>叶振宇</td><td>653</td></tr><tr><td>23</td><td>32</td><td>余震坤</td><td>653</td></tr><tr><td>24</td><td>46</td><td>倪心怡</td><td>649</td></tr><tr><td>25</td><td>36</td><td>钟如意</td><td>646</td></tr><tr><td>26</td><td>15</td><td>毛雨馨</td><td>644</td></tr><tr><td>27</td><td>39</td><td>张泽一</td><td>638</td></tr><tr><td>28</td><td>20</td><td>李轶锴</td><td>637</td></tr><tr><td>29</td><td>22</td><td>符馨然</td><td>632</td></tr><tr><td>30</td><td>29</td><td>张文哲</td><td>615</td></tr><tr><td>31</td><td>43</td><td>周靖</td><td>614</td></tr><tr><td>32</td><td>31</td><td>毛佳蕾</td><td>608</td></tr><tr><td>33</td><td>14</td><td>杨憬航</td><td>605</td></tr><tr><td>34</td><td>24</td><td>占明睿</td><td>602</td></tr><tr><td>35</td><td>35</td><td>王梓菲</td><td>593</td></tr><tr><td>36</td><td>33</td><td>罗梦竹</td><td>586</td></tr><tr><td>37</td><td>23</td><td>张竞心</td><td>585</td></tr><tr><td>38</td><td>55</td><td>王俊棋</td><td>579</td></tr><tr><td>39</td><td>21</td><td>占俊超</td><td>571</td></tr><tr><td>40</td><td>44</td><td>周宇欣</td><td>569</td></tr><tr><td>41</td><td>54</td><td>杜祥</td><td>568</td></tr><tr><td>42</td><td>27</td><td>王帅</td><td>563</td></tr><tr><td>43</td><td>26</td><td>徐依琳</td><td>562</td></tr><tr><td>44</td><td>17</td><td>付嘉琪</td><td>561</td></tr><tr><td>45</td><td>41</td><td>徐宇昇</td><td>554</td></tr><tr><td>46</td><td>37</td><td>魏佳宁</td><td>550</td></tr><tr><td>47</td><td>47</td><td>钟俊臣</td><td>546</td></tr><tr><td>48</td><td>53</td><td>舒木飞</td><td>535</td></tr><tr><td>49</td><td>50</td><td>祝心蕾</td><td>531</td></tr><tr><td>50</td><td>49</td><td>罗尚恩</td><td>528</td></tr><tr><td>51</td><td>52</td><td>应奥凯</td><td>524</td></tr><tr><td>52</td><td>51</td><td>舒虹睿</td><td>480</td></tr><tr><td>53</td><td>19</td><td>王智棋</td><td>457</td></tr><tr><td>54</td><td>40</td><td>毛骏韬</td><td>451</td></tr><tr><td>55</td><td>48</td><td>汪凡非</td><td>0</td></tr></tbody></table><h2 id="20211123初二期中考试"><a href="#20211123初二期中考试" class="headerlink" title="20211123初二期中考试"></a>20211123初二期中考试</h2><p>年级排名简略</p><table><thead><tr><th>排名起</th><th>排名止</th><th>区间人数</th></tr></thead><tbody><tr><td>1</td><td>200</td><td>7</td></tr><tr><td>200</td><td>400</td><td>16</td></tr><tr><td>400</td><td>500</td><td>19</td></tr><tr><td>1000</td><td>1000以后</td><td>23</td></tr></tbody></table><p>年级第一（yuzhi）成绩参考</p><table><thead><tr><th>总成绩</th><th>语文</th><th>数学</th><th>英语</th><th>物理</th><th>政治</th><th>历史</th><th>地理</th><th>生物</th></tr></thead><tbody><tr><td>649</td><td>97</td><td>118</td><td>116</td><td>78</td><td>74</td><td>74</td><td>43</td><td>49</td></tr></tbody></table><p>班级排名</p><table><thead><tr><th>排名</th><th>学号</th><th>姓名</th><th>成绩</th></tr></thead><tbody><tr><td>1</td><td>1</td><td>陈众望</td><td>645</td></tr><tr><td>2</td><td>6</td><td>洪子轩</td><td>628</td></tr><tr><td>3</td><td>25</td><td>翁伟维</td><td>619</td></tr><tr><td>4</td><td>5</td><td>余依璇</td><td>616</td></tr><tr><td>5</td><td>11</td><td>李欣蓉</td><td>598</td></tr><tr><td>6</td><td>10</td><td>姚逸涵</td><td>597</td></tr><tr><td>7</td><td>3</td><td>占铭涛</td><td>595</td></tr><tr><td>8</td><td>7</td><td>郏子安</td><td>577</td></tr><tr><td>9</td><td>2</td><td>王梓翔</td><td>574</td></tr><tr><td>10</td><td>18</td><td>王含笑</td><td>571</td></tr><tr><td>11</td><td>38</td><td>缪奕恒</td><td>571</td></tr><tr><td>12</td><td>28</td><td>严婧依</td><td>567</td></tr><tr><td>13</td><td>13</td><td>吴柏霖</td><td>566</td></tr><tr><td>14</td><td>34</td><td>苏念庭</td><td>561</td></tr><tr><td>15</td><td>32</td><td>余震坤</td><td>559</td></tr><tr><td>16</td><td>8</td><td>艾馨</td><td>558</td></tr><tr><td>17</td><td>42</td><td>郑佳炜</td><td>552</td></tr><tr><td>18</td><td>12</td><td>张安青</td><td>550</td></tr><tr><td>19</td><td>4</td><td>陈泽宇</td><td>546</td></tr><tr><td>20</td><td>16</td><td>祝俊熙</td><td>543</td></tr><tr><td>21</td><td>9</td><td>郑诗雨</td><td>537</td></tr><tr><td>22</td><td>30</td><td>叶振宇</td><td>537</td></tr><tr><td>23</td><td>20</td><td>李轶锴</td><td>535</td></tr><tr><td>24</td><td>46</td><td>倪心怡</td><td>535</td></tr><tr><td>25</td><td>45</td><td>夏圆圆</td><td>528</td></tr><tr><td>26</td><td>36</td><td>钟如意</td><td>517</td></tr><tr><td>27</td><td>22</td><td>符馨然</td><td>516</td></tr><tr><td>28</td><td>29</td><td>张文哲</td><td>516</td></tr><tr><td>29</td><td>15</td><td>毛雨馨</td><td>510</td></tr><tr><td>30</td><td>43</td><td>周靖</td><td>496</td></tr><tr><td>31</td><td>39</td><td>张泽一</td><td>491</td></tr><tr><td>32</td><td>24</td><td>占明睿</td><td>489</td></tr><tr><td>33</td><td>33</td><td>罗梦竹</td><td>487</td></tr><tr><td>34</td><td>31</td><td>毛佳蕾</td><td>479</td></tr><tr><td>35</td><td>35</td><td>王梓菲</td><td>475</td></tr><tr><td>36</td><td>14</td><td>杨憬航</td><td>473</td></tr><tr><td>37</td><td>23</td><td>张竞心</td><td>464</td></tr><tr><td>38</td><td>21</td><td>占俊超</td><td>463</td></tr><tr><td>39</td><td>37</td><td>魏佳宁</td><td>461</td></tr><tr><td>40</td><td>44</td><td>周宇欣</td><td>451</td></tr><tr><td>41</td><td>53</td><td>舒木飞</td><td>450</td></tr><tr><td>42</td><td>17</td><td>付嘉琪</td><td>445</td></tr><tr><td>43</td><td>26</td><td>徐依琳</td><td>440</td></tr><tr><td>44</td><td>55</td><td>王俊棋</td><td>431</td></tr><tr><td>45</td><td>50</td><td>祝心蕾</td><td>427</td></tr><tr><td>46</td><td>27</td><td>王帅</td><td>424</td></tr><tr><td>47</td><td>41</td><td>徐宇昇</td><td>424</td></tr><tr><td>48</td><td>54</td><td>杜祥</td><td>415</td></tr><tr><td>49</td><td>51</td><td>舒虹睿</td><td>411</td></tr><tr><td>50</td><td>49</td><td>罗尚恩</td><td>404</td></tr><tr><td>51</td><td>40</td><td>毛骏韬</td><td>399</td></tr><tr><td>52</td><td>52</td><td>应奥凯</td><td>390</td></tr><tr><td>53</td><td>48</td><td>汪凡非</td><td>388</td></tr><tr><td>54</td><td>19</td><td>王智棋</td><td>374</td></tr><tr><td>55</td><td>47</td><td>钟俊臣</td><td>366</td></tr></tbody></table><h2 id="20211015初二第一次月考"><a href="#20211015初二第一次月考" class="headerlink" title="20211015初二第一次月考"></a>20211015初二第一次月考</h2><p>注：按照七年级上学期的学号排序，请核对自己的真实成绩，不要相信姓名</p><p>平均分 485.972727</p><blockquote><p>名字是真的难打</p></blockquote><p>年级排名如下（简略）</p><table><thead><tr><th>排名起</th><th>排名止</th><th>区间人数</th></tr></thead><tbody><tr><td>1</td><td>50</td><td>2</td></tr><tr><td>51</td><td>150</td><td>3</td></tr><tr><td>151</td><td>200</td><td>7</td></tr><tr><td>201</td><td>250</td><td>2</td></tr></tbody></table><p>年级高分榜</p><table><thead><tr><th>学科</th><th>分数</th><th>班级</th><th>姓名</th></tr></thead><tbody><tr><td>语文</td><td>97</td><td>8，1</td><td>占铭涛</td></tr><tr><td></td><td>&gt;96</td><td>8，15</td><td>？</td></tr><tr><td></td><td>&gt;96</td><td>8，19</td><td>？</td></tr><tr><td></td><td>&gt;96</td><td>8，24</td><td>？</td></tr></tbody></table><p>学号如下</p><table><thead><tr><th>1</th><th>陈众望</th><th>617</th></tr></thead><tbody><tr><td>2</td><td>王梓翔</td><td>575</td></tr><tr><td>3</td><td>占铭涛</td><td>566.5</td></tr><tr><td>4</td><td>陈泽宇</td><td>536</td></tr><tr><td>5</td><td>余依璇</td><td>563</td></tr><tr><td>6</td><td>洪子轩</td><td>611.5</td></tr><tr><td>7</td><td>郏子安</td><td>575</td></tr><tr><td>8</td><td>艾馨</td><td>558.5</td></tr><tr><td>9</td><td>郑诗雨</td><td>541</td></tr><tr><td>10</td><td>姚逸涵</td><td>579</td></tr><tr><td>11</td><td>李欣蓉</td><td>558.5</td></tr><tr><td>12</td><td>张安青</td><td>530</td></tr><tr><td>13</td><td>吴柏霖</td><td>519</td></tr><tr><td>14</td><td>杨憬航</td><td>467</td></tr><tr><td>15</td><td>毛雨馨</td><td>501</td></tr><tr><td>16</td><td>祝俊熙</td><td>541</td></tr><tr><td>17</td><td>付嘉琪</td><td>417</td></tr><tr><td>18</td><td>王含笑</td><td>544</td></tr><tr><td>19</td><td>王智棋</td><td>360</td></tr><tr><td>20</td><td>李轶锴</td><td>504</td></tr><tr><td>21</td><td>占俊超</td><td>435</td></tr><tr><td>22</td><td>符馨然</td><td>491</td></tr><tr><td>23</td><td>张竞心</td><td>461</td></tr><tr><td>24</td><td>占明睿</td><td>430.5</td></tr><tr><td>25</td><td>翁伟伟</td><td>558</td></tr><tr><td>26</td><td>徐依琳</td><td>457</td></tr><tr><td>27</td><td>王帅</td><td>402.5</td></tr><tr><td>28</td><td>严婧依</td><td>555</td></tr><tr><td>29</td><td>张文哲</td><td>498.5</td></tr><tr><td>30</td><td>叶振宇</td><td>519.5</td></tr><tr><td>31</td><td>毛佳蕾</td><td>445</td></tr><tr><td>32</td><td>余震坤</td><td>541.5</td></tr><tr><td>33</td><td>罗梦竹</td><td>483.5</td></tr><tr><td>34</td><td>苏念庭</td><td>542</td></tr><tr><td>35</td><td>王梓菲</td><td>457</td></tr><tr><td>36</td><td>钟如意</td><td>490</td></tr><tr><td>37</td><td>魏佳宁</td><td>422</td></tr><tr><td>38</td><td>缪奕恒</td><td>549.5</td></tr><tr><td>39</td><td>张泽一</td><td>498</td></tr><tr><td>40</td><td>毛骏韬</td><td>373</td></tr><tr><td>41</td><td>徐宇昇</td><td>376.5</td></tr><tr><td>42</td><td>郑佳炜</td><td>530</td></tr><tr><td>43</td><td>周靖</td><td>482</td></tr><tr><td>44</td><td>周宇欣</td><td>403.5</td></tr><tr><td>45</td><td>夏圆圆</td><td>546</td></tr><tr><td>46</td><td>倪心怡</td><td>492</td></tr><tr><td>47</td><td>钟俊臣</td><td>370</td></tr><tr><td>48</td><td>汪凡非</td><td>397.5</td></tr><tr><td>49</td><td>罗尚恩</td><td>389</td></tr><tr><td>50</td><td>祝心蕾</td><td>423</td></tr><tr><td>51</td><td>舒虹睿</td><td>370</td></tr><tr><td>52</td><td>应奥凯</td><td>406</td></tr><tr><td>53</td><td>舒木飞</td><td>439.5</td></tr><tr><td>54</td><td>杜祥</td><td>395</td></tr><tr><td>55</td><td>王俊棋</td><td>435.5</td></tr></tbody></table><p>班级排名、年级排名划分如下</p><table><thead><tr><th>学号</th><th>姓名</th><th>成绩</th></tr></thead><tbody><tr><td>1</td><td>陈众望</td><td>617</td></tr><tr><td>6</td><td>洪子轩</td><td>611.5</td></tr><tr><td>年级前50</td><td></td><td>600</td></tr><tr><td>10</td><td>姚逸涵</td><td>579</td></tr><tr><td>2</td><td>王梓翔</td><td>575</td></tr><tr><td>7</td><td>郏子安</td><td>575</td></tr><tr><td>年级前150</td><td></td><td>570</td></tr><tr><td>3</td><td>占铭涛</td><td>566.5</td></tr><tr><td>5</td><td>余依璇</td><td>563</td></tr><tr><td>11</td><td>李欣蓉</td><td>558.5</td></tr><tr><td>8</td><td>艾馨</td><td>558.5</td></tr><tr><td>25</td><td>翁伟伟</td><td>558</td></tr><tr><td>28</td><td>严婧依</td><td>555</td></tr><tr><td>38</td><td>缪奕恒</td><td>549.5</td></tr><tr><td>年级前200</td><td></td><td>548</td></tr><tr><td>45</td><td>夏圆圆</td><td>546</td></tr><tr><td>18</td><td>王含笑</td><td>544</td></tr><tr><td>年级前250</td><td></td><td>543</td></tr><tr><td>34</td><td>苏念庭</td><td>542</td></tr><tr><td>32</td><td>余震坤</td><td>541.5</td></tr><tr><td>9</td><td>郑诗雨</td><td>541</td></tr><tr><td>16</td><td>祝俊熙</td><td>541</td></tr><tr><td>4</td><td>陈泽宇</td><td>536</td></tr><tr><td>12</td><td>张安青</td><td>530</td></tr><tr><td>42</td><td>郑佳炜</td><td>530</td></tr><tr><td>30</td><td>叶振宇</td><td>519.5</td></tr><tr><td>13</td><td>吴柏霖</td><td>519</td></tr><tr><td>20</td><td>李轶锴</td><td>504</td></tr><tr><td>15</td><td>毛雨馨</td><td>501</td></tr><tr><td>年级前500</td><td></td><td>500</td></tr><tr><td>29</td><td>张文哲</td><td>498.5</td></tr><tr><td>39</td><td>张泽一</td><td>498</td></tr><tr><td>46</td><td>倪心怡</td><td>492</td></tr><tr><td>22</td><td>符馨然</td><td>491</td></tr><tr><td>36</td><td>钟如意</td><td>490</td></tr><tr><td>年级前700</td><td></td><td>490</td></tr><tr><td>班级平均</td><td></td><td>485.972727</td></tr><tr><td>33</td><td>罗梦竹</td><td>483.5</td></tr><tr><td>43</td><td>周靖</td><td>482</td></tr><tr><td>14</td><td>杨憬航</td><td>467</td></tr><tr><td>23</td><td>张竞心</td><td>461</td></tr><tr><td>26</td><td>徐依琳</td><td>457</td></tr><tr><td>35</td><td>王梓菲</td><td>457</td></tr><tr><td>31</td><td>毛佳蕾</td><td>445</td></tr><tr><td>53</td><td>舒木飞</td><td>439.5</td></tr><tr><td>55</td><td>王俊棋</td><td>435.5</td></tr><tr><td>21</td><td>占俊超</td><td>435</td></tr><tr><td>24</td><td>占明睿</td><td>430.5</td></tr><tr><td>年级前1000</td><td></td><td>430</td></tr><tr><td>50</td><td>祝心蕾</td><td>423</td></tr><tr><td>37</td><td>魏佳宁</td><td>422</td></tr><tr><td>17</td><td>付嘉琪</td><td>417</td></tr><tr><td>52</td><td>应奥凯</td><td>406</td></tr><tr><td>44</td><td>周宇欣</td><td>403.5</td></tr><tr><td>27</td><td>王帅</td><td>402.5</td></tr><tr><td>48</td><td>汪凡非</td><td>397.5</td></tr><tr><td>54</td><td>杜祥</td><td>395</td></tr><tr><td>49</td><td>罗尚恩</td><td>389</td></tr><tr><td>41</td><td>徐宇昇</td><td>376.5</td></tr><tr><td>40</td><td>毛骏韬</td><td>373</td></tr><tr><td>47</td><td>钟俊臣</td><td>370</td></tr><tr><td>51</td><td>舒虹睿</td><td>370</td></tr><tr><td>19</td><td>王智棋</td><td>360</td></tr></tbody></table>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 学习 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>明日方舟-远牙</title>
+      <link href="/2021/10/12/%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F-%E8%BF%9C%E7%89%99/"/>
+      <url>/2021/10/12/%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F-%E8%BF%9C%E7%89%99/</url>
+      
+        <content type="html"><![CDATA[<h1 id="明日方舟干员轶事"><a href="#明日方舟干员轶事" class="headerlink" title="明日方舟干员轶事"></a>明日方舟干员轶事</h1><h2 id="远牙"><a href="#远牙" class="headerlink" title="远牙"></a>远牙</h2><p>如何评价新六星的攻击距离?<br>远呀！<br>怎样看待新六星暴打粉丝后畏罪潜逃?<br>冤呀！<br>是怎么认识新六星的?<br>缘呀！<br>新六星是什么种族呢?<br>鸢呀！<br>保底却没抽到新六星作何感想?<br>怨呀！<br>继续开包吗?<br>愿呀！<br>对新六星的第一印象?<br>圆呀！（指胸）<br>新六星的代号是?<br>远牙！！</p><p>鸢鸟啊<br>离开自己的故乡<br>你又背负了什么样的<br>孤寂呢？<br>飘零的羽毛带走的<br>不只是牵挂</p><p>骑士啊<br>不断战斗的赛场<br>你又背负了何等的<br>荣耀呢？<br>光鲜的身姿牵连的<br>不只是暗流</p><p>远牙啊<br>站在望风的甲板<br>你又背负了怎样的<br>忧愁呢？<br>染灰的口琴留念的<br>不只是回忆</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 游戏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-前缀和与差分</title>
+      <link href="/2021/10/09/CPP%E6%95%99%E7%A8%8B-%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86/"/>
+      <url>/2021/10/09/CPP%E6%95%99%E7%A8%8B-%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><p>差分与前缀和是在优化数组存储时的主要的方法，下面我们来了解它们</p><h2 id="前缀和"><a href="#前缀和" class="headerlink" title="前缀和"></a>前缀和</h2><p>以下是两个数组</p><pre class=" language-1"><code class="language-1">1,2,3,4, 5  //原数组1,3,6,10,15  //前缀和处理</code></pre><p>我可以明确的告诉你这就是前缀和<br>看出来了吗?前缀和数组<code>a[n]</code>就等于原数组<code>b[n]</code>项(含)前面的所有项目的和<br>放在递推里可以这样写</p><pre class=" language-c++"><code class="language-c++">a[1]=b[1];for(...)&#123;    a[i]=a[i-1]+b[i];&#125;</code></pre><p>那么前缀和有什么用呢?<br>他可以让我们更快的读取数组区间的和<br>以一维数组为例:<br>要求数组<code>b[n~m]</code>项的和<code>ans</code>,可以这样写</p><pre class=" language-c++"><code class="language-c++">//a[]是b[]的前缀和数组ans=a[m]-a[n-1];</code></pre><h2 id="差分"><a href="#差分" class="headerlink" title="差分"></a>差分</h2><p>照样是两个数组</p><pre class=" language-c++"><code class="language-c++">1,2,5,4,61,1,3,-1,2</code></pre><p>有一点乱,但没关系,差分数组<code>a[]</code>和原数组<code>b[]</code>规律就是</p><pre class=" language-c++"><code class="language-c++">a[n]=b[n]-b[n-1]</code></pre><p>即是原数组的对应项与前一项的差<br>那么差分有什么用呢?<br>他可以让我们更快的改变数组区间内的值(同操作,如都+2)<br>如果要把<code>b[n~m]</code>的项目都<code>+2</code>怎么办呢?</p><pre class=" language-c++"><code class="language-c++">a[n]+=2;a[m+1]-=2;</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 高级教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-循环与递归</title>
+      <link href="/2021/10/06/CPP%E6%95%99%E7%A8%8B-%E5%BE%AA%E7%8E%AF%E4%BA%8E%E9%80%92%E5%BD%92/"/>
+      <url>/2021/10/06/CPP%E6%95%99%E7%A8%8B-%E5%BE%AA%E7%8E%AF%E4%BA%8E%E9%80%92%E5%BD%92/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><blockquote><p>在循环中有几种方法可以表示 <code>循环n次</code>呢?</p></blockquote><p>1.for正</p><pre class=" language-c++"><code class="language-c++">for(int i=1;i<=n;i++)</code></pre><p>2.for逆</p><pre class=" language-c++"><code class="language-c++">for(int i=n;i<=1;i--)</code></pre><p>3.while</p><pre class=" language-c++"><code class="language-c++">while(n--)</code></pre><p>注意:这种循环会改变<code>n</code>的值</p><h2 id=""><a href="#" class="headerlink" title=""></a></h2>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 高级教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-排序</title>
+      <link href="/2021/10/06/CPP%E6%95%99%E7%A8%8B-%E6%8E%92%E5%BA%8F/"/>
+      <url>/2021/10/06/CPP%E6%95%99%E7%A8%8B-%E6%8E%92%E5%BA%8F/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><blockquote><p>在c++中,怎么样对一个无序数组从小到大/从大到小排序呢?</p></blockquote><p>方法如下</p><p>1.函数法<br>c++本身就提供给我们一个高效的排序函数</p><pre class=" language-c++"><code class="language-c++">int a[1000]//数据下标为1~nsort(a+1,a+n+1)//若数据下标为0~n-1,则sort(a,a+n)</code></pre><p><code>sort</code>函数使用的方法是<code>快速排序</code><br>2.选择排序</p><pre class=" language-c++"><code class="language-c++"></code></pre><p>3.冒泡排序<br>程序如下</p><pre class=" language-c++"><code class="language-c++">for(int i=1;i<=n;i++)&#123;    for(int j=i;j<=n;j++)&#123;        if(a[j]>a[j+1])swap(a[j],a[j+1]);    &#125;&#125;</code></pre><p>时间复杂度为<code>O(n^2)</code><br>4.插入排序</p><pre class=" language-c++"><code class="language-c++"></code></pre><p>5.快速排序(高级)<br>程序如下</p><pre class=" language-c++"><code class="language-c++">int a[10000001],n;void qsort(int l,int r)&#123;    int mid=a[(l+r)/2],i=l,j=r;    do&#123;        while(a[i]<mid)i++;        while(a[j]>mid)j--;        if(i<=j)swap(a[i++],a[j--]);    &#125;while(i<=j);    if(l<j)qsort(l,j);    if(i<r)qsort(i,r);&#125;int main() &#123;    cin>>n;    for(int i=1;i<=n;i++)scanf(%d,&a[i]);    qsort(1,n);    for(int i=1;i<=n;i++)printf(%d ,a[i]);    return 0;&#125;</code></pre><p>6.归并排序(高级)<br>程序如下</p><pre class=" language-c++"><code class="language-c++">int a[10000001],n,b[10000001];void msort(int l,int r)&#123;    if(l==r)return;    int mid=(l+r)/2,i=l,j=mid+1,k=l;    msort(l,mid);msort(mid+1,r);    while(i<=mid&&j<=r)&#123;        if(a[i]<a[j])b[k++]=a[i++];        else b[k++]=a[j++];    &#125;    while(i<=mid)b[k++]=a[i++];    while(j<=r)b[k++]=a[j++];    for(int i=l;i<=r;i++)a[i]=b[i];&#125;int main() &#123;    cin>>n;    for(int i=1;i<=n;i++)scanf(%d,&a[i]);    msort(1,n);    for(int i=1;i<=n;i++)printf(%d ,a[i]);    return 0;&#125;</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 高级教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-结构体</title>
+      <link href="/2021/10/05/CPP%E6%95%99%E7%A8%8B-%E7%BB%93%E6%9E%84%E4%BD%93/"/>
+      <url>/2021/10/05/CPP%E6%95%99%E7%A8%8B-%E7%BB%93%E6%9E%84%E4%BD%93/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h2><p>结构体就是你自己的自定义数据结构<br>你可以在结构体中包括n个不同类型的数据，那么这种类型的变量就相当于一个n项的一维列表<br>一维列表就相当于二维……</p><blockquote><p>定义方式</p></blockquote><pre class=" language-c++"><code class="language-c++">struct node &#123;    int id, t;    bool operator <(const node &x)const &#123;        return t > x.t;    &#125;&#125; a[10001];</code></pre><p><code>node</code>表示这个结构的名称,可以自定义<br><code>a[10001]</code>表示这个列表/变量的类型是这个自定义结构<br><code>int id,t;</code>表示这个结构体包含的项目</p><p>这里混进了一个奇怪的东西</p><pre class=" language-c++"><code class="language-c++">bool operator <(const node &x)const &#123;    return t > x.t;</code></pre><p>这个是什么呢?<br><code>operator</code>的意思是重载运算符,这端代码的意义是在<code>sort()</code>排序中按照结构体中的<code>t</code>来排序<br>eg</p><pre class=" language-c++"><code class="language-c++">~node a[10001];//输入的数据下标范围是0~n-1~sort(a,a+n);</code></pre><p>这样的话排序就会按<code>a</code>中的<code>t</code>进行排序,于<code>a</code>中的t对应的<code>id</code>也会改变位置</p><blockquote><p>使用方式</p></blockquote><p>你可以把结构体当成维度+1的列表<br>eg</p><pre class=" language-c++"><code class="language-c++">//定义结构体struct node &#123;    int id, t;    &#125;&#125; a[10001];//使用结构体中的项目a[19].id // a 列表中的下标19项的结构体中的 id 项</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Pic APi</title>
+      <link href="/2021/10/04/Pic-APi/"/>
+      <url>/2021/10/04/Pic-APi/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>PicApi应用正式发布!</p></blockquote><h1 id="PicApi"><a href="#PicApi" class="headerlink" title="PicApi"></a>PicApi</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>PicApi是一个免翻墙的图片网站,每刷新一次就会给你推送一组新的图片<br>图片有风景,二次元等众多分类</p><h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>链接:<a href="https://ntsc-yrx.github.io/File/PICAPI/about%EF%BC%88%E5%9C%A8%E6%AD%A4%E9%A1%B5%E9%9D%A2%E4%B8%8B%E6%BB%91%EF%BC%89">https://ntsc-yrx.github.io/File/PICAPI/about（在此页面下滑）</a></p><h2 id="支持"><a href="#支持" class="headerlink" title="支持"></a>支持</h2><ul><li>Android4+</li><li>Windows10、7</li></ul>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 软件 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>共贺国庆-2021</title>
+      <link href="/2021/10/02/%E5%85%B1%E8%B4%BA%E5%9B%BD%E5%BA%86-2021/"/>
+      <url>/2021/10/02/%E5%85%B1%E8%B4%BA%E5%9B%BD%E5%BA%86-2021/</url>
+      
+        <content type="html"><![CDATA[<p><img src="https://ntsc-yrx.github.io/File/image/20211001.jpg" alt="神州大地繁花似锦，祖国长空乐曲如潮。"></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>关于本网站被bing及google收录的通知</title>
+      <link href="/2021/09/27/%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%BD%91%E7%AB%99%E8%A2%ABbing%E5%8F%8Agoogle%E6%94%B6%E5%BD%95%E7%9A%84%E9%80%9A%E7%9F%A5/"/>
+      <url>/2021/09/27/%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%BD%91%E7%AB%99%E8%A2%ABbing%E5%8F%8Agoogle%E6%94%B6%E5%BD%95%E7%9A%84%E9%80%9A%E7%9F%A5/</url>
+      
+        <content type="html"><![CDATA[<h1 id="关于本网站被各大搜索引擎收录的状态"><a href="#关于本网站被各大搜索引擎收录的状态" class="headerlink" title="关于本网站被各大搜索引擎收录的状态"></a>关于本网站被各大搜索引擎收录的状态</h1><h2 id="最近"><a href="#最近" class="headerlink" title="最近"></a>最近</h2><blockquote><p>bing<br>google</p></blockquote><h2 id="所有"><a href="#所有" class="headerlink" title="所有"></a>所有</h2><p>格式：</p><pre class=" language-1"><code class="language-1">搜索引擎：关键词</code></pre><p>bing:<br>ntsc’s blog,</p><p>google:<br>ntscyrx,</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 公告 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>在本博客发布文章的方法</title>
+      <link href="/2021/09/25/%E5%9C%A8%E6%9C%AC%E5%8D%9A%E5%AE%A2%E5%8F%91%E5%B8%83%E6%96%87%E7%AB%A0%E7%9A%84%E6%96%B9%E6%B3%95/"/>
+      <url>/2021/09/25/%E5%9C%A8%E6%9C%AC%E5%8D%9A%E5%AE%A2%E5%8F%91%E5%B8%83%E6%96%87%E7%AB%A0%E7%9A%84%E6%96%B9%E6%B3%95/</url>
+      
+        <content type="html"><![CDATA[<h1 id="在本博客发布文章的方法"><a href="#在本博客发布文章的方法" class="headerlink" title="在本博客发布文章的方法"></a>在本博客发布文章的方法</h1><p>1.编辑邮件，内容如下</p><blockquote><p>作者<br>时间<br>分类<br>内容<br>访问密码(可选)</p></blockquote><p>2.发送至<a href="mailto:&#104;&#122;&#120;&#x33;&#x30;&#x36;&#57;&#49;&#52;&#64;&#49;&#x36;&#x33;&#46;&#99;&#x6f;&#109;">&#104;&#122;&#120;&#x33;&#x30;&#x36;&#57;&#49;&#52;&#64;&#49;&#x36;&#x33;&#46;&#99;&#x6f;&#109;</a><br>3.等待审核通过<br>4.在博客查看你自己的网站</p><blockquote><p>注:<br>文章审核时间:每周六<br>文章发布:最晚14天内</p></blockquote>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 公告 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>FineYunOS在线系统发布</title>
+      <link href="/2021/09/25/FineYunOS%E5%9C%A8%E7%BA%BF%E7%B3%BB%E7%BB%9F%E5%8F%91%E5%B8%83/"/>
+      <url>/2021/09/25/FineYunOS%E5%9C%A8%E7%BA%BF%E7%B3%BB%E7%BB%9F%E5%8F%91%E5%B8%83/</url>
+      
+        <content type="html"><![CDATA[<h1 id="FineYunOS发布！"><a href="#FineYunOS发布！" class="headerlink" title="FineYunOS发布！"></a>FineYunOS发布！</h1><p>FineYUNoS是一个可以在浏览器中直接运行的系统！目前已经发布！</p><h2 id="配置要求"><a href="#配置要求" class="headerlink" title="配置要求"></a>配置要求</h2><pre class=" language-txt"><code class="language-txt">系统——Windows7以上浏览器——Edge/Chrome等支持HTML5的浏览器内存——至少8GB分辨率——至少360*480</code></pre><p>运行时可能会有较长的启动时间</p><h2 id="OS信息"><a href="#OS信息" class="headerlink" title="OS信息"></a>OS信息</h2><pre class=" language-txt"><code class="language-txt">内核——Scratch3.12.0编码——HTML系统大小——9MB</code></pre><h2 id="在线体验"><a href="#在线体验" class="headerlink" title="在线体验"></a>在线体验</h2><p>网站：<a href="https://ntsc-yrx.github.io/File/fos">https://ntsc-yrx.github.io/File/fos</a></p><p>旧版：<a href="https://ntsc-yrx.github.io/File/FineYunOS">https://ntsc-yrx.github.io/File/FineYunOS</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 软件 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP函数-计算函数</title>
+      <link href="/2021/09/24/CPP%E5%87%BD%E6%95%B0-%E8%AE%A1%E7%AE%97%E5%87%BD%E6%95%B0/"/>
+      <url>/2021/09/24/CPP%E5%87%BD%E6%95%B0-%E8%AE%A1%E7%AE%97%E5%87%BD%E6%95%B0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="计算函数"><a href="#计算函数" class="headerlink" title="计算函数"></a>计算函数</h2><p>C++中自带了一些十分方便的计算函数，它们都直接返回返回值，使用方法如下</p><pre class=" language-c++"><code class="language-c++">a = sqrt(n); //a=n的平方根</code></pre><p>常用函数表</p><pre class=" language-c++"><code class="language-c++">sqrt(n) 平方根pow(x,y) x的y次方ceil(n) 向上取整floor(n) 向下取整max(x,y) 返回x，y中的最大值min(x,y) 返回x，y中的最小值abs(n) 绝对值</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 函数 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-文件导入&amp;导出</title>
+      <link href="/2021/09/21/CPP%E6%95%99%E7%A8%8B-%E6%96%87%E4%BB%B6%E5%AF%BC%E5%85%A5-%E5%AF%BC%E5%87%BA/"/>
+      <url>/2021/09/21/CPP%E6%95%99%E7%A8%8B-%E6%96%87%E4%BB%B6%E5%AF%BC%E5%85%A5-%E5%AF%BC%E5%87%BA/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="文件导入与导出"><a href="#文件导入与导出" class="headerlink" title="文件导入与导出"></a>文件导入与导出</h2><blockquote><p>以下内容为竞赛使用</p></blockquote><p>如果不想在控制台输入数据,而是直接从文件中读取数据怎么办呢?以下代码就可以实现</p><pre class=" language-c++"><code class="language-c++">freopen("xxx.in","r",stdin); //读入freopen("xxx.out","w",stdout); //输出</code></pre><p>注意:</p><blockquote><p>读入文件的文件名后缀名为<code>.in</code>,你可以先使用记事本编辑一个<code>txt</code>文件,然后改一下后缀名就可以了 </p></blockquote><blockquote><p>程序运行完之后会自动创建一个名字为<code>xxx.out</code>的输出文件,直接用记事本打开即可 </p></blockquote><blockquote><p>请把代码放在主程序<code>main</code>的第一行,而且最后两句一起写</p></blockquote>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-循环</title>
+      <link href="/2021/09/19/CPP%E6%95%99%E7%A8%8B-%E5%BE%AA%E7%8E%AF/"/>
+      <url>/2021/09/19/CPP%E6%95%99%E7%A8%8B-%E5%BE%AA%E7%8E%AF/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h2><p>代码</p><pre class=" language-c++"><code class="language-c++">for(初始化变量;判断条件;变量更改)&#123;    ...&#125;</code></pre><p>当<code>判断条件</code>不成立时停止循环<br>例子</p><pre class=" language-c++"><code class="language-c++">for(int i=1;i<=10;i++)&#123; //会执行10次    ...&#125;</code></pre><h2 id="while循环"><a href="#while循环" class="headerlink" title="while循环"></a>while循环</h2><p>代码</p><pre class=" language-c++"><code class="language-c++">while(判断条件)&#123;    ...&#125;</code></pre><p>和<code>for循环</code>一样,只不过是把<code>初始化变量</code>与<code>变量更改</code>外置<br>例子</p><pre class=" language-c++"><code class="language-c++">int i=1;while(i<=10)&#123; //当i>10时停止    ...    i++;&#125;</code></pre><h2 id="do-while循环"><a href="#do-while循环" class="headerlink" title="do-while循环"></a>do-while循环</h2><p>和<code>while循环</code>一样,只不过会先执行一遍再判定<br>代码</p><pre class=" language-c++"><code class="language-c++">do&#123;    ...&#125;while(判断条件);</code></pre><h2 id="特殊语句"><a href="#特殊语句" class="headerlink" title="特殊语句"></a>特殊语句</h2><p>以下是放在循环里的一些语句</p><pre class=" language-c++"><code class="language-c++">continue;//跳过本次,直接开始下一次循环break;//跳出循环</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>勿忘国耻</title>
+      <link href="/2021/09/18/%E5%8B%BF%E5%BF%98%E5%9B%BD%E8%80%BB/"/>
+      <url>/2021/09/18/%E5%8B%BF%E5%BF%98%E5%9B%BD%E8%80%BB/</url>
+      
+        <content type="html"><![CDATA[<p><img src="https://ntsc-yrx.github.io/File/image/20210918.png" alt="918"></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-条件判断语句</title>
+      <link href="/2021/09/18/CPP%E6%95%99%E7%A8%8B-%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD%E8%AF%AD%E5%8F%A5/"/>
+      <url>/2021/09/18/CPP%E6%95%99%E7%A8%8B-%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD%E8%AF%AD%E5%8F%A5/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="if语句"><a href="#if语句" class="headerlink" title="if语句"></a>if语句</h2><p>if语句是bool运算的一部分，中文为：如果</p><p>格式如下</p><pre class=" language-c++"><code class="language-c++">if(条件)&#123;    执行语句&#125;</code></pre><p>如果<code>条件</code>成立,那么<code>执行语句</code></p><h2 id="else语句"><a href="#else语句" class="headerlink" title="else语句"></a>else语句</h2><p>else是和if配套使用的,中文为:否则</p><p>格式如下</p><pre class=" language-c++"><code class="language-c++">if(条件)&#123;    ...&#125;else&#123;    执行语句&#125;</code></pre><p>如果<code>条件</code>不成立,那么<code>执行语句</code></p><h2 id="switch语句"><a href="#switch语句" class="headerlink" title="switch语句"></a>switch语句</h2><p>switch是一种特殊的判断语句,可以理解为一个问题,几个选项</p><p>格式如下</p><pre class=" language-c++"><code class="language-c++">switch()&#123;    case 值1:执行语句1;break;    case 值2:执行语句2;break;    ...    default:其它情况执行语句;&#125;</code></pre><p><code>break</code> 的作用是跳出循环,如果不加,将会在找到合适的<code>执行语句n</code>后还会执行<code>语句n+1,n+2...</code></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>论爱-何为爱情</title>
+      <link href="/2021/09/17/%E8%AE%BA%E7%88%B1-%E4%BD%95%E4%B8%BA%E7%88%B1%E6%83%85/"/>
+      <url>/2021/09/17/%E8%AE%BA%E7%88%B1-%E4%BD%95%E4%B8%BA%E7%88%B1%E6%83%85/</url>
+      
+        <content type="html"><![CDATA[<h1 id="论爱，何为爱情"><a href="#论爱，何为爱情" class="headerlink" title="论爱，何为爱情"></a>论爱，何为爱情</h1><p>以下仅阐述我个人的观点，不作标准</p><p>仅讨论中学时的爱情</p><h2 id="长篇大论"><a href="#长篇大论" class="headerlink" title="长篇大论"></a>长篇大论</h2><p>我认为爱情是有两种的，我不妨把它们叫做A式爱情与B式爱情</p><p>B式爱情就和那么大部分人认为的一样，是不好的，但A式爱情截然不同，它的更多意义是两个人互相学习，互相帮助，相互进步。我相信，如果你是这种爱情，老师一定不会阻拦你</p><p>我爱你，只不过是为了让我们俩不成为陌生人</p><p>现在算下来，我充其量只剩下1年的时间了，在着一年里我只希望可以和你一起把成绩提上来，我没有别的想法。</p><p>确实我还是蛮幼稚的，太冲动了，没有深思熟虑。我也考虑过后果，我知道后果可能会很糟，但我真的不想看到你拉着脸和我说话</p><p>我知道我这样会给你带来很多麻烦。</p><p>我们的关系不是大人的爱情，我说我蛮喜欢你只是因为我和你同天值日，有一份特殊的感情罢了</p><p>我是一个考虑问题严谨的人，我在这个方面不会轻易走出第一步，而且我是想得很开的，我心里的爱情是喜欢学习共同进步的爱情，我也不希望你轻易和其他人走在一起，你一定要仔细辨别对方的好坏，一定要和成绩好的，有道德素养的人在一起，避开“伪君子”。</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 感情 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-输入与输出</title>
+      <link href="/2021/09/17/CPP%E6%95%99%E7%A8%8B-%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA/"/>
+      <url>/2021/09/17/CPP%E6%95%99%E7%A8%8B-%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="输入输出"><a href="#输入输出" class="headerlink" title="输入输出"></a>输入输出</h2><p>C++里的输入输出一般都会显示在命令提示符（黑底白字的那玩意儿）里，而要在那里输入或输出程序计算结果，就要使用输入输出语句</p><p>输入输出语句在C++里有两种：流式，格式</p><blockquote><p>在C语言中貌似没有流式</p></blockquote><h3 id="流式输入-出"><a href="#流式输入-出" class="headerlink" title="流式输入/出"></a>流式输入/出</h3><p>流式输入输出是C++里的独特的方式(指针)</p><p>它的效率比格式化输入输出要低,特别是在输入输出量很大的时候,极有可能会造成程序超时</p><blockquote><p>输入输出流程: 输入&gt;外存&gt;内存</p></blockquote><p>代码如下</p><pre class=" language-c++"><code class="language-c++">cin>>a; //输入并赋值给acout<<a; //输出a的值cout<<a<<endl; //输出并换行</code></pre><p>注：以下代码可以加快流式的速度，可以与格式化媲美</p><pre class=" language-c++"><code class="language-c++">ios::sync_with_stdio(false); //加速cin,cout</code></pre><h3 id="格式化输入-出"><a href="#格式化输入-出" class="headerlink" title="格式化输入/出"></a>格式化输入/出</h3><p>格式化输入输出在C系列语言中通用</p><p>它的效率更高,特别是在输入输出量很大的时候,推荐使用</p><blockquote><p>输入输出流程: 输入&gt;内存</p></blockquote><p>但是它的代码要复杂的多,而且灵活性低</p><p>代码如下</p><pre class=" language-c++"><code class="language-c++">scanf("%d",&a) //输入一个类型为 整数(%d) 的值并按照 地址(&) 赋值给aprintf("%d",a) //输出a的值(强制转换类型为整数)</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>API-动漫图片API</title>
+      <link href="/2021/09/16/API-%E5%8A%A8%E6%BC%AB%E5%9B%BE%E7%89%87API/"/>
+      <url>/2021/09/16/API-%E5%8A%A8%E6%BC%AB%E5%9B%BE%E7%89%87API/</url>
+      
+        <content type="html"><![CDATA[<h1 id="API大全"><a href="#API大全" class="headerlink" title="API大全"></a>API大全</h1><p>不定期更新</p><h2 id="动漫图片"><a href="#动漫图片" class="headerlink" title="动漫图片"></a>动漫图片</h2><p><a href="https://api.jysafe.cn/pixiv/?color=f00&amp;limit=10">https://api.jysafe.cn/pixiv/?color=f00&amp;limit=10</a><br><a href="https://api.ghser.com/acg.html">https://api.ghser.com/acg.html</a><br><a href="https://rainchan.win/projects/pximg">https://rainchan.win/projects/pximg</a><br><a href="https://api.skyil.cn/#/">https://api.skyil.cn/#/</a><br><a href="http://119.91.108.170:88/doc/pixiv">http://119.91.108.170:88/doc/pixiv</a><br><a href="https://acg.e4a.top/acgurl.php%EF%BC%88acg.e4a,top%EF%BC%89">https://acg.e4a.top/acgurl.php（acg.e4a,top）</a><br><a href="https://api.lyiqk.cn/api%EF%BC%88%E5%87%8C%E4%B8%80API%EF%BC%89">https://api.lyiqk.cn/api（凌一API）</a><br><a href="https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php%EF%BC%88%E5%8A%A8%E6%BC%AB%E6%98%9F%E7%A9%BA%EF%BC%89">https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php（动漫星空）</a><br><a href="https://acg.teas.moe/man/api.php%EF%BC%88%E5%96%B5%E7%99%BDAPI%EF%BC%89">https://acg.teas.moe/man/api.php（喵白API）</a><br><a href="https://api.imacroc.cn/acg/%EF%BC%88Macro%E2%80%98s">https://api.imacroc.cn/acg/（Macro‘s</a> API）<br><a href="http://www.dmoe.cc/random.php%EF%BC%88%E9%BE%99%E8%B0%B7%E6%83%85%EF%BC%89">http://www.dmoe.cc/random.php（龙谷情）</a><br><a href="https://api.ghser.com/random/bg.php%EF%BC%88%E4%B8%89%E7%A7%8B-%E9%A3%8E%E6%99%AF%EF%BC%89">https://api.ghser.com/random/bg.php（三秋-风景）</a><br><a href="http://119.91.108.170:88/api/pixiv/setu.php?return=img">http://119.91.108.170:88/api/pixiv/setu.php?return=img</a><br><a href="https://www.yingciyuan.cn/api.php">https://www.yingciyuan.cn/api.php</a><br><a href="https://www.morenote.top/api/GetRandomImage?type=%E5%8A%A8%E6%BC%AB%E7%BB%BC%E5%90%882">https://www.morenote.top/api/GetRandomImage?type=%E5%8A%A8%E6%BC%AB%E7%BB%BC%E5%90%882</a><br><a href="https://api.mz-moe.cn/img.php%EF%BC%88%E6%9C%A8%E5%AD%90%EF%BC%89">https://api.mz-moe.cn/img.php（木子）</a><br><a href="https://api.paugram.com/wallpaper/%EF%BC%88%E4%BF%9D%E7%BD%97%EF%BC%89">https://api.paugram.com/wallpaper/（保罗）</a><br><a href="https://api.btstu.cn/sjbz/api.php?lx=dongman&amp;format=images%EF%BC%88%E6%90%8F%E5%A4%A9%EF%BC%89">https://api.btstu.cn/sjbz/api.php?lx=dongman&amp;format=images（搏天）</a><br><a href="https://api.mtyqx.cn/api/random.php%EF%BC%88%E5%A2%A8%E5%A4%A9%E9%80%B8%EF%BC%89">https://api.mtyqx.cn/api/random.php（墨天逸）</a><br><a href="https://api.isoyu.com/aipc_animation.php%EF%BC%88%E5%A7%AC%E9%95%BF%E4%BF%A1%EF%BC%89">https://api.isoyu.com/aipc_animation.php（姬长信）</a><br><a href="https://api.yimian.xyz/img?type=moe%EF%BC%88EEE.DOG">https://api.yimian.xyz/img?type=moe（EEE.DOG</a> 动漫）<br><a href="https://api.yimian.xyz/img?type=head%EF%BC%88EEE.DOG">https://api.yimian.xyz/img?type=head（EEE.DOG</a> 头像）<br><a href="https://api.yimian.xyz/img?type=moe&amp;size=1920x1080%EF%BC%88EEE%E3%80%82DOG">https://api.yimian.xyz/img?type=moe&amp;size=1920x1080（EEE。DOG</a> 背景）<br><a href="https://img.paulzzh.com/touhou/random%EF%BC%88paulzzh">https://img.paulzzh.com/touhou/random（paulzzh</a>  东方project）<br><a href="https://api.r10086.com/%E5%8A%A8%E6%BC%AB%E7%BB%BC%E5%90%881.php">https://api.r10086.com/动漫综合1.php</a></p><p>输出JSON的<br><a href="http://jiuli.xiaoapi.cn/i/pixiv_img.php?key=JiuLiapi">http://jiuli.xiaoapi.cn/i/pixiv_img.php?key=JiuLiapi</a><br><a href="http://119.91.108.170:88/api/pixiv/setu.php">http://119.91.108.170:88/api/pixiv/setu.php</a><br><a href="https://api.lolicon.app/setu/v2">https://api.lolicon.app/setu/v2</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> API </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>逻辑运算讲解</title>
+      <link href="/2021/09/16/%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E8%AE%B2%E8%A7%A3/"/>
+      <url>/2021/09/16/%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E8%AE%B2%E8%A7%A3/</url>
+      
+        <content type="html"><![CDATA[<h1 id="逻辑运算"><a href="#逻辑运算" class="headerlink" title="逻辑运算"></a>逻辑运算</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>逻辑运算是使用<code>bool值</code>的一种运算,他只有<code>是true``否false</code>两种情况<br>bool值的表达方式有很多种,如下</p><blockquote><p>1,0<br>true,fales<br>是,否<br>除0的数,0</p></blockquote><h2 id="运算"><a href="#运算" class="headerlink" title="运算"></a>运算</h2><p>运算符有以下几个</p><blockquote><p>并且<code>∧</code><br>那么<code>→</code><br>或者<code>∨</code><br>以下是错误的<code>﹁</code></p></blockquote><p>注意相连的两个要使用括号括起来</p><p>例子:</p><p>(p∧q)→(﹁(q∨r))<br>如果p并且q,那么以下的就是错误的:q或者r</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>人教初中-地理24句</title>
+      <link href="/2021/09/16/%E4%BA%BA%E6%95%998%E4%B8%8A-%E5%9C%B0%E7%90%8612%E5%8F%A5/"/>
+      <url>/2021/09/16/%E4%BA%BA%E6%95%998%E4%B8%8A-%E5%9C%B0%E7%90%8612%E5%8F%A5/</url>
+      
+        <content type="html"><![CDATA[<h1 id="地理24句"><a href="#地理24句" class="headerlink" title="地理24句"></a>地理24句</h1><p>Ntsc原创</p><h2 id="中国邻国"><a href="#中国邻国" class="headerlink" title="中国邻国"></a>中国邻国</h2><blockquote><p>朝俄蒙哈吉塔阿，巴印尼不缅老越。<br>韩日菲文马印尼。</p></blockquote><h2 id="少数民族"><a href="#少数民族" class="headerlink" title="少数民族"></a>少数民族</h2><blockquote><p>壮满回苗维吾尔，土家蒙古彝藏多。</p></blockquote><h2 id="山脉"><a href="#山脉" class="headerlink" title="山脉"></a>山脉</h2><blockquote><p>天阴昆仑秦南岭，大太巫雪长武台。</p></blockquote><h2 id="中国省级行政区"><a href="#中国省级行政区" class="headerlink" title="中国省级行政区"></a>中国省级行政区</h2><blockquote><p>两湖两广两河山，五江二宁青陕甘，云贵西四北上天，内重台海福吉安，还有港澳好河山</p></blockquote><h2 id="铁路"><a href="#铁路" class="headerlink" title="铁路"></a>铁路</h2><blockquote><p>京沪京九京哈广，北太焦柳宝成昆。<br>陇海兰新京宝兰，还有一条沪昆线</p></blockquote><blockquote><p>京九京沪郑徐旁，南昌京九株洲广.</p></blockquote><h2 id="400mm降水量线"><a href="#400mm降水量线" class="headerlink" title="400mm降水量线"></a>400mm降水量线</h2><blockquote><p>大阴昆仑祁巴颜,喀拉冈底斯界线.</p></blockquote><h2 id="江西特色"><a href="#江西特色" class="headerlink" title="江西特色"></a>江西特色</h2><blockquote><p>南九景萍新鹰赣,宜上吉抚11市.<br>铜钨铀钽稀(土)金银,七朵金花人杰地灵.</p></blockquote>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 学习 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP自定义库函数</title>
+      <link href="/2021/09/11/CPP%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%93%E5%87%BD%E6%95%B0/"/>
+      <url>/2021/09/11/CPP%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BA%93%E5%87%BD%E6%95%B0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-自定义库函数"><a href="#C-自定义库函数" class="headerlink" title="C++自定义库函数"></a>C++自定义库函数</h1><h2 id="制作-amp-使用教程"><a href="#制作-amp-使用教程" class="headerlink" title="制作&amp;使用教程"></a>制作&amp;使用教程</h2><blockquote><p>制作</p></blockquote><p>把你原来在你自己的程序里定义的函数的定义代码拿出来,加入<code>库文件</code>中就可以了(记得在库文件中加以下代码)</p><pre class=" language-C++"><code class="language-C++">#include <bits/stdc++.h>using namespace std;</code></pre><p><code>库文件</code>要求:后缀名是<code>.h</code>,文件名随意</p><blockquote><p>使用</p></blockquote><p>就像加入标准库一样<br>实例:</p><pre class=" language-C++"><code class="language-C++">#include <C:\Users\abc\Desktop\name.h></code></pre><p>你需要在<code>&lt;&gt;</code>中加入你自己的库文件在你的计算机上的文件地址</p><h2 id="推荐我自己编的库函数"><a href="#推荐我自己编的库函数" class="headerlink" title="推荐我自己编的库函数"></a>推荐我自己编的库函数</h2><blockquote><p>最近更新：<a href="https://ntsc-yrx.github.io/File/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E5%BA%93/ntsc.h">下载库文件</a></p></blockquote><p>所有：<br><a href="https://ntsc-yrx.github.io/File/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E5%BA%93/bignum/bignum.h">bignum</a><br><a href="https://ntsc-yrx.github.io/File/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E5%BA%93/sort/sort.h">sort</a><br><a href="https://ntsc-yrx.github.io/File/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E5%BA%93/ntsc.h">其它</a></p><p>以下是部分库文件目录</p><pre class=" language-C++"><code class="language-C++">//判断质数//返回值,是返回true,不是返回falsebool if_prime(int x) &#123;//输出逆序数字//coutvoid reverse_num(int x) &#123;//转进制//参数(十进制数,目标进制)//coutvoid change_base(int a, int b) &#123;</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-变量</title>
+      <link href="/2021/09/09/CPP%E6%95%99%E7%A8%8B-%E5%8F%98%E9%87%8F/"/>
+      <url>/2021/09/09/CPP%E6%95%99%E7%A8%8B-%E5%8F%98%E9%87%8F/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++教程"></a>C++教程</h1><h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>几乎所有编程语言里面都有变量,C++也不例外</p><p>C++的变量定义代码是</p><pre class=" language-C++"><code class="language-C++"> int name=0;</code></pre><p> <code>int</code>是这个变量的类型,所有类型如下</p><blockquote><p>int 整形(整数)<br>float 浮点型(小数)<br>double 双精度浮点型(长小数)<br>char 字符<br>string 字符串<br>long long 长整数<br>bool 布尔型(是或否)</p></blockquote><p> 在使用习惯上,一般<code>float</code>会不用,而用<code>double</code></p><p> <code>name</code>是指这个变量的名字,可随意填写,但要求如下</p><blockquote><p>只包括英文,数字,下划线<br>不以数字开头<br>没有空格</p></blockquote><p>变量可以用<code>=</code>直接赋值,也可以赋值为另一个变量的值,但要注意两个量的类型是否相同</p><blockquote><p>注:string在代码编辑器里的颜色与其它如int,double等的颜色不同,因为string是一个特殊的类型,它确实是一个内置函数,相当于一个一维的字符列表(你以后会学到)</p></blockquote><p>位置:<br>你可以在<code>主函数</code>内或者外面定义变量,也可以在其它函数里定义</p><blockquote><p>布尔值详解</p></blockquote><p>布尔值是一个特殊的类型,如果把它赋值为一个数字,那么除0还是0外,其它的都是1<br>0=否,1=是</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CPP教程-初见</title>
+      <link href="/2021/09/08/CPP%E6%95%99%E7%A8%8B-%E5%88%9D%E8%A7%81/"/>
+      <url>/2021/09/08/CPP%E6%95%99%E7%A8%8B-%E5%88%9D%E8%A7%81/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-教程"><a href="#C-教程" class="headerlink" title="C++ 教程"></a>C++ 教程</h1><h2 id="hello-world"><a href="#hello-world" class="headerlink" title="hello world"></a>hello world</h2><blockquote><p>你好，世界！</p></blockquote><p>C++的世界,很大.</p><p>C++是C语言的继承，它既可以进行C语言的过程化程序设计，又可以进行以抽象数据类型为特点的基于对象的程序设计，还可以进行以继承和多态为特点的面向对象的程序设计。C++擅长面向对象程序设计的同时，还可以进行基于过程的程序设计，因而C++就适应的问题规模而论，大小由之。<br>C++不仅拥有计算机高效运行的实用性特征，同时还致力于提高大规模程序的编程质量与程序设计语言的问题描述能力。</p><p>C++是世界上最通用的编程语言之一,与HTML不同的是,C++是编程语言,而HTML是超文本标记语言.一个是编程,一个是标记,因此,C++的难度会大一些<br>与C++齐名的还要Java,Python等</p><p>C++的用处很大,在游戏搭建,软件构造等都有用武之地<br>C++是一门复杂的编程语言,同学们要做好心理准备</p><blockquote><p>C++软件推荐:Dev C++</p></blockquote><h2 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h2><p>接下来,我们正式开始学习C++这个编程语言</p><p>C++的基本代码框架如下</p><pre class=" language-C++"><code class="language-C++"># include <bits/stdc++.h>using namespace std;int main()&#123;程序return 0;&#125;</code></pre><p>C++的每个语句之间使用<code>;</code>隔开!<br>框架逐行讲解如下:</p><pre class=" language-C++"><code class="language-C++"># include <bits/stdc++.h></code></pre><p>这个是声明,<code>&lt;&gt;</code>里的是要使用的库,当你在使用C++里面的某些代码时,计算机可能需要在不同的库里面找到,而你必须声明所有你用的的库,不然就会报错<code>没有这个代码</code></p><p>实例里的<code>bits/stdc++.h</code>是万能头文件,里面涵盖的大部分常用库</p><pre class=" language-C++"><code class="language-C++">using namespace std;</code></pre><p>这个的意思是——使用通用命名空间<br>这个是用来处理重名问题的,一般情况下这样写就可以</p><pre class=" language-C++"><code class="language-C++">int main&#123;...return 0;&#125;</code></pre><p>这个是<code>主函数</code>,表示程序主要执行部分,除了定义新函数需要写在外面&amp;定义变量,列表可以写在外面 以外,其他的都要写在里面才会执行</p><pre class=" language-C++"><code class="language-C++">return 0;</code></pre><p>这个表示程序结束,终止.</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>HTML扩展-设置是否缓存</title>
+      <link href="/2021/09/06/HTML%E6%89%A9%E5%B1%95-%E8%AE%BE%E7%BD%AE%E6%98%AF%E5%90%A6%E7%BC%93%E5%AD%98/"/>
+      <url>/2021/09/06/HTML%E6%89%A9%E5%B1%95-%E8%AE%BE%E7%BD%AE%E6%98%AF%E5%90%A6%E7%BC%93%E5%AD%98/</url>
+      
+        <content type="html"><![CDATA[<h1 id="设置是否缓存"><a href="#设置是否缓存" class="headerlink" title="设置是否缓存"></a>设置是否缓存</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>缓存至把浏览器中从网络上获取的文件暂时保存在磁盘上，这样下一次在同一个设备上访问此网站就可以减少下载量，从而加快网站加载速度</p><blockquote><p>缓存的选择：</p></blockquote><p>长时间不变化的，或者文件较大的（如视频、图片）需要缓存<br>可能会随时更改的数据不要缓存</p><blockquote><p>缓存的时间：</p></blockquote><p>缓存没有时间限制，但如果用户清理了浏览器缓存，那么缓存内容会被清空</p><h2 id="改变"><a href="#改变" class="headerlink" title="改变"></a>改变</h2><p>设置缓存需要在两个地方进行改动</p><blockquote><p>新文件</p></blockquote><p>你需要新建一个文件<code>name.appcache</code>后缀名不可更改<br>文件内容如下</p><pre class=" language-appcache"><code class="language-appcache">CACHE MANIFEST/要缓存的文件NETWORK/不缓存的文件(填*表示除要缓存的文件外都不要缓存)FALLBACK/没有网络时跳转的错误页面(html文件)</code></pre><blockquote><p>html文件</p></blockquote><p>在原文件更改代码为</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">manifest</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>name.appcache<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>...<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre><p>即可</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>实用软件分享</title>
+      <link href="/2021/09/05/%E5%AE%9E%E7%94%A8%E8%BD%AF%E4%BB%B6%E5%88%86%E4%BA%AB/"/>
+      <url>/2021/09/05/%E5%AE%9E%E7%94%A8%E8%BD%AF%E4%BB%B6%E5%88%86%E4%BA%AB/</url>
+      
+        <content type="html"><![CDATA[<h1 id="实用软件分享"><a href="#实用软件分享" class="headerlink" title="实用软件分享"></a>实用软件分享</h1><p>本文章分享的软件均免费或有poujie版</p><h2 id="Adobe全家桶"><a href="#Adobe全家桶" class="headerlink" title="Adobe全家桶"></a>Adobe全家桶</h2><p><a href="https://www.yutu.cn/popsoft.html">https://www.yutu.cn/popsoft.html</a></p><h2 id="电脑美化"><a href="#电脑美化" class="headerlink" title="电脑美化"></a>电脑美化</h2><p><a href="https://zhutix.com/tag/10t/">https://zhutix.com/tag/10t/</a></p><h2 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h2><p><a href="https://msdn.itellyou.cn/">https://msdn.itellyou.cn/</a></p><h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>本博客仅转载，无实际内容</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 软件 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>HTML扩展-localStorage存储2</title>
+      <link href="/2021/09/05/HTML%E6%8B%93%E5%B1%95-localStorage%E5%AD%98%E5%82%A82/"/>
+      <url>/2021/09/05/HTML%E6%8B%93%E5%B1%95-localStorage%E5%AD%98%E5%82%A82/</url>
+      
+        <content type="html"><![CDATA[<h1 id="HTML拓展-localStorage存储"><a href="#HTML拓展-localStorage存储" class="headerlink" title="HTML拓展-localStorage存储"></a>HTML拓展-localStorage存储</h1><p>localStorage存储技术属于JS（JavaScript）的内容，而且还要放在函数中执行，框架如下</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script language-javascript">    <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>    此处放置代码    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span></code></pre><p>localStorage存储的功能有很多，我们一一讲解</p><h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><p>代码如下</p><pre class=" language-javascript"><code class="language-javascript">localStorage<span class="token punctuation">.</span><span class="token function">removeItem</span><span class="token punctuation">(</span><span class="token string">"key"</span><span class="token punctuation">)</span></code></pre><p>以上是删除单个数据的方法，删除全部数据（清空）如下</p><pre class=" language-javascript"><code class="language-javascript">localStorage<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre><h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>缓存指你关闭浏览器时会自动清空的数据</p><p>方法很简单，只需要把原代码的单词替换一下</p><pre class=" language-javascript"><code class="language-javascript">localStorage改为sessionStorage即可</code></pre><h2 id="判断是否支持"><a href="#判断是否支持" class="headerlink" title="判断是否支持"></a>判断是否支持</h2><p>以下方法可以让你判断你的浏览器是否支持localStorage存储技术</p><pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">if</span><span class="token punctuation">(</span>window<span class="token punctuation">.</span>localStorage<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>支持时的操作（比如显示文字等）<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span><span class="token keyword">else</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>不支持时的操作<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span></code></pre><p>判断是否支持sessionStorage存储只要把“localStorage”改为“sessionStorage”即可</p><h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>代码有时会出现“&amp;#123”和“&amp;#125”，分别代表前后花括号” {   }  “</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>HTML拓展-localStorage存储</title>
+      <link href="/2021/09/04/HTML%E6%8B%93%E5%B1%95-localStorage%E5%AD%98%E5%82%A8/"/>
+      <url>/2021/09/04/HTML%E6%8B%93%E5%B1%95-localStorage%E5%AD%98%E5%82%A8/</url>
+      
+        <content type="html"><![CDATA[<h1 id="HTML拓展-localStorage存储"><a href="#HTML拓展-localStorage存储" class="headerlink" title="HTML拓展-localStorage存储"></a>HTML拓展-localStorage存储</h1><h2 id="localStorage存储技术"><a href="#localStorage存储技术" class="headerlink" title="localStorage存储技术"></a>localStorage存储技术</h2><p>localStorage存储技术属于JS（JavaScript）的内容，而且还要放在函数中执行，框架如下</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script language-javascript">    <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>    此处放置代码    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span></code></pre><p>localStorage存储的功能有很多，我们一一讲解</p><h2 id="输入与储存"><a href="#输入与储存" class="headerlink" title="输入与储存"></a>输入与储存</h2><p>输入还是使用input代码，如下</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>data<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span><span class="token punctuation">></span></span></code></pre><p>储存的代码如下</p><pre class=" language-JavaScript"><code class="language-JavaScript">localStorage.key=data或者localStorage.setItem('key',data)</code></pre><p>这里说明一下localStorage存储的格式<br>localStorage存储的内容有两个：key,data<br>可以理解为是名称和内容，他们俩一一对应。<br>key和data都可以被当做变量直接赋值，如方法1</p><h2 id="获取"><a href="#获取" class="headerlink" title="获取"></a>获取</h2><p>直接上代码</p><pre class=" language-JavaScript"><code class="language-JavaScript">var data=localStorage.getItem("key")</code></pre><p>如果要把获取的内容显示出来，你需要</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>123<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span></code></pre><pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> data<span class="token operator">=</span>localStorage<span class="token punctuation">.</span><span class="token function">getItem</span><span class="token punctuation">(</span><span class="token string">"key"</span><span class="token punctuation">)</span><span class="token number">123</span><span class="token punctuation">.</span>innerHTML<span class="token operator">=</span>data</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>我的世界指令大全-实时更新</title>
+      <link href="/2021/09/03/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C%E6%8C%87%E4%BB%A4%E5%A4%A7%E5%85%A8-%E5%AE%9E%E6%97%B6%E6%9B%B4%E6%96%B0/"/>
+      <url>/2021/09/03/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8C%E6%8C%87%E4%BB%A4%E5%A4%A7%E5%85%A8-%E5%AE%9E%E6%97%B6%E6%9B%B4%E6%96%B0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="我的世界指令大全"><a href="#我的世界指令大全" class="headerlink" title="我的世界指令大全"></a>我的世界指令大全</h1><h2 id="A"><a href="#A" class="headerlink" title="A"></a>A</h2><p>/awake（哎咿呀咿呀咿呀）<br>/ascend (提升到一个平台）</p><h2 id="B"><a href="#B" class="headerlink" title="B"></a>B</h2><p>/buttercup（开始吟唱）<br>/bind&lt;命令&gt;（设置命令快捷键）<br>/blockdata（修改某个方块的数据标签）<br>/backup（运行备份）<br>/ban（添加一个玩家到黑名单）<br>/ban-ip（添加一个ip到黑名单）<br>/banlist（显示你的黑名单）<br>/butcher（杀死附近所有的怪物）</p><h2 id="C"><a href="#C" class="headerlink" title="C"></a>C</h2><p>/clear（清空背包）<br>/clone（将某个方块复制到某个位置）</p><h2 id="D"><a href="#D" class="headerlink" title="D"></a>D</h2><p>/daylock（开启或关闭日夜循环）<br>/difficulty（设置游戏难度，0和平，1简单，2普通，3困难）<br>/damage（开启或关闭伤害）<br>/descend（下降到一个平台）<br>/dupe [all]（复制物品）<br>/destroy [all]（破坏背包里的物品）<br>/defuse [all]（拆掉点燃了的TNT）<br>/drops（开启或关闭物品掉落）<br>/duplicate [all]（复制当前手中物品并丢出）<br>/deop（将某个玩家的管理员身份撤销）</p><h2 id="E"><a href="#E" class="headerlink" title="E"></a>E</h2><p>/explode [范围]（使指定范围产生爆炸）<br>/effect（获得或移除某效果）<br>/ext [all]（熄灭周围的火焰）<br>/enchant（附魔某个玩家的某个物品）</p><h2 id="F"><a href="#F" class="headerlink" title="F"></a>F</h2><p>/fly（飞行）<br>/freeze（冻结所有怪物）<br>/fill（用某种方块填满某块区域）<br>/forestgen（在身旁形成森林）<br>/falldamage（高空掉落是否造成伤害）</p><h2 id="G"><a href="#G" class="headerlink" title="G"></a>G</h2><p>/give（玩家）&lt;物品&gt; [数量]     （给某个玩家某种数量的某种物品，给自己时则不需要输玩家名）<br>/goto&lt;某地名&gt;（直接去某个地方）<br>/gamemode（设置游戏模式）<br>/gamerule ture/false（开启或关闭某种游戏规则）<br>/gamerule pvp（开启或关闭玩家之间的伤害）<br>/gamerule doMobLoot（开启或关闭生物掉落物品）<br>/gamerule doMobSpawning（开启或关闭生物自然生成）<br>/gamerule doWeatherCycle（开启或关闭天气变化）<br>/gamerule keepInventory（开启或关闭死亡不掉落，你们最想要的东西）<br>/gamerule naturalRegeneration false（UHC，指超极限）<br>依次输入以下指令：/gamerule naturalRegeneration false     /time set 18000           /gamerule doDaylightCycle false（永夜UHC，最难生存，能玩下来的都是鬼才）<br>/grow（生长达到满）</p><h2 id="H"><a href="#H" class="headerlink" title="H"></a>H</h2><p>/house（马了顶大！）<br>/help（命令帮助）<br>/heal（为某人补指定的血）<br>/health（设置血量）<br>/home（回到你的出生点）</p><h2 id="I"><a href="#I" class="headerlink" title="I"></a>I</h2><p>/i &lt;物品代码&gt; [数量]（给玩家指定数量的物品，物品代码大全下面会给）<br>/invsee（查看某人的背包）<br>/itemstack &lt;物品代码&gt; [数量]（同上）<br>/instantmine（即时挖矿）<br>/itemname（显示当前手上的物品名称）</p><h2 id="J"><a href="#J" class="headerlink" title="J"></a>J</h2><p>/jump（瞬移到光标所指处）</p><h2 id="K"><a href="#K" class="headerlink" title="K"></a>K</h2><p>/kill（自杀）<br>/kick（将某位玩家踢出房间）<br>/killnpc [all]（杀掉周围所有的NPC）</p><h2 id="L"><a href="#L" class="headerlink" title="L"></a>L</h2><p>/lexburner（用爱发电&amp;一方通行）<br>/light（开关光照）<br>/list（列出玩家列表）<br>/lingtning（超电磁炮）<br>/lingtning（雷击，若不输入名字则雷会劈到你的光标所指处）<br>/locate（寻找遗迹或村庄）<br>/listwaypoints（列出所有路径点）<br>M<br>/mihotel（食用猕hotel，回复100点生命值）<br>/music [音量值]（播放音乐）<br>/mute（将某人禁言）<br>/me（显示你自己的信息）<br>/msg &lt;消息&gt;（私聊）<br>/maxstack [物品ID|物品名称|全部] [数量]（最大堆叠物品）<br>/macro &lt;文件名&gt; {参数}（允许运行宏）<br>/mmoedit name skname rank（如果你安装了MCRPG插件，那么你可以使用这个命令改变某位玩家的某项技能级别）</p><h2 id="N"><a href="#N" class="headerlink" title="N"></a>N</h2><p>/nick ID（给某人改名）<br>/noclip（穿墙）</p><h2 id="O"><a href="#O" class="headerlink" title="O"></a>O</h2><p>/op（给予某位玩家管理员身份）<br>P</p><h2 id="p（显示当前的坐标）"><a href="#p（显示当前的坐标）" class="headerlink" title="/p（显示当前的坐标）"></a>/p（显示当前的坐标）</h2><p>/pumpkins（在自己身旁形成南瓜林）<br>/pardon（从黑名单移除某位玩家或某个ip）<br>/pos（显示当前所有玩家的坐标）<br>/particle（制造颗粒效果）<br>/playsound（播放某个游戏音效）<br>/publish（对局域网开放单人世界）<br>Q<br>暂无<br>R<br>/reach（到指定的地方）<br>/replaceitem（替换物品栏中的物品）<br>/return（传送到上一次传送的地方）<br>/removedrops [all]（删掉地上的所有物品）<br>/rename（修改某命令的名称）<br>/rem（删除指定路点）<br>/repair [all]（当前手持物品耐久回满）<br>/reset（恢复所有默认设置）<br>S<br>/stop（停止服务器运行）<br>/seen name（查看某位玩家最后退出的时间）<br>/search &lt;关键词&gt;（搜索某物品名）<br>/save-all（将服务器保存至硬盘中）<br>/save-off（禁用服务器自动保存）<br>/save-on（开启服务器自动保存）<br>/set &lt;名字&gt;（在这个世界标记一个路径点）<br>/say（向其他玩家显示一条信息）<br>/setjump [JUMP|reset]（设置跳跃的高度 落地伤害和移动 1:1）<br>/setspawn [ X,Y,Z轴 ]（设置当前位置）<br>/scoreboard（管理玩家或队伍）<br>/seed（显示此世界种子）<br>/setspeed [速度|重置]（设置移动速度）<br>/spawn（产生某个生物）<br>/setblock（将一个方块变成另一个方块）<br>/setidletimeout（设置自动踢出挂机玩家的时间）<br>/spawnstack {NAME|ID|random}（产生一个合体的怪物NPC）<br>/setworldspawn（设置出生点）<br>/spawnpoint（设置某位玩家的出生点）<br>/summon（生成某个实体）<br>/snow（在自己附近生成下雪后的样子）<br>/stats（通过命令的返回改变计分板对象）<br>T<br>/tele（传送到某坐标）<br>/thaw（融化所有雪和冰块）<br>/title（设置屏幕标题）<br>/tp [玩家名]（传送到某玩家的位置）<br>/tp name1 name2（把玩家1传送到玩家2的位置）<br>/tphere（把某位玩家传送到自己的位置）<br>/tpall（将当前所有玩家传送到自己的位置）<br>/tell（向某玩家发起私聊）<br>/tellraw（向其他玩家显示一条JSON信息）<br>/time [set|get|day|night [minute|hour|day [TIME]]]（设置在指定时间得到某物品）<br>/timeschedule（设定一段时间，并且当前世界将永远保持着这段时间）<br>/testfor（计算特定条件的实体数）<br>/time（修改或查询当前世界时间）<br>/tree（生成一棵树）<br>/testforblock（探测某一个方块是否在某一个位置）<br>/testforblocks（探测某两个区域内的方块是否匹配）<br>/trigger（设置触发装置的激活状态）<br>U<br>/up[高度]（将自己提升到某个高度）<br>/unbind（撤销某个命令）<br>/unlimited id（给自己某个物品【无限】）<br>/useportal（传送到下界）<br>V<br>暂无<br>W<br>/weather（设置天气）<br>/waterdamage（开关水下伤害）<br>/world（当前世界信息）<br>/world load（加载指定的文件）<br>/world save（保存并退出）<br>/world exit（不保存并退出）<br>/world list（列出所有存档）<br>/whitelist（列出白名单）<br>/worldborder（管理世界边界）<br>X<br>/xp（增加或移除某位玩家的经验值）<br>Y<br>暂无<br>Z<br>暂无</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 游戏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>派蒙~</title>
+      <link href="/2021/09/03/%E6%B4%BE%E8%92%99/"/>
+      <url>/2021/09/03/%E6%B4%BE%E8%92%99/</url>
+      
+        <content type="html"><![CDATA[<h1 id="派蒙-应急食物嘿嘿嘿…"><a href="#派蒙-应急食物嘿嘿嘿…" class="headerlink" title="派蒙-应急食物嘿嘿嘿…"></a>派蒙-应急食物嘿嘿嘿…</h1><p>⠀  ⠀⠀⠀⠀⠀⠀⢀⣠⠴⠒⠛⠲⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<br>⠀⠀⠀⠀⡀⠀⢀⠀⢻⡄⣠⠶⣆⠀⣸⣀⣀⠀⠀⡀⠀⢀⠀⢀⠀⠀<br>⠀⠀⠀⠁⠀⠀⢀⡠⠬⠛⢓⣏⠉⣾⣉⣀⠉⢹⡀⠀⠀⠀⠀⠀⠀⠀<br>⠀⠀⠐⠀⢀⡖⠋⣠⠴⠛⠙⢹⠞⢳⢀⣨⡵⠚⠀⠀⠀⠐⠀⠀⠂⠀<br>⠀⠀⠀⣰⠋⡠⠎⠁⣀⠤⠒⠚⠛⠙⠒⠳⠤⣄⡀⠀⠠⠀⠀⠄⠀⠠<br>⠀⠀⠀⠘⠐⢼⠖⠋⠀⠀⢀⠀⠀⠀⠀⠀⠀⠘⣌⡒⠲⢹⠀⠀⠀⠀<br>⠀⠀⠈⠀⡸⠁⠀⠀⠀⠀⡆⠀⠀⠐⠀⠢⣄⠀⡽⡙⡲⠑⠒⠒⡒⠁<br>⢀⡠⠴⠚⠀⠀⠀⠀⠀⣕⠝⣄⡀⢀⠀⠀⡇⠵⢍⠚⢾⡀⢠⠖⠁⠀<br>⠈⠦⣄⣀⠀⡔⠀⠀⢁⡞⠀⠉⠲⣄⡀⢲⢼⠀⢀⠳⡄⠁⠀⢣⠀⠀<br>⠀⠀⣠⠃⢐⠄⠀⠀⠴⠅⠠⡊⡢⠀⠉⠉⠁⠀⢆⠕⠹⡀⠀⠈⡆⠀<br>⠀⠠⡇⠀⡸⠀⠀⠀⠨⡅⠀⠒⠈⠀⢄⠠⠠⠔⠀⠀⠀⢻⠀⠀⢣⠀<br>⠀⢸⠅⠀⡕⠀⠀⠀⠀⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⡏⠀⠀⢸⠀<br>⠀⠈⡇⠀⣣⠀⠀⠈⠀⠸⡦⠴⠲⢚⢚⠙⠝⠙⠍⠝⣱⠏⢠⠀⢸⠅<br>⠀⠀⠙⣆⠘⣄⠀⠠⣄⠀⠹⣌⠌⠀⠂⠐⢈⠄⡁⢌⠳⣺⠏⢀⡞⠀<br>⠀⠀⠀⠀⠙⠺⠛⣲⠜⠟⡓⡚⣏⣔⡀⡌⣀⢂⣔⠴⠋⢏⠒⠁⠀</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 游戏 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CSS教程-列表与鼠标</title>
+      <link href="/2021/09/03/CSS%E6%95%99%E7%A8%8B-%E5%88%97%E8%A1%A8%E4%B8%8E%E9%BC%A0%E6%A0%87/"/>
+      <url>/2021/09/03/CSS%E6%95%99%E7%A8%8B-%E5%88%97%E8%A1%A8%E4%B8%8E%E9%BC%A0%E6%A0%87/</url>
+      
+        <content type="html"><![CDATA[<h1 id="CSS教程-列表，鼠标"><a href="#CSS教程-列表，鼠标" class="headerlink" title="CSS教程-列表，鼠标"></a>CSS教程-列表，鼠标</h1><h2 id="列表样式"><a href="#列表样式" class="headerlink" title="列表样式"></a>列表样式</h2><p>今天讲的样式的分类是</p><pre class=" language-CSS"><code class="language-CSS">list-style-</code></pre><p>项目有</p><pre class=" language-CSS"><code class="language-CSS">type:样式position:边距image:自定义图片样式</code></pre><p>项目单独讲解如下：<br>type<br>none表示无</p><h2 id="超链接样式"><a href="#超链接样式" class="headerlink" title="超链接样式"></a>超链接样式</h2><p>今天讲的样式没有分类，而且与之前的有一点不一样<br>模块如下</p><pre class=" language-CSS"><code class="language-CSS">a:+++&#123;    属性&#125;</code></pre><p>今天我们不讲“属性”部分，而将“+++”的部分</p><p>“+++”可以替换为以下，表示属性适用于不同的超链接</p><pre class=" language-CSS"><code class="language-CSS">link 未访问的hover 鼠标悬停的visited 访问过的active 被激活的</code></pre><p>注：定义的顺序如下</p><blockquote><p>link / visited</p><p>↓</p><p>hover</p><p>↓</p><p>active</p></blockquote>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CSS教程-边框</title>
+      <link href="/2021/09/02/CSS%E6%95%99%E7%A8%8B-%E8%BE%B9%E6%A1%86/"/>
+      <url>/2021/09/02/CSS%E6%95%99%E7%A8%8B-%E8%BE%B9%E6%A1%86/</url>
+      
+        <content type="html"><![CDATA[<h1 id="CSS教程-边框"><a href="#CSS教程-边框" class="headerlink" title="CSS教程-边框"></a>CSS教程-边框</h1><h2 id="边框样式"><a href="#边框样式" class="headerlink" title="边框样式"></a>边框样式</h2><p>今天讲的文本样式的分类是</p><pre class=" language-CSS"><code class="language-CSS">border-</code></pre><p>边框样式包括图片边框和文字边框哦~</p><p>项  ,NM目有</p><pre class=" language-CSS"><code class="language-CSS">color:x*x*xu*?&""</code></pre><p>项目单独讲解如下：</p><p>//作者很懒，什么也没留下….</p><p>这是CSS教程系列里最后一个样式的教程了，请同学们一定要牢记！</p><p>7</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CSS教程-字体</title>
+      <link href="/2021/09/01/CSS%E6%95%99%E7%A8%8B-%E5%AD%97%E4%BD%93/"/>
+      <url>/2021/09/01/CSS%E6%95%99%E7%A8%8B-%E5%AD%97%E4%BD%93/</url>
+      
+        <content type="html"><![CDATA[<h1 id="CSS教程-字体，间距"><a href="#CSS教程-字体，间距" class="headerlink" title="CSS教程-字体，间距"></a>CSS教程-字体，间距</h1><h2 id="字体样式"><a href="#字体样式" class="headerlink" title="字体样式"></a>字体样式</h2><p>今天讲的样式的分类是</p><pre class=" language-CSS"><code class="language-CSS">font-</code></pre><p>项目有</p><pre class=" language-CSS"><code class="language-CSS">color:#表示颜色的数值size :大小style:样式family:字体weight:粗细</code></pre><p>项目单独讲解如下：<br>weight<br>可填入数字100~900中的整百数，数字越大，字体越粗</p><h2 id="设置间接"><a href="#设置间接" class="headerlink" title="设置间接"></a>设置间接</h2><p>这个没有统一的分类，但也不多</p><pre class=" language-CSS"><code class="language-CSS">line-height //行距word-spacing //词距letter-spacing //字距</code></pre><p>一共就这3个,在后面加冒号加数值即可</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CSS教程-背景</title>
+      <link href="/2021/08/31/CSS%E6%95%99%E7%A8%8B-%E8%83%8C%E6%99%AF/"/>
+      <url>/2021/08/31/CSS%E6%95%99%E7%A8%8B-%E8%83%8C%E6%99%AF/</url>
+      
+        <content type="html"><![CDATA[<h1 id="CSS教程-背景"><a href="#CSS教程-背景" class="headerlink" title="CSS教程-背景"></a>CSS教程-背景</h1><h2 id="背景样式"><a href="#背景样式" class="headerlink" title="背景样式"></a>背景样式</h2><p>今天讲的文本样式的分类是</p><pre class=" language-CSS"><code class="language-CSS">background-</code></pre><p>项目有</p><pre class=" language-CSS"><code class="language-CSS">color:#表示颜色的数值image:图片repeat:平铺attachment:图片是否跟随文本移动position:图片位置</code></pre><p>项目单独讲解如下：<br>repeat</p><pre class=" language-CSS"><code class="language-CSS">-x //-y //no- //</code></pre><p>attachment</p><pre class=" language-CSS"><code class="language-CSS">scroll //是fixed //否</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CSS教程-文本</title>
+      <link href="/2021/08/30/CSS%E6%95%99%E7%A8%8B-%E6%96%87%E6%9C%AC/"/>
+      <url>/2021/08/30/CSS%E6%95%99%E7%A8%8B-%E6%96%87%E6%9C%AC/</url>
+      
+        <content type="html"><![CDATA[<h1 id="CSS教程-文本"><a href="#CSS教程-文本" class="headerlink" title="CSS教程-文本"></a>CSS教程-文本</h1><h2 id="文本样式"><a href="#文本样式" class="headerlink" title="文本样式"></a>文本样式</h2><p>此部分及以后的部分讲的都是“属性”里可以填入的内容<br>CSS样式代码是有分类的，绝大部分的代码的格式都是如下：</p><pre class=" language-CSS"><code class="language-CSS">text-color:#000000;</code></pre><p>转换为中文就是：</p><blockquote><p>分类 - 项目：数值 ；</p></blockquote><p>今天讲的文本样式的分类是</p><pre class=" language-CSS"><code class="language-CSS">text-</code></pre><p>项目有</p><pre class=" language-CSS"><code class="language-CSS">color:#表示颜色的数值indent:数字emstyle:样式decoration:各种线align:对齐方式transform:默认大小写</code></pre><p>项目单独讲解如下：<br>decoration</p><pre class=" language-CSS"><code class="language-CSS">underline //下划线overline //上划线line-through //删除线blink //闪烁</code></pre><p>transform</p><pre class=" language-CSS"><code class="language-CSS">c~ //首字母大写u~ //全大写l~ //全小写</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>CSS教程-初见</title>
+      <link href="/2021/08/29/CSS%E6%95%99%E7%A8%8B-%E5%88%9D%E8%A7%81/"/>
+      <url>/2021/08/29/CSS%E6%95%99%E7%A8%8B-%E5%88%9D%E8%A7%81/</url>
+      
+        <content type="html"><![CDATA[<h1 id="CSS教程-初见"><a href="#CSS教程-初见" class="headerlink" title="CSS教程-初见"></a>CSS教程-初见</h1><p>没错，今天我们不讲HTML了，我们来讲CSS。</p><h2 id="CSS简介"><a href="#CSS简介" class="headerlink" title="CSS简介"></a>CSS简介</h2><blockquote><p>问题1：CSS是什么？</p></blockquote><p>CSS全称“层叠样式表”，层叠样式表(英文全称：Cascading Style Sheets)是一种用来表现HTML（标准通用标记语言的一个应用）或XML（标准通用标记语言的一个子集）等文件样式的计算机语言。CSS不仅可以静态地修饰网页，还可以配合各种脚本语言动态地对网页各元素进行格式化。<br>CSS 能够对网页中元素位置的排版进行像素级精确控制，支持几乎所有的字体字号样式，拥有对网页对象和模型样式编辑的能力。</p><p>这样说你们可能还是不清楚，说白了，CSS就是表示网页外观的文件。<br>CSS文件的格式清晰，但要真正实现一些高级外观功能（如圆角，动画）还是有一定的难度。</p><blockquote><p>问题2：CSS该怎么用？</p></blockquote><p>你可以把CSS代码嵌入到HTML中，代码如下：</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">></span></span><span class="token style language-css">    CSS代码<span class="token number">...</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">></span></span></code></pre><p>你也可以单独创建一个CSS文件，后缀名为.css，然后在HTML中链接CSS文件（见HTML教程-head部分）</p><h2 id="CSS使用"><a href="#CSS使用" class="headerlink" title="CSS使用"></a>CSS使用</h2><blockquote><p> 问题3：CSS代码的格式是？</p></blockquote><p>css代码格式如下</p><pre class=" language-css"><code class="language-css"><span class="token number">.</span>p&amp;<span class="token hexcode">#123</span><span class="token punctuation">;</span>    参数&amp;<span class="token hexcode">#125</span><span class="token punctuation">;</span></code></pre><p>其中，“参数”表示外观代码，”.p”表示此段CSS代码是关于</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span></code></pre><p>的外观代码。</p><p>以后，我们学习CSS的重点就放在“参数”这里了。</p><blockquote><p>问题4:怎么样区分不同的段落?</p></blockquote><p>(以p为例子) 方法一:</p><pre class=" language-html"><code class="language-html">html:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>id<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>CSS: p.id<span class="token entity" title="&#123;">&amp;#123;</span><span class="token entity" title="&#125;">&amp;#125;</span></code></pre><p>方法二:</p><pre class=" language-html"><code class="language-html">html:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>id<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>CSS: #id<span class="token entity" title="&#123;">&amp;#123;</span><span class="token entity" title="&#125;">&amp;#125;</span></code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>出发！NOIP！</title>
+      <link href="/2021/08/28/%E5%87%BA%E5%8F%91%EF%BC%81NOIP%EF%BC%81/"/>
+      <url>/2021/08/28/%E5%87%BA%E5%8F%91%EF%BC%81NOIP%EF%BC%81/</url>
+      
+        <content type="html"><![CDATA[<h1 id="通知"><a href="#通知" class="headerlink" title="通知"></a>通知</h1><p>我要去参加NOIP竞赛了</p><p>noip官网<a href="https://www.noi.cn/">NOI全国青少年信息学奥林匹克竞赛</a></p><p>虽然时间有点紧（9月多），但我一个能拿个等级奖……吧……</p><p>以下内容原引百度百科内容</p><blockquote><h2 id="命题宗旨"><a href="#命题宗旨" class="headerlink" title="命题宗旨"></a>命题宗旨</h2><p>全国青少年信息学<a href="https://baike.baidu.com/item/%E5%A5%A5%E6%9E%97%E5%8C%B9%E5%85%8B">奥林匹克</a>联赛（NOIP）是一项面向全国青少年的信息学竞赛和普及活动，旨在向那些在中学阶段学习的青少年普及计算机科学知识；给学校的<a href="https://baike.baidu.com/item/%E4%BF%A1%E6%81%AF%E6%8A%80%E6%9C%AF%E6%95%99%E8%82%B2">信息技术教育</a>课程提供动力和新的思路；给那些有才华的学生提供相互交流和学习的机会；通过竞赛和相关的活动培养和选拔优秀的计算机人才。</p><p>竞赛的目的是为了在更高层次上推动普及。本竞赛及其相关活动遵循开放性原则，任何有条件和有兴趣的学校和个人，都可以在业余时间自愿参加。本活动不和现行的学校教学相冲突，也不列入教学计划，是课外性质的因材施教活动。参加者可为初高中学生或其他<a href="https://baike.baidu.com/item/%E4%B8%AD%E7%AD%89%E4%B8%93%E4%B8%9A%E5%AD%A6%E6%A0%A1">中等专业学校</a>的青少年。</p><h2 id="加分保送"><a href="#加分保送" class="headerlink" title="加分保送"></a>加分保送</h2><p>2010年11月19日，教育部宣布取消了各项<a href="https://baike.baidu.com/item/%E5%A5%A5%E6%9E%97%E5%8C%B9%E5%85%8B%E7%AB%9E%E8%B5%9B">奥林匹克竞赛</a>全国决赛一等奖以下的高校保送资格，改由所在地招生委员会决定是否给予20分及以下的加分。调整政策从2011年秋季进入高中阶段一年级的学生开始适用，2010年(含)以前已进入高中阶段学习的学生，仍可适用调整前的相关政策。</p><p>根据教育部现行《普通高校招收保送生办法》中关于保送生选拔条件的规定，获得全国青少年信息学奥林匹克联赛(NOIP)一等奖的应届高中毕业生，均**<u>具有保送进入高校就读</u><strong>的资格。部分地区一等奖获奖选手还享有高考加分优惠，具体情况视省招办政策而定。获奖选手可申请参加<a href="https://baike.baidu.com/item/%E9%AB%98%E6%A0%A1%E8%87%AA%E4%B8%BB%E6%8B%9B%E7%94%9F">高校自主招生</a>和保送生考试，经高校测试通过，可享受</strong><u>高考降分</u><strong>优惠或</strong><u>直接保送录取</u>**。</p><p>NOIP中成绩优秀的非高三选手，可以作为省代表队成员参加全国决赛(NOI)及夏令营比赛（部分省市代表队人员须经过选拔赛决出）。NOIP获奖选手同样具有保送资格，并且成绩优秀的选手能够当场获得高校点招，免试进入名牌大学。夏令营作为全国决赛的扩大赛，本身不具有保送资格，但如果选手之前已获得NOIP一等奖，则同样可以参与现场保送。2013届及以前获得提高组复赛一等奖的高中毕业生可免高考，而通过大学的保送生考试直接被录取。</p></blockquote><p>当然现在我只能说打扰了</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>HTML教程-head部分</title>
+      <link href="/2021/08/28/HTML%E6%95%99%E7%A8%8B-head%E9%83%A8%E5%88%86/"/>
+      <url>/2021/08/28/HTML%E6%95%99%E7%A8%8B-head%E9%83%A8%E5%88%86/</url>
+      
+        <content type="html"><![CDATA[<h1 id="HTML教程-head部分"><a href="#HTML教程-head部分" class="headerlink" title="HTML教程-head部分"></a>HTML教程-head部分</h1><p>##head部分</p><p>还记得当初讲过的HTML模板吗？忘记了不要紧，但接下来可要记牢哦<br>我们来复习一下</p><pre class=" language-html"><code class="language-html"><span class="token doctype">&lt;!DOCTYPE html></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>...<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>...<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre><p>没错，我们今天要讲的就是head标签内的部分<br>那么，head部分有什么用呢？</p><blockquote><p>head部分的内容不会在网页中直接显示，但却至关重要</p></blockquote><p>head部分常见的代码如下：</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>标题<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>link</span> <span class="token attr-name">rel</span><span class="token attr-value"><span class="token punctuation">=</span>stylesheet</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span>CSS文件</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span>text/css</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span>keywords</span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation">=</span>搜索时用的关键字</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span>decsrption</span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation">=</span>搜索条目的简介</span><span class="token punctuation">></span></span></code></pre><p>让我来介绍一下这些代码的用途</p><blockquote><p>title–网页标题【特别重要】<br>link–关联文件（如js，css等）【很重要】<br>meta–简介，关键字</p></blockquote><p>由此可见，如果你的网页head部分为空，那么你的网页就只能是一个连标题都没有的word文档了</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>HTML教程-输入</title>
+      <link href="/2021/08/26/HTML%E6%95%99%E7%A8%8B-%E8%BE%93%E5%85%A5/"/>
+      <url>/2021/08/26/HTML%E6%95%99%E7%A8%8B-%E8%BE%93%E5%85%A5/</url>
+      
+        <content type="html"><![CDATA[<h1 id="HTML教程-输入"><a href="#HTML教程-输入" class="headerlink" title="HTML教程-输入"></a>HTML教程-输入</h1><p>注意！这是一个非常重要的板块！</p><h2 id="输入-介绍"><a href="#输入-介绍" class="headerlink" title="输入-介绍"></a>输入-介绍</h2><p>你心中的输入指的是什么？输入框？字符串？选项？用户名？<br>我不管你认为的输入是什么，我现在就要“颠覆你的三观”</p><p>输入包括以下：</p><blockquote><p>输入框：输入文本，密码，email<br>文件<br>按钮：提交，重置<br>复选框<br>单选框</p></blockquote><p>待会儿我们就会把以上的输入的代码一一告诉你，可不要开小差哦！</p><h2 id="输入-代码"><a href="#输入-代码" class="headerlink" title="输入-代码"></a>输入-代码</h2><p>输入的通用代码如下:</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span></code></pre><p>“”内可输入</p><p> 输入框样式:</p><blockquote><p>text</p><p>email</p><p>password</p><p>url</p></blockquote><p> 选择文件样式:</p><blockquote><p>file</p></blockquote><p> 按钮样式:</p><blockquote><p>submit (提交)</p><p>reset (重置)</p><p>button</p><p>image (以图片为按钮,要在type=””后键入src=”图片地址”)</p></blockquote><p>选择样式:</p><blockquote><p>checkbox (复选框)</p><p>radio (单选框)</p></blockquote><p> 日历样式:</p><blockquote><p>date,month,day……</p></blockquote><p> 输入数字样式:</p><blockquote><p>number</p></blockquote><p> 拉条样式:</p><blockquote><p>range (要键入max=”最大值” min=”最小值” step=”加工” value=”默认值”)</p></blockquote>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>C++ 出发！</title>
+      <link href="/2021/08/25/CPP-%E5%87%BA%E5%8F%91/"/>
+      <url>/2021/08/25/CPP-%E5%87%BA%E5%8F%91/</url>
+      
+        <content type="html"><![CDATA[<h1 id="C-出发！"><a href="#C-出发！" class="headerlink" title="C++ 出发！"></a>C++ 出发！</h1><p>C++学习日志即将翻开，我……</p><p>算了，说白话吧</p><p>我开始学C++了，不知道能不能赶上九月多的比赛</p><p>就这样了</p><pre class=" language-c++"><code class="language-c++">return 0; //表示结束</code></pre>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> C++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>HTML教程-链接</title>
+      <link href="/2021/08/25/HTML%E6%95%99%E7%A8%8B-%E9%93%BE%E6%8E%A5/"/>
+      <url>/2021/08/25/HTML%E6%95%99%E7%A8%8B-%E9%93%BE%E6%8E%A5/</url>
+      
+        <content type="html"><![CDATA[<h1 id="HTML初级教程"><a href="#HTML初级教程" class="headerlink" title="HTML初级教程"></a>HTML初级教程</h1><p>今天我们来讲链接</p><h2 id="链接（介绍）"><a href="#链接（介绍）" class="headerlink" title="链接（介绍）"></a>链接（介绍）</h2><p>相信大家都应该见过链接这种东西吧！就是这个<a href="#">有下划线的一般是蓝色的</a>东西</p><p>链接的作用有很多种，包括但不限于以下</p><blockquote><p>跳转网页</p><p>下载文件</p><p>转到某个标题位置</p><p>标记网站中的图片</p><p>……</p></blockquote><p>接下来就让我们看看如何在网页中插入一个链接吧！</p><h2 id="链接（使用）"><a href="#链接（使用）" class="headerlink" title="链接（使用）"></a>链接（使用）</h2><p>废话不多说，直接上代码</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>web<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>文本<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span></code></pre><p>注：可以把web替换为以下：</p><blockquote><p>网页地址(<a href="http://xxx.com/">http://xxx.com</a>)</p><p>#本页已标记的标题</p><p>文件地址</p><p>mailto:邮箱地址</p></blockquote><p>语法2(#~)细节:</p><p>这种用法指跳转至一篇文章的某个标题处,你需要在这个标题处命名,如下</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>名字<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>标题文字<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span></code></pre><p>然后使用链接方法如下</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>#名字<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>链接文字<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span></code></pre><p>如何使用图片代替链接文字?</p><p>你可以使用以下代码</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>web<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>图片地址<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span></code></pre><p>怎么样让链接变成其它颜色?(蓝色在黑身背景下不好区分)</p><p>这个需要运用CSS的知识,我们以后再说~</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>评论&amp;交流区入口&gt;&gt;&gt;here</title>
+      <link href="/2021/08/24/%E8%AF%84%E8%AE%BA-%E4%BA%A4%E6%B5%81%E5%8C%BA%E5%85%A5%E5%8F%A3-here/"/>
+      <url>/2021/08/24/%E8%AF%84%E8%AE%BA-%E4%BA%A4%E6%B5%81%E5%8C%BA%E5%85%A5%E5%8F%A3-here/</url>
+      
+        <content type="html"><![CDATA[<p>欢迎小伙伴们在这里畅所欲言</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 评论区 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>HTML教程-列表</title>
+      <link href="/2021/08/24/HTML%E6%95%99%E7%A8%8B-%E5%88%97%E8%A1%A8/"/>
+      <url>/2021/08/24/HTML%E6%95%99%E7%A8%8B-%E5%88%97%E8%A1%A8/</url>
+      
+        <content type="html"><![CDATA[<h1 id="HTML初级教程"><a href="#HTML初级教程" class="headerlink" title="HTML初级教程"></a>HTML初级教程</h1><h2 id="列表种类"><a href="#列表种类" class="headerlink" title="列表种类"></a>列表种类</h2><p>列表分为2种：有序列表与无序列表</p><p>有序列表：</p><pre><code>&lt;ul&gt;    &lt;li&gt;第1项&lt;/li&gt;    &lt;li&gt;第2项&lt;/li&gt;    ……&lt;/ul&gt;</code></pre><p>无序列表：</p><pre><code>&lt;ol&gt;    &lt;li&gt;第1项&lt;/li&gt;    &lt;li&gt;第2项&lt;/li&gt;    ……&lt;/ol&gt;</code></pre><p>区别：有序列表——有数字或字母编号（默认是数字）</p><p>无序列表——每一项前是一个点（默认实心圆）</p><h2 id="列表样式"><a href="#列表样式" class="headerlink" title="列表样式"></a>列表样式</h2><p>怎么样设置列表前面是数字，字母还是正方形呢？</p><p>无序列表中，你可以把</p><pre><code>&lt;ul&gt;</code></pre><p>替换为</p><pre><code>&lt;ul type=&quot;&quot;&gt;</code></pre><blockquote><p>“”中填入：</p><p>disc——实心圆</p><p>circle——空心圆</p><p>square——正方形</p></blockquote><p>有序列表中，你可以把</p><pre><code>&lt;ol&gt;</code></pre><p>替换为</p><pre><code>&lt;ol type=&quot;&quot;&gt;</code></pre><blockquote><p>“”中填入：</p><p>A——大小字母</p><p>a——小写字母</p><p>I（大写的i）——大写罗马字</p><p>i——小写罗马字</p><p>1——数字</p></blockquote>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>HTML教程-入门与文本</title>
+      <link href="/2021/08/23/HTML%E5%88%9D%E7%BA%A7%E6%95%99%E7%A8%8B/"/>
+      <url>/2021/08/23/HTML%E5%88%9D%E7%BA%A7%E6%95%99%E7%A8%8B/</url>
+      
+        <content type="html"><![CDATA[<h1 id="html初级教程"><a href="#html初级教程" class="headerlink" title="html初级教程"></a>html初级教程</h1><p>作者：Ntsc</p><h2 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h2><p>HTML是目前网页前端(服务器端)最常用的一种语言,属于标记语言,所以在学习使用没有编程语言那么困难</p><h2 id="标记"><a href="#标记" class="headerlink" title="标记"></a>标记</h2><p>HTML是一种标记语言，标记放在&lt;&gt;中<br>标记也有两种——单标记（空标记）与双标记</p><pre><code>&lt;ab&gt;  //单标记&lt;ab&gt;&lt;/ab&gt;  //双标记</code></pre><p>那网页中的文本呢?</p><pre><code>网页中的文本一般都放置在双标记的中间例子:&lt;p&gt;文本&lt;/p&gt;</code></pre><p>当你理解了这些后,恭喜你,成功入门了</p><h2 id="网站基本框架"><a href="#网站基本框架" class="headerlink" title="网站基本框架"></a>网站基本框架</h2><p>废话不多说,直接上代码</p><pre class=" language-html"><code class="language-html"><span class="token doctype">&lt;!DOCTYPE html></span>  //声明<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span> //表示文件开始<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>头部信息<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>网页内容<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span> //表示文件结束</code></pre><p>你需要牢记这个框架,代码绝大多数会在”头部信息”与”网页内容”中编写</p><h2 id="文本I"><a href="#文本I" class="headerlink" title="文本I"></a>文本I</h2><p>以下介绍一些代码</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>之间写文本,表示一个段落,在末尾会自动换行<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>表示标题1,数字可以替换为1~6<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">></span></span>这是一个单标记,作用是换行,包括但不限于文本,图片</code></pre><h2 id="文本II"><a href="#文本II" class="headerlink" title="文本II"></a>文本II</h2><p>以下我们会介绍文字处理,例如加粗,斜体</p><pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>加粗<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>big</span><span class="token punctuation">></span></span>大号<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>big</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span><span class="token punctuation">></span></span>斜体<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>small</span><span class="token punctuation">></span></span>小号<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>small</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sub</span><span class="token punctuation">></span></span>上标<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sub</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sup</span><span class="token punctuation">></span></span>下标<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sup</span><span class="token punctuation">></span></span></code></pre><p>这些代码看作与文本紧密相连的部分</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>我的第一篇博客</title>
+      <link href="/2021/08/23/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/"/>
+      <url>/2021/08/23/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
+      
+        <content type="html"><![CDATA[<h2 id="第一"><a href="#第一" class="headerlink" title="第一"></a>第一</h2><p>博客nb</p><hr><h2 id="第二"><a href="#第二" class="headerlink" title="第二"></a>第二</h2><p>我nb</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World(hexo博客使用说明)</title>
+      <link href="/2021/08/23/hello-world/"/>
+      <url>/2021/08/23/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>(本博客非内容)</p><p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start-快速开始"><a href="#Quick-Start-快速开始" class="headerlink" title="Quick Start(快速开始)"></a>Quick Start(快速开始)</h2><h3 id="Create-a-new-post-新建博客"><a href="#Create-a-new-post-新建博客" class="headerlink" title="Create a new post(新建博客)"></a>Create a new post(新建博客)</h3><pre class=" language-bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span></code></pre><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server-运行本地服务器"><a href="#Run-server-运行本地服务器" class="headerlink" title="Run server(运行本地服务器)"></a>Run server(运行本地服务器)</h3><pre class=" language-bash"><code class="language-bash">$ hexo server</code></pre><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files-创建可上传至远程仓库的文件"><a href="#Generate-static-files-创建可上传至远程仓库的文件" class="headerlink" title="Generate static files(创建可上传至远程仓库的文件)"></a>Generate static files(创建可上传至远程仓库的文件)</h3><pre class=" language-bash"><code class="language-bash">$ hexo generate</code></pre><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites-上传至远程仓库"><a href="#Deploy-to-remote-sites-上传至远程仓库" class="headerlink" title="Deploy to remote sites(上传至远程仓库)"></a>Deploy to remote sites(上传至远程仓库)</h3><pre class=" language-bash"><code class="language-bash">$ hexo deploy</code></pre><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+  
+  
+</search>
