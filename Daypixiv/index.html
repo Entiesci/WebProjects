@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="live2d/waifu.min.css?v=1.4.2"/>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>DayPixiv 每日小图站</title>
+  <meta content="DayPixiv每日小图站，随时更新随机二次元美图，不用翻墙，加载迅速。" name="description">
+  <meta content="daypixiv, pixiv, pic, 二次元, acg" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Satisfy" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Laura - v4.3.0
+  * Template URL: https://bootstrapmade.com/laura-free-creative-bootstrap-theme/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?051b52ded2ae874896c07e423d3f69f2";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex justify-content-center align-items-center header-transparent">
+
+    <nav id="navbar" class="navbar">
+      <ul>
+        <li><a class="nav-link scrollto active" href="#hero">欢迎&nbsp;</a></li>
+        <li><a class="nav-link scrollto " href="#portfolio">图片</a></li>
+        <li><a class="nav-link scrollto" href="#contact">关于&nbsp;</a></li>
+	    <li><a class="nav-link scrollto" href="Search/index.html">搜索</a></li>
+      </ul>
+      <i class="bi bi-list mobile-nav-toggle"></i>
+    </nav><!-- .navbar -->
+    
+  </header><!-- End Header -->
+	
+	    <!-- waifu-tips.js 依赖 JQuery 库 -->
+    <script src="live2d/jquery.min.js?v=3.3.1"></script>
+    
+    <!-- 实现拖动效果，需引入 JQuery UI -->
+    <script src="live2d/jquery-ui.min.js?v=1.12.1"></script>
+    
+     <div class="waifu">
+        <div class="waifu-tips"></div>
+        <canvas id="live2d" class="live2d"></canvas>
+        <div class="waifu-tool">
+            <span class="fui-home"></span>
+            <span class="fui-chat"></span>
+            <span class="fui-eye"></span>
+            <span class="fui-user"></span>
+            <span class="fui-photo"></span>
+            <span class="fui-info-circle"></span>
+            <span class="fui-cross"></span>
+        </div>
+    </div>
+        
+    <script src="live2d/waifu-tips.min.js?v=1.4.2"></script>
+    <script src="live2d/live2d.min.js?v=1.0.5"></script>
+    <script type="text/javascript">
+        
+    /* 可直接修改部分参数 */
+    live2d_settings['hitokotoAPI'] = 'hitokoto.cn'; // 一言 API
+    live2d_settings['modelId'] = 1;                    // 默认模型 ID
+    live2d_settings['modelTexturesId'] = 87;            // 默认材质 ID
+    live2d_settings['modelStorage'] = false;           // 不储存模型 ID
+    live2d_settings['canCloseLive2d'] = true;         // 隐藏 关闭看板娘 按钮
+    live2d_settings['canTurnToHomePage'] = true;      // 隐藏 返回首页 按钮
+    live2d_settings['waifuSize'] = '360x321';          // 看板娘大小
+    live2d_settings['waifuTipsSize'] = '300x100';      // 提示框大小
+    live2d_settings['waifuFontSize'] = '20px';         // 提示框字体
+    live2d_settings['waifuEdgeSide'] = 'left:10';     // 看板娘贴边方向
+    live2d_settings['waifuToolFont'] = '24px';         // 工具栏字体
+    live2d_settings['waifuToolLine'] = '30px';         // 工具栏行高
+    live2d_settings['waifuToolTop'] = '-60px';         // 工具栏顶部边距
+    live2d_settings['waifuDraggable'] = 'axis-x';      // 拖拽样式
+	live2d_settings['homePageUrl'] = 'https://ntsc-yrx.github.io/Menu'; 
+        
+    /* 内置 waifu-tips.json */
+    initModel({
+        "waifu": {
+            "console_open_msg": ["哈哈，你打开了控制台，是想要看看我的秘密吗？"],
+            "copy_message": ["你都复制了些什么呀，转载要记得加上出处哦"],
+            "screenshot_message": ["照好了嘛，是不是很可爱呢？"],
+            "hidden_message": ["我们还能再见面的吧…"],
+            "load_rand_textures": ["我还没有其他衣服呢", "我的新衣服好看嘛"],
+            "hour_tips": {
+                "t5-7": ["早上好！一日之计在于晨，美好的一天就要开始了"],
+                "t7-11": ["上午好！工作顺利嘛，不要久坐，多起来走动走动哦！"],
+                "t11-14": ["中午了，工作了一个上午，现在是午餐时间！"],
+                "t14-17": ["午后很容易犯困呢，今天的运动目标完成了吗？"],
+                "t17-19": ["傍晚了！窗外夕阳的景色很美丽呢，最美不过夕阳红~"],
+                "t19-21": ["晚上好，今天过得怎么样？"],
+                "t21-23": ["已经这么晚了呀，早点休息吧，晚安~"],
+                "t23-5": ["你是夜猫子呀？这么晚还不睡觉，明天起的来嘛"],
+                "default": ["嗨~ 快来逗我玩吧！"]
+            },
+            "referrer_message": {
+                "localhost": ["欢迎来到<span style=\"color:#0099cc;\">『", "』</span>", " - "],
+                "baidu": ["Hello! 来自 百度搜索 的朋友<br>你是搜索 <span style=\"color:#0099cc;\">", "</span> 找到的我吗？"],
+                "so": ["Hello! 来自 360搜索 的朋友<br>你是搜索 <span style=\"color:#0099cc;\">", "</span> 找到的我吗？"],
+                "google": ["Hello! 来自 谷歌搜索 的朋友<br>欢迎阅读<span style=\"color:#0099cc;\">『", "』</span>", " - "],
+                "default": ["Hello! 来自 <span style=\"color:#0099cc;\">", "</span> 的朋友"],
+                "none": ["欢迎来到<span style=\"color:#0099cc;\">『", "』</span>", " - "]
+            },
+            "referrer_hostname": {
+                "example.com": ["示例网站"],
+                "www.fghrsh.net": ["FGHRSH 的博客"]
+            },
+            "model_message": {
+                "1": ["来自 Potion Maker 的 Pio 酱 ~"],
+                "2": ["来自 Potion Maker 的 Tia 酱 ~"]  
+            },
+            "hitokoto_api_message": {
+                "lwl12.com": ["这句一言来自 <span style=\"color:#0099cc;\">『{source}』</span>", "，是 <span style=\"color:#0099cc;\">{creator}</span> 投稿的", "。"],
+                "fghrsh.net": ["这句一言出处是 <span style=\"color:#0099cc;\">『{source}』</span>，是 <span style=\"color:#0099cc;\">FGHRSH</span> 在 {date} 收藏的！"],
+                "jinrishici.com": ["这句诗词出自 <span style=\"color:#0099cc;\">《{title}》</span>，是 {dynasty}诗人 {author} 创作的！"],
+                "hitokoto.cn": ["这句一言来自 <span style=\"color:#0099cc;\">『{source}』</span>，是 <span style=\"color:#0099cc;\">{creator}</span> 在 hitokoto.cn 投稿的。"]
+            }
+        },
+        "mouseover": [
+            { "selector": ".container a[href^='http']", "text": ["要看看 <span style=\"color:#0099cc;\">{text}</span> 么？"] },
+            { "selector": ".fui-home", "text": ["点击前往网页导航，想回到上一页可以使用浏览器的后退功能哦"] },
+            { "selector": ".fui-chat", "text": ["一言一语，一颦一笑。一字一句，一颗赛艇。"] },
+            { "selector": ".fui-eye", "text": ["嗯··· 要切换 看板娘 吗？"] },
+            { "selector": ".fui-user", "text": ["喜欢换装 Play 吗？"] },
+            { "selector": ".fui-photo", "text": ["要拍张纪念照片吗？"] },
+            { "selector": ".fui-info-circle", "text": ["这里有关于我的信息呢，点击会转到另外的网页哦"] },
+            { "selector": ".fui-cross", "text": ["你不喜欢我了吗..."] },
+            { "selector": "#tor_show", "text": ["翻页比较麻烦吗，点击可以显示这篇文章的目录呢"] },
+            { "selector": "#comment_go", "text": ["想要去评论些什么吗？"] },
+            { "selector": "#night_mode", "text": ["深夜时要爱护眼睛呀"] },
+            { "selector": "#qrcode", "text": ["手机扫一下就能继续看，很方便呢"] },
+            { "selector": ".comment_reply", "text": ["要吐槽些什么呢"] },
+            { "selector": "#back-to-top", "text": ["回到开始的地方吧"] },
+            { "selector": "#author", "text": ["该怎么称呼你呢"] },
+            { "selector": "#mail", "text": ["留下你的邮箱，不然就是无头像人士了"] },
+            { "selector": "#url", "text": ["你的家在哪里呢，好让我去参观参观"] },
+            { "selector": "#textarea", "text": ["认真填写哦，垃圾评论是禁止事项"] },
+            { "selector": ".OwO-logo", "text": ["要插入一个表情吗"] },
+            { "selector": "#csubmit", "text": ["要[提交]^(Commit)了吗，首次评论需要审核，请耐心等待~"] },
+            { "selector": ".ImageBox", "text": ["点击图片可以放大呢"] },
+            { "selector": "input[name=s]", "text": ["找不到想看的内容？搜索看看吧"] },
+            { "selector": ".previous", "text": ["去上一页看看吧"] },
+            { "selector": ".next", "text": ["去下一页看看吧"] },
+            { "selector": ".dropdown-toggle", "text": ["这里是菜单"] },
+            { "selector": "c-player a.play-icon", "text": ["想要听点音乐吗"] },
+            { "selector": "c-player div.time", "text": ["在这里可以调整<span style=\"color:#0099cc;\">播放进度</span>呢"] },
+            { "selector": "c-player div.volume", "text": ["在这里可以调整<span style=\"color:#0099cc;\">音量</span>呢"] },
+            { "selector": "c-player div.list-button", "text": ["<span style=\"color:#0099cc;\">播放列表</span>里都有什么呢"] },
+            { "selector": "c-player div.lyric-button", "text": ["有<span style=\"color:#0099cc;\">歌词</span>的话就能跟着一起唱呢"] },
+            { "selector": ".waifu #live2d", "text": ["干嘛呢你，快把手拿开", "鼠…鼠标放错地方了！"] }
+        ],
+        "click": [
+            {
+                "selector": ".waifu #live2d",
+                "text": [
+                    "是…是不小心碰到了吧",
+                    "萝莉控是什么呀",
+                    "你看到我的小白熊了吗？找到了我会给你给惊喜的！",
+                    "再摸的话我可要报警了！⌇●﹏●⌇",
+                    "110吗，这里有个变态一直在摸我(ó﹏ò｡)"
+                ]
+            }
+        ],
+        "seasons": [
+            { "date": "01/01", "text": ["<span style=\"color:#0099cc;\">元旦</span>了呢，新的一年又开始了，今年是{year}年~"] },
+            { "date": "02/14", "text": ["又是一年<span style=\"color:#0099cc;\">情人节</span>，{year}年找到对象了嘛~"] },
+            { "date": "03/08", "text": ["今天是<span style=\"color:#0099cc;\">妇女节</span>！"] },
+            { "date": "03/12", "text": ["今天是<span style=\"color:#0099cc;\">植树节</span>，要保护环境呀"] },
+            { "date": "04/01", "text": ["悄悄告诉你一个秘密~<span style=\"background-color:#34495e;\">今天是愚人节，不要被骗了哦~</span>"] },
+            { "date": "05/01", "text": ["今天是<span style=\"color:#0099cc;\">五一劳动节</span>，计划好假期去哪里了吗~"] },
+            { "date": "06/01", "text": ["<span style=\"color:#0099cc;\">儿童节</span>了呢，快活的时光总是短暂，要是永远长不大该多好啊…"] },
+            { "date": "09/03", "text": ["<span style=\"color:#0099cc;\">中国人民抗日战争胜利纪念日</span>，铭记历史、缅怀先烈、珍爱和平、开创未来。"] },
+            { "date": "09/10", "text": ["<span style=\"color:#0099cc;\">教师节</span>，在学校要给老师问声好呀~"] },
+            { "date": "10/01", "text": ["<span style=\"color:#0099cc;\">国庆节</span>，新中国已经成立69年了呢"] },
+            { "date": "11/05-11/12", "text": ["今年的<span style=\"color:#0099cc;\">双十一</span>是和谁一起过的呢~"] },
+            { "date": "12/20-12/31", "text": ["这几天是<span style=\"color:#0099cc;\">圣诞节</span>，主人肯定又去剁手买买买了~"] }
+        ]
+    });
+    </script>
+	
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero">
+    <div class="hero-container">
+      <h1>Day Pixiv</h1>
+      <h2><p id="hitokoto"><a href="#" id="hitokoto_text">:D 获取中...</a></p>
+ <script src="https://v1.hitokoto.cn/?encode=js&select=%23hitokoto" defer></script></h2>
+      <a href="#portfolio" class="btn-scroll scrollto" title="Scroll Down"><i class="bx bx-chevron-down"></i></a>
+    </div>
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+  
+
+    <!-- ======= My Portfolio Section ======= -->
+    <section id="portfolio" class="portfolio">
+      <div class="container">
+
+        <div class="section-title">
+          <span>DAY PHOTOS</span>
+          <h2>DAY PHOTOS</h2>
+          <p>每日小图（涩图警告！）</p>
+        </div>
+
+        <ul id="portfolio-flters" class="d-flex justify-content-center">
+          <li data-filter="*" class="filter-active">所有</li>
+		  <li data-filter=".filter-aaaaa">时刻更新</li>
+          <li data-filter=".filter-bbbbb">已固定</li>
+         
+       
+        </ul>
+
+        <div class="row portfolio-container">
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+            <div class="portfolio-img"><img src="https://pximg2.rainchan.win/img" class="img-fluid" alt=""></div>
+            <div class="portfolio-info">
+              <h4>RainChan</h4>
+              <p>动漫</p>
+              <a href="https://pximg2.rainchan.win/img" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="“时刻更新”类图像说明：如果要保存图像，你只能把图像拖动到文件夹或桌面上，右键保存与复制链接是没有用的！！"><i class="bx bx-plus"></i></a>
+            </div>
+          </div>
+		  
+          <div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+            <div class="portfolio-img"><img src="https://api.skyil.cn/random?size=pc" class="img-fluid" alt=""></div>
+            <div class="portfolio-info">
+              <h4>Skyil</h4>
+              <p>pc</p>
+              <a href="https://api.skyil.cn/random?size=pc" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 2"><i class="bx bx-plus"></i></a>
+            </div>
+          </div>
+		  
+          <div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+            <div class="portfolio-img"><img src="https://api.skyil.cn/random?size=phone" class="img-fluid" alt=""></div>
+            <div class="portfolio-info">
+              <h4>Skyil</h4>
+              <p>phone</p>
+              <a href="https://api.skyil.cn/random?size=phone" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 2"><i class="bx bx-plus"></i></a>
+            </div>
+          </div>
+		  
+		  <div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.ghser.com/random/pc.php" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>三秋</h4>
+		      <p>动漫</p>
+		      <a href="https://api.ghser.com/random/pc.php" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 2"><i class="bx bx-plus"></i></a>
+		    </div>
+		  </div>
+			
+			<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://acg.e4a.top/acgurl.php" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>acg.e4a,top</h4>
+		      <p>动漫</p>
+		      <a href="https://acg.e4a.top/acgurl.php" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 2"><i class="bx bx-plus"></i></a>
+		    </div>
+		  </div>
+
+			<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.lyiqk.cn/acg" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>凌一</h4>
+		      <p>pc</p>
+		    </div>
+		  </div>
+	
+			<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.lyiqk.cn/acgst" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>凌一</h4>
+		      <p>phone</p>
+		    </div>
+		  </div>
+			
+			<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>动漫星空</h4>
+		      <p>动漫</p>
+		      <a href="https://api.dongmanxingkong.com/suijitupian/acg/1080p/index.php" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 2"><i class="bx bx-plus"></i></a>
+		    </div>
+		  </div>
+			
+			<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://acg.teas.moe/man/api.php" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>喵白</h4>
+		      <p>动漫</p>
+		      <a href="https://acg.teas.moe/man/api.php" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 2"><i class="bx bx-plus"></i></a>
+		    </div>
+		  </div>
+		 
+			<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.imacroc.cn/acg/" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>Macro</h4>
+		      <p>动漫</p>
+		      <a href="https://api.imacroc.cn/acg/" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 2"><i class="bx bx-plus"></i></a>
+		    </div>
+		  </div>
+			
+			<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="http://www.dmoe.cc/random.php" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>龙谷情</h4>
+		      <p>动漫</p>
+		      <a href="http://www.dmoe.cc/random.php" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 2"><i class="bx bx-plus"></i></a>
+		    </div>
+		  </div>
+			
+			<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.ghser.com/random/bg.php" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>三秋</h4>
+		      <p>风景</p>
+		      <a href="https://api.ghser.com/random/bg.php" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 2"><i class="bx bx-plus"></i></a>
+		    </div>
+		  </div>
+			
+			<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="http://119.91.108.170:88/api/pixiv/setu.php?return=img" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>？？</h4>
+		      <p>动漫</p>
+		      <a href="http://119.91.108.170:88/api/pixiv/setu.php?return=img" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 2"><i class="bx bx-plus"></i></a>
+		    </div>
+		  </div>
+			
+			<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://www.yingciyuan.cn/api.php" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>？？</h4>
+		      <p>动漫</p>
+		      <a href="https://www.yingciyuan.cn/api.php" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 2"><i class="bx bx-plus"></i></a>
+		    </div>
+		  </div>
+			
+			<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://www.morenote.top/api/GetRandomImage?type=%E5%8A%A8%E6%BC%AB%E7%BB%BC%E5%90%882" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>？？</h4>
+		      <p>动漫</p>
+		    </div>
+		  </div>
+
+<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.mz-moe.cn/img.php" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>木子</h4>
+		      <p>动漫</p>
+		    </div>
+		  </div>
+
+<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.paugram.com/wallpaper/" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>保罗</h4>
+		      <p>动漫</p>
+		    </div>
+		  </div>
+
+<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.btstu.cn/sjbz/api.php?lx=dongman&format=images" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>搏天</h4>
+		      <p>动漫</p>
+		    </div>
+		  </div>
+
+<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.mtyqx.cn/api/random.php" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>墨天逸</h4>
+		      <p>动漫</p>
+		    </div>
+		  </div>
+
+<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.isoyu.com/aipc_animation.php" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>姬长信</h4>
+		      <p>动漫</p>
+		    </div>
+		  </div>
+
+<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.yimian.xyz/img?type=moe" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>EEE.DOG</h4>
+		      <p>动漫</p>
+		    </div>
+		  </div>
+
+<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.yimian.xyz/img?type=head" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>EEE.DOG</h4>
+		      <p>头像</p>
+		    </div>
+		  </div>
+
+<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.yimian.xyz/img?type=moe&size=1920x1080" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>EEE.DOG</h4>
+		      <p>背景</p>
+		    </div>
+		  </div>
+
+<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://img.paulzzh.com/touhou/random" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>Paulzzh</h4>
+		      <p>东方Porject</p>
+		    </div>
+		  </div>
+
+<div class="col-lg-4 col-md-6 portfolio-item filter-aaaaa">
+		    <div class="portfolio-img"><img src="https://api.r10086.com/动漫综合1.php" class="img-fluid" alt=""></div>
+		    <div class="portfolio-info">
+		      <h4>？？</h4>
+		      <p>动漫</p>
+		    </div>
+		  </div>
+
+
+<!--  已经固定的 -->
+
+		 <div class="col-lg-4 col-md-6 portfolio-item filter-bbbbb">
+		   <div class="portfolio-img"><img src=" https://pixiv.cat/79973106.jpg" class="img-fluid" alt=""></div>
+		   <div class="portfolio-info">
+		     <h4>动漫</h4>
+		     <p>我的收藏</p>
+			 <a href="assets/img/dm/1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 2"><i class="bx bx-plus"></i></a>
+		   </div>
+		 </div>
+		 
+		 <div class="col-lg-4 col-md-6 portfolio-item filter-bbbbb">
+		   <div class="portfolio-img"><img src=" https://pixiv.cat/60453642.jpg" class="img-fluid" alt=""></div>
+		   <div class="portfolio-info">
+		     <h4>动漫</h4>
+		     <p>我的收藏</p>
+		   </div>
+		 </div>
+		 
+		 <div class="col-lg-4 col-md-6 portfolio-item filter-bbbbb">
+		   <div class="portfolio-img"><img src="assets/img/dm/4.jpg" class="img-fluid" alt=""></div>
+		   <div class="portfolio-info">
+		     <h4>动漫</h4>
+		     <p>我的收藏</p>
+		   </div>
+		 </div>
+
+<div class="col-lg-4 col-md-6 portfolio-item filter-bbbbb">
+		   <div class="portfolio-img"><img src="assets/img/dm/5.jpg" class="img-fluid" alt=""></div>
+		   <div class="portfolio-info">
+		     <h4>动漫</h4>
+		     <p>我的收藏</p>
+		   </div>
+		 </div>
+
+<div class="col-lg-4 col-md-6 portfolio-item filter-bbbbb">
+		   <div class="portfolio-img"><img src="assets/img/dm/bear.png" class="img-fluid" alt=""></div>
+		   <div class="portfolio-info">
+		     <h4>かわいい</h4>
+		     <p>我的收藏</p>
+		     <a href="egg/bear.html" class="details-link" title="这里貌似有一点特殊？"><i class="bx bx-link"></i></a>
+		   </div>
+		 </div>
+		 
+       <div class="col-lg-4 col-md-6 portfolio-item filter-bbbbb">
+		   <div class="portfolio-img"><img src=" https://pixiv.cat/80699577.jpg" class="img-fluid" alt=""></div>
+		   <div class="portfolio-info">
+		     <h4>动漫</h4>
+		     <p>我的收藏</p>
+		   </div>
+		 </div>
+<div class="col-lg-4 col-md-6 portfolio-item filter-bbbbb">
+		   <div class="portfolio-img"><img src=" https://pixiv.cat/84148429.jpg" class="img-fluid" alt=""></div>
+		   <div class="portfolio-info">
+		     <h4>动漫</h4>
+		     <p>我的收藏</p>
+		   </div>
+		 </div>
+
+<div class="col-lg-4 col-md-6 portfolio-item filter-bbbbb">
+		   <div class="portfolio-img"><img src="https://pixiv.cat/78511983.jpg" class="img-fluid" alt=""></div>
+		   <div class="portfolio-info">
+		     <h4>动漫</h4>
+		     <p>我的收藏</p>
+		   </div>
+		 </div>
+
+<div class="col-lg-4 col-md-6 portfolio-item filter-bbbbb">
+		   <div class="portfolio-img"><img src="https://pixiv.cat/.jpg" class="img-fluid" alt=""></div>
+		   <div class="portfolio-info">
+		     <h4>空的</h4>
+		     <p>图片支持</p>
+	 	    <a href="https://pixiv.cat/" class="details-link" title="链接"><i class="bx bx-link"></i></a>
+		   </div>
+		 </div>
+
+
+		
+     
+    
+		  
+		</div>
+    </section><!-- End My Portfolio Section -->
+
+
+    <!-- ======= Contact Me Section ======= -->
+    <section id="contact" class="contact">
+      <div class="container">
+
+        <div class="section-title">
+          <span>分享</span>
+          <h2>分享</h2>
+          <p>喜欢就分享吧！</p>
+        </div>
+
+        <div class="row">
+
+          <div class="col-lg-12">
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="info-box">
+                  <i class="bx bx-share-alt"></i>
+                  <h3>分享这个网站</h3>
+                  <div class="social-links">
+                    <a href="https://qzone.qq.com">QQ空间</a>
+                    <a href="https://weibo.com/">微博</a>
+                   
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-box mt-4">
+                  <i class="bx bx-envelope"></i>
+                  <h3>名称</h3>
+                  <p>DayPixiv</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="info-box mt-4">
+                  <i class="bx bx-phone-call"></i>
+                  <h3>网址</h3>
+                  <p>https://ntsc-yrx.github.io/Daypixiv</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+      
+
+        </div>
+
+      </div>
+    </section><!-- End Contact Me Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <h3>Day Pixiv&nbsp;</h3>
+      <p>每日小图站&nbsp;</p>
+      <div class="social-links">
+        <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+        <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+        <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+      </div>
+      <div class="copyright">
+        &copy; Copyright <strong><span>Ntsc-Yrx</span></strong>. All Rights Reserved
+      </div>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=492390949&auto=1&height=32"></iframe>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+	  
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/purecounter/purecounter.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

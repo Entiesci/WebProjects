@@ -1,0 +1,18 @@
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+#header {
+  z-index: 997;
+  transition: all 0.5s;
+  height: 80px;
+  background: rgba(darken($secondary, 15), 0.8);
+
+  &.header-transparent {
+    background: transparent;
+  }
+
+  &.header-scrolled {
+    height: 60px;
+    background: rgba(darken($secondary, 15), 0.8);
+  }
+}

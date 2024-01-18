@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+	<title></title>
+	<script src="js/Bmob-2.2.5.min.js"></script>
+<script>
+	Bmob.initialize("14886c61807ec8a5", "361123");
+	Bomb.debug(true)
+	function get(){
+		let user = Bmob.User.current();
+		var spanTag = document.getElementById("info");
+		spanTag.innerHTML = user.username;
+		}
+	function exit(){
+		Bmob.User.logout()
+	}
+	function oldnewpwd(){
+		let objectId ='objectId'
+		let data = {
+			oldPassword: document.getElementById("oldpwd").value,
+  			newPassword: document.getElementById("newpwd").value
+		}
+		Bmob.updateUserPassword(objectId,data).then(res => {
+			console.log(res)
+  		}).catch(err => {
+    		console.log(err)
+  		})
+	}
+	function login(){
+		Bmob.User.login(document.getElementById("username").value,document.getElementById("pwd").value).then(res => {
+			location.href="https://ntsc-yrx.github.io/user/index.html"
+		}).catch(err => {
+			console.log(err)
+		});
+	}
+	</script>
+</head>
+<body>
+	<h1>Ntsc-Yrx Account MINI控制台</h1>
+	<p>登录：（已登录可跳过）</p>
+	<input placeholder="用户名" name="Name" id="username" type="text" required="">
+	<input placeholder="密码" name="Name" id="pwd" type="password" required="">
+	<input type="submit" onclick="login()" value="确定">
+	<p>获取用户名：（验证是否登录）</p>
+	<span id="info"></span>
+	<button onclick="get()">获取用户名</button><br>
+	<p>退出登录：</p>
+	<button onClick="exit()">退出登录</button><br>
+	<p>修改密码：</p>
+	<input placeholder="旧密码" name="Name" id="oldpwd" type="text" required="">
+	<input placeholder="新密码" name="Name" id="newpwd" type="text" required="">
+	<input type="submit" onclick="oldnewpwd()" value="确定">
+	
+		<div class="copyright">
+				<p>&copy; 2021 <strong>Ntsc-Yrx</strong> All rights reserved&nbsp;
+				</p>
+			</div>
+</body>
+</html>

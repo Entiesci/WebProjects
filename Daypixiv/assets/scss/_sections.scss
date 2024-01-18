@@ -1,0 +1,888 @@
+/*--------------------------------------------------------------
+# Sections General
+--------------------------------------------------------------*/
+section {
+  padding: 60px 0;
+}
+
+.section-bg {
+  background-color: lighten($primary, 48);
+}
+
+.section-title {
+  text-align: center;
+  padding: 30px 0;
+  position: relative;
+
+  h2 {
+    font-size: 32px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding-bottom: 0;
+    color: $secondary;
+    position: relative;
+    z-index: 2;
+  }
+
+  span {
+    position: absolute;
+    top: 30px;
+    color: lighten($secondary, 68);
+    left: 0;
+    right: 0;
+    z-index: 1;
+    font-weight: 700;
+    font-size: 52px;
+    text-transform: uppercase;
+    line-height: 0;
+  }
+
+  p {
+    margin-bottom: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  @media (max-width: 575px) {
+    h2 {
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+    span {
+      font-size: 38px;
+    }
+  }
+
+}
+
+/*--------------------------------------------------------------
+# Breadcrumbs
+--------------------------------------------------------------*/
+.breadcrumbs {
+  padding: 20px 0;
+  background-color: lighten($secondary, 70);
+  min-height: 40px;
+  margin-top: 78px;
+
+  @media (max-width: 992px) {
+    margin-top: 60px;
+  }
+
+  h2 {
+    font-size: 24px;
+    font-weight: 300;
+    margin: 0;
+    @media (max-width: 992px) {
+      margin: 0 0 10px 0;
+    }
+  }
+
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+
+    li + li {
+      padding-left: 10px;
+    }
+
+    li + li::before {
+      display: inline-block;
+      padding-right: 10px;
+      color: #6c757d;
+      content: "/";
+    }
+  }
+
+  @media (max-width: 768px) {
+    .d-flex {
+      display: block !important;
+
+    }
+
+    ol {
+      display: block;
+      li {
+        display: inline-block;
+      }
+
+    }
+  }
+}
+
+/*--------------------------------------------------------------
+# About Me
+--------------------------------------------------------------*/
+.about {
+
+  .content {
+
+    h3 {
+      font-weight: 700;
+      font-size: 26px;
+      color: $secondary;
+      text-transform: uppercase;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+      }
+
+      strong {
+        margin-right: 10px;
+      }
+
+      i {
+        font-size: 16px;
+        margin-right: 5px;
+        color: $primary;
+        line-height: 0;
+      }
+    }
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    .count-box {
+      width: 100%;
+  
+      i {
+        display: block;
+        font-size: 36px;
+        color: $primary;
+        float: left;
+        line-height: 0;
+      }
+  
+      span {
+        font-size: 36px;
+        line-height: 30px;
+        display: block;
+        font-weight: 700;
+        color: $secondary;
+        margin-left: 50px;
+      }
+  
+      p {
+        padding: 15px 0 0 0;
+        margin: 0 0 0 50px;
+        font-family: $font-primary;
+        font-size: 14px;
+        color: lighten($secondary, 15);
+      }
+  
+      a {
+        font-weight: 600;
+        display: block;
+        margin-top: 20px;
+        color: lighten($secondary, 15);
+        font-size: 15px;
+        font-family: $font-secondary;
+        transition: ease-in-out 0.3s;
+        &:hover {
+          color: lighten($secondary, 30);
+        }
+      }
+    }
+  
+  }
+
+  .image  {
+    background: url("../img/me.jpg") center center no-repeat;
+    background-size: cover;
+    min-height: 500px;
+  }
+
+  .skills-content {
+
+    margin-top: 30px;
+    .progress {
+      height: 60px;
+      display: block;
+      background: none;
+      border-radius: 0;
+    }
+    .progress .skill {
+      padding: 10px 0;
+      margin: 0 0 6px 0;
+      text-transform: uppercase;
+      display: block;
+      font-weight: 700;
+      font-family: $font-primary;
+      color: $secondary;
+    }
+    .progress .skill .val {
+      float: right;
+      font-style: normal;
+    }
+  
+    .progress-bar-wrap {
+      background: lighten($secondary, 65);
+    }
+  
+    .progress-bar {
+      width: 1px;
+      height: 10px;
+      transition: .9s;
+      background-color: $primary;
+    }
+  }
+
+}
+
+/*--------------------------------------------------------------
+# My Resume
+--------------------------------------------------------------*/
+.resume {
+
+  .resume-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: $secondary;
+  }
+  
+  .resume-item {
+    padding: 0 0 20px 20px;
+    margin-top: -2px;
+    border-left: 2px solid lighten($secondary, 30);
+    position: relative;
+
+    h4 {
+      line-height: 18px;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: $primary;
+      margin-bottom: 10px;
+    }
+
+    h5 {
+      font-size: 16px;
+      background: lighten($secondary, 68);
+      padding: 5px 15px;
+      display: inline-block;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      padding-left: 20px;
+
+      li {
+        padding-bottom: 10px;
+      }
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  .resume-item::before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50px;
+    left: -9px;
+    top: 0;
+    background: $white;
+    border: 2px solid lighten($secondary, 30);
+  }
+
+}
+
+/*--------------------------------------------------------------
+# My Services
+--------------------------------------------------------------*/
+.services {
+
+  .icon-box {
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    background: $white;
+    box-shadow: 0 10px 29px 0 rgba(68,88,144,.1);
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    border: 1px solid $white;
+  }
+
+  .icon {
+    margin: 0 auto 20px auto;
+    padding-top: 17px;
+    display: inline-block;
+    text-align: center;
+    border-radius: 50%;
+    width: 72px;
+    height: 72px;
+    background: lighten($primary, 36);
+
+    i {
+      font-size: 36px;
+      line-height: 1;
+      color: $primary;
+    }
+
+  }
+
+  .title {
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-size: 18px;
+    a {
+      color: #111;
+      transition: 0.3s;
+    }
+  }
+
+  .description {
+    font-size: 15px;
+    line-height: 28px;
+    margin-bottom: 0;
+  }
+
+  .icon-box:hover {
+    border-color: $primary;
+    .title a {
+      color: $primary;
+    }
+  }
+
+}
+
+/*--------------------------------------------------------------
+# Testimonials
+--------------------------------------------------------------*/
+.testimonials {
+  padding: 80px 0;
+  background: url("../img/testimonials-bg.jpg") no-repeat;
+  background-position: center center;
+  background-size: cover;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(darken($secondary, 20), 0.7);
+  }
+
+  .section-header {
+    margin-bottom: 40px;
+  }
+
+  .testimonial-item {
+    text-align: center;
+    color: $white;
+
+    .testimonial-img {
+      width: 100px;
+      border-radius: 50%;
+      border: 6px solid rgba($white, .15);
+      margin: 0 auto;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 10px 0 5px 0;
+      color: $white;
+    }
+
+    h4 {
+      font-size: 14px;
+      color: #ddd;
+      margin: 0 0 15px 0;
+    }
+
+    .quote-icon-left, .quote-icon-right {
+      color: rgba($white, .4);
+      font-size: 26px;
+    }
+
+    .quote-icon-left {
+      display: inline-block;
+      left: -5px;
+      position: relative;
+    }
+
+    .quote-icon-right {
+      display: inline-block;
+      right: -5px;
+      position: relative;
+      top:10px;
+    }
+
+    p {
+      font-style: italic;
+      margin: 0 auto 15px auto;
+      color: #eee;
+    }
+
+  }
+
+  .swiper-pagination {
+    margin-top: 20px;
+    position: relative;
+  
+    .swiper-pagination-bullet {
+      width: 12px;
+      height: 12px;
+      opacity: 1;
+      background-color: rgba($white, .4)
+    }
+  
+    .swiper-pagination-bullet-active {
+      background-color: $primary;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .testimonial-item p {
+      width: 80%;
+    } 
+  }
+
+}
+
+/*--------------------------------------------------------------
+# My Portfolio
+--------------------------------------------------------------*/
+.portfolio {
+
+  #portfolio-flters {
+    list-style:none;
+    margin-bottom: 20px;
+
+    li {
+      cursor: pointer;
+      display: inline-block;
+      margin: 0 10px 10px 10px;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1;
+      padding: 7px 10px ;
+      text-transform: uppercase;
+      color: $default;
+      transition: all 0.3s ease-in-out;
+      border: 2px solid $white;
+
+      &:hover, &.filter-active {
+        color: darken($primary, 10);
+        border-color: $primary;
+      }
+    }
+  }
+
+  .portfolio-item {
+    margin-bottom: 30px;
+    
+    .portfolio-img {
+      overflow: hidden;
+      img {
+        transition: all 0.8s ease-in-out;
+      }
+    }
+
+    .portfolio-info {
+      opacity: 0;
+      position: absolute;
+      left: 15px;
+      bottom: 0;
+      z-index: 3;
+      right: 15px;
+      transition: all ease-in-out 0.3s;
+      background: rgba(#000, .5);
+      padding: 10px 15px;
+
+      h4 {
+        font-size: 18px;
+        color: $white;
+        font-weight: 600;
+        color: $white;
+        margin-bottom: 0px;
+      }
+
+      p {
+        color: rgba($white, .8);
+        font-size: 14px;
+        margin-bottom: 0;
+      }
+
+      .preview-link, .details-link {
+        position: absolute;
+        right: 40px;
+        font-size: 24px;
+        top: calc(50% - 18px);
+        color: $white;
+        transition: 0.3s;
+        &:hover {
+          color: lighten($primary, 5);
+        }
+      }
+
+      .details-link {
+        right: 10px;
+      }
+      
+    }
+
+    &:hover {
+      .portfolio-img img {
+        transform: scale(1.2);
+      }
+      .portfolio-info {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+/*--------------------------------------------------------------
+# Portfolio Details
+--------------------------------------------------------------*/
+.portfolio-details {
+
+  padding-top: 40px;
+
+  .portfolio-details-slider {
+    img {
+      width: 100%;
+    }
+    .swiper-pagination {
+      margin-top: 20px;
+      position: relative;
+
+      .swiper-pagination-bullet {
+        width: 12px;
+        height: 12px;
+        background-color: #fff;
+        opacity: 1;
+        border: 1px solid $primary;
+      }
+
+      .swiper-pagination-bullet-active {
+        background-color: $primary;
+      }
+    }
+
+  }
+
+  .portfolio-info {
+    padding: 30px;
+    box-shadow: 0px 0 30px rgba($secondary, 0.08);
+
+    h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      font-size: 15px;
+
+      li +li {
+        margin-top: 10px;
+      }
+    }
+    
+  }
+
+  .portfolio-description {
+    padding-top: 30px;
+    
+    h2 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    p {
+      padding: 0;
+    }
+  }
+
+}
+
+/*--------------------------------------------------------------
+# Pricing
+--------------------------------------------------------------*/
+.pricing {
+
+  .box {
+    padding: 20px;
+    background: #fff;
+    text-align: center;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.12);
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  h3 {
+    font-weight: 400;
+    margin: -20px -20px 20px -20px;
+    padding: 20px 15px;
+    font-size: 16px;
+    font-weight: 600;
+    color: lighten($default, 20);
+    background: #f8f8f8;
+  }
+
+  h4 {
+    font-size: 36px;
+    color: $primary;
+    font-weight: 600;
+    font-family: $font-default;
+    margin-bottom: 20px;
+
+    sup {
+      font-size: 20px;
+      top: -12px;
+      left: -3px;
+    }
+
+    span {
+      color: #bababa;
+      font-size: 16px;
+      font-weight: 300;
+    }
+  }
+
+  ul {
+    padding: 0;
+    list-style: none;
+    color: $default;
+    text-align: center;
+    line-height: 20px;
+    font-size: 14px;
+
+    li {
+      padding-bottom: 16px;
+    }
+
+    i {
+      color: $primary;
+      font-size: 18px;
+      padding-right: 4px;
+    }
+    .na {
+      color: #ccc;
+      text-decoration: line-through;
+    }
+  }
+
+  .btn-wrap {
+    margin: 20px -20px -20px -20px;
+    padding: 20px 15px;
+    background: #f8f8f8;
+    text-align: center;
+  }
+
+  .btn-buy {
+    background: $primary;
+    display: inline-block;
+    padding: 8px 35px;
+    border-radius: 4px;
+    color: #fff;
+    transition: none;
+    font-size: 14px;
+    font-weight: 400;
+    font-family: $font-primary;
+    font-weight: 600;
+    transition: 0.3s;
+    &:hover {
+      background: lighten($primary, 10);
+    }
+  }
+
+  .featured {
+    h3 {
+      color: $white;
+      background: $primary;
+    }
+  }
+
+  .advanced {
+    width: 200px;
+    position: absolute;
+    top: 18px;
+    right: -68px;
+    transform: rotate(45deg);
+    z-index: 1;
+    font-size: 14px;
+    padding: 1px 0 3px 0;
+    background: $primary;
+    color: $white;
+  }
+
+}
+
+/*--------------------------------------------------------------
+# Contact Me
+--------------------------------------------------------------*/
+.contact {
+
+  .info-box {
+    color: $default;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(214, 215, 216, 0.6);
+    padding: 20px 0 30px 0;
+
+    i.bx {
+      font-size: 24px;
+      color: $primary;
+      border-radius: 50%;
+      padding: 15px;
+      background: lighten($primary, 37);
+    }
+
+    h3 {
+      font-size: 20px;
+      color: lighten($default, 20);
+      font-weight: 700;
+      margin: 10px 0;
+    }
+
+    p {
+      padding: 0;
+      line-height: 24px;
+      font-size: 14px;
+      margin-bottom: 0;
+    }
+
+  }
+
+  .social-links {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    a {
+      font-size: 18px;
+      display: inline-block;
+      color: lighten($secondary, 20);
+      line-height: 1;
+      margin: 0 8px;
+      transition: 0.3s;
+      padding: 14px;
+      border-radius: 50px;
+      border: 1px solid lighten($secondary, 62);
+      &:hover {
+        color: $white;
+        border-color: $primary;
+        background: $primary;
+      }
+    }
+  }
+
+  .php-email-form {
+
+    box-shadow: 0 0 30px rgba(214, 215, 216, 0.6);
+    padding: 27px;
+
+    .validate {
+      display: none;
+      color: red;
+      margin: 0 0 15px 0;
+      font-weight: 400;
+      font-size: 13px;
+    }
+    
+    .error-message {
+      display: none;
+      color: #fff;
+      background: #ed3c0d;
+      text-align: left;
+      padding: 15px;
+      font-weight: 600;
+      & br + br {
+        margin-top: 25px;
+      }
+    }
+    
+    .sent-message {
+      display: none;
+      color: #fff;
+      background: #18d26e;
+      text-align: center;
+      padding: 15px;
+      font-weight: 600;
+    }
+  
+    .loading {
+      display: none;
+      background: #fff;
+      text-align: center;
+      padding: 15px;
+  
+      &:before {
+        content: "";
+        display: inline-block;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        margin: 0 10px -6px 0;
+        border: 3px solid #18d26e;
+        border-top-color: #eee;
+        animation: animate-loading 1s linear infinite;
+      }
+  
+    }
+
+    input, textarea {
+      border-radius: 0;
+      box-shadow: none;
+      font-size: 14px;
+      &::focus {
+        background-color: $primary;
+      }
+    }
+
+    input {
+      padding: 10px 15px;
+    }
+
+    textarea {
+      padding: 12px 15px;
+    }
+
+    button[type="submit"] {
+      background: $primary;
+      border: 0;
+      padding: 10px 24px;
+      color: #fff;
+      transition: 0.4s;
+      border-radius: 5px;
+      &:hover {
+        background: lighten($primary, 10%);
+      }
+    }
+  
+  }
+  
+  @keyframes animate-loading {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}
+

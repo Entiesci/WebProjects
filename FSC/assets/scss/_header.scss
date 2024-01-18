@@ -1,0 +1,46 @@
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+#header {
+  height: 90px;
+  transition: all 0.5s;
+  z-index: 997;
+  transition: all 0.5s;
+  background: $white;
+  box-shadow: 0 4px 10px -3px hsla(0, 0%, 75%, 0.5);
+
+  .logo {
+
+    h1 {
+      font-size: 28px;
+      margin: 0;
+      line-height: 1;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    h1 a, h1 a:hover {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    img {
+      padding: 0;
+      margin: 0;
+      max-height: 40px;
+    }
+  }
+
+  @media (max-width: 992px) {
+    height: 70px;
+  }
+}
+
+.scrolled-offset {
+  margin-top: 90px;
+
+  @media (max-width: 992px) {
+    margin-top: 90px;
+  }
+}
