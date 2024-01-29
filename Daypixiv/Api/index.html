@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+	<title>API测试</title>
+	
+	
+	
+	
+	
+	
+	<script>
+		function go(){
+		var num = document.getElementById("pid").value;
+		location.href="https://pixiv.cat/"+num+".jpg"
+		}
+		
+		function bing(){
+		var num = document.getElementById("wd").value;
+		location.href="https://cn.bing.com/search?q="+num+" "
+		}
+		
+		function google(){
+		var num = document.getElementById("wd").value;
+		location.href="https://www.google-fix.com/search?q="+num+" "//123
+		}
+		
+		function three60(){
+		var num = document.getElementById("wd").value;
+		location.href="https://www.so.com/s?ie=utf-8&fr=so.com&src=home_so.com&q="+num+" "
+		}
+		
+		function sogo(){
+		var num = document.getElementById("wd").value;
+		location.href="https://www.sogou.com/web?query="+num+" "
+		}
+
+		function pic(){
+		var num = document.getElementById("dec").value;
+		location.href="https://api.r10086.com/"+num+"1.php"
+		}
+
+		function googt(){
+		var num = document.getElementById("tex").value;
+		location.href="https://translate.google.cn/?hl=zh-CN&sl=zh-CN&tl=en&text="+num+"&op=translate"
+		}
+
+		function baidt(){
+		var num = document.getElementById("tex").value;
+		location.href="https://fanyi.baidu.com/?#zh/en/"+num+""
+		}
+	</script>
+</head>
+	
+<body>
+
+<h1>一言</h1>
+	<p id="hitokoto"><a href="#" id="hitokoto_text">:D 获取中...</a></p>
+ <script src="https://v1.hitokoto.cn/?encode=js&select=%23hitokoto" defer></script>
+	
+<h1>搜索</h1>
+	
+     <input type="text" id="wd">
+	<input type="submit" onclick="bing()" value="bing两下">
+	<input type="submit" onclick="baidu()" value="百度一下">
+	<input type="submit" onclick="google()" value="google go!">
+	<input type="submit" onclick="three60()" value="360">
+	<input type="submit" onclick="sogo()" value="搜狗">
+
+<h1>翻译</h1>
+	
+	<input type="text" id="tex">
+   <input type="submit" onclick="googt()" value="google中英">
+   <input type="submit" onclick="baidt()" value="百度中英">
+	<!-- Controlgroup -->	
+<script>
+	
+	function tran(){
+	var tran = document.getElementsByName("tran").value;
+	var num = document.getElementsById("trat").value;
+	
+	location.href="https://translate.google.cn/?hl=zh-CN&sl=zh-CN&tl=en&text="+num+"&op=translate"
+	}
+
+</script>
+	
+<fieldset>
+	<legend>快捷翻译</legend>
+	<div id="controlgroup">
+		<select id="translate">
+			<option>中-英语</option>
+			<option>中文-日语</option>
+			<option>中文-俄语</option>
+			<option>SUV</option>
+			<option>Luxury</option>
+			<option>Truck</option>
+			<option>Van</option>
+		</select>
+
+		<label for="transmission-standard">谷歌</label>
+		<input type="radio" name="tran" id="transmission-standard">
+
+		<label for="transmission-automatic">百度</label>
+		<input type="radio" name="tran" id="transmission-automatic">
+		<label for="insurance">————翻译内容</label>
+		<input type="text" id="tex">
+		<input type="submit" onclick="googt()" value="翻译">
+	</div>
+</fieldset>
+	
+
+<h1>pixiv</h1>
+	
+	搜索(8nums)：<input type="text" value="搜索画作ID..." id="pid"/><input type="submit" onClick="go()">
+	<br><br>
+	按分类搜索<input type="text" id="dec">
+	<input type="submit" onclick="pic()" value="PIC">
+	<br>
+	所有分类:
+	<small>动漫综合
+		火影忍者
+		海贼王
+		进击的巨人
+		从零开始的异世界生活
+		SAO
+		缘之空
+		东方project<br>
+		猫娘<br>
+		风景系列<br>
+		物语系列
+		少女前线
+		明日方舟
+		重装战姬
+		P站系列<br>
+		CG系列
+		守望先锋
+		王者荣耀
+		少女写真<br>
+		随机视频<br>
+		</small>
+	<br>												 
+	<h2>随机图片</h2>
+	<p>服务已转移，请访问<a href="https://ntsc-yrx.github.io/Menu/Daypixiv/">Day Pixiv</a></p>
+	<a href="https://api.jysafe.cn/pixiv/?color=585858&limit=10">我很固执</a>
+	
+	
+</body>
+</html>

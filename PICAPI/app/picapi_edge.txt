@@ -1,0 +1,9 @@
+PicApi
+
+Edge版使用教程
+适用于安装了Edge的Window10/7电脑
+优势：同步更新，分辨率高，功能丰富
+
+1.创建一个新快捷方式
+2.右键选“属性”
+3.将“目标”更改为“"C:\Program Files (x86)\Microsoft\Edge\Application\msedge_proxy.exe" --profile-directory=Default --app-id=bicmlkjokhojmlmdpeaoedpnlfokocgk --app-url=https://ntsc-yrx.github.io/File/PICAPI/index.html --app-launch-source=4”

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>随机P站图片</title>
+	</head>
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<body>
+		<h1>提示</h1>
+	为防止CORS拦截，请下载此插件<a href="https://chrome.google.com/webstore/detail/moesif-origin-cors-change/digfbfaphojjndkpccljibejjbppifbc">一个去chrome商店的连接</a><br>
+  如果上不去，请下载一个可以上google的插件，推荐iguge<br>
+  或者你可以到其它的扩展商店看看有没有解除CORS的插件<br>
+  <a href="old.html">回到旧版/不需要CORS插件的版本</a>
+     <br>
+  <h1>图片</h1>
+  <input type="number" id="ppid" placeholder="输入PID">
+	<input type="button" id="src" value="搜索图片" />(如输入不存在的图片则不会有信息)<span id="msg"></span>
+  <br>
+  <input type="button" value="随机图片" id="btn" />(随机的图片只有miku哦！)
+        <fieldset>
+          <legend>图片信息 </legend>
+          图片标题：<span id="title"></span><br>
+          图片数量：<span id="nums"></span>
+          <fieldset>
+            <legend>网址</legend>
+            <ul>
+              <li>图片网址（代理）：<span id="purl2"></span></li>
+              <li>图片网址（原链）：<span id="purl"></span></li>
+            </ul>
+          </fieldset>
+          <fieldset>
+            <legend>简介</legend>
+            <ul>
+              <li>简介：<br><span id="cap"></span></li>
+              <li>标签：<br><span id="tags"></span></li>
+            </ul>
+          </fieldset>
+          <fieldset>
+            <legend>ID及作者</legend>
+            <ul>
+              <li>作者UID：<span id="uid"></span></li>
+              <li>作者：<span id="user"></span></li>
+              <li>图片PID：<span id="pid"></span></li>
+            </ul>
+          </fieldset>
+           
+            </fieldset>
+            <br>
+            <fieldset>
+              <legend>图片原图</legend>
+                
+                <img id="pic" width="100%" style="margin:0 auto;">   
+                </fieldset>
+
+		</div>
+	</body>
+<script type="application/javascript">
+        //监听按钮点击事件
+		$("#btn").click(function() {
+            // 同文件夹下的json文件路径
+            var ppid = document.getElementById("ppid").value;
+            /*CORS!
+            var url = "https://api.fczbl.vip/pixiv/v2/?type=rank"
+            var url = "api.ardor.one/illust/"+ppid+""*/
+            var url = "https://api.lovemiku.online/miku/"
+            // 申明一个XMLHttpRequest
+            var request = new XMLHttpRequest();
+            // 设置请求方法与路径
+            request.open("get", url);
+            // 不发送数据到服务器
+            request.send(null);
+            //XHR对象获取到返回信息后执行
+            request.onload = function () {
+                // 返回状态为200，即为数据获取成功
+                if (request.status == 200) {
+                    //将数据保存至data
+                    var data = JSON.parse(request.responseText);
+                    //控制台输出
+                    console.log(data);
+                    //选择内容保存
+
+                    var purl2=data.url;
+                    var uid=data.uid;
+                    var pid=data.pid;
+                    var title=data.title;
+                    var cap="未知";
+
+                    document.getElementById("purl2").innerHTML=purl2;
+                    document.getElementById("pic").src = purl2;
+                    document.getElementById("uid").innerHTML=uid;
+                    document.getElementById("pid").innerHTML=pid;
+                    document.getElementById("title").innerHTML=title;
+                    document.getElementById("cap").innerHTML=cap;
+                }
+            }
+		})
+</script>
+
+<script type="application/javascript">
+    //监听按钮点击事件
+  $("#src").click(function() {
+            var ppid = document.getElementById("ppid").value;
+            var url = "https://api.ardor.one/illust/"+ppid+""
+            // 申明一个XMLHttpRequest
+            var request = new XMLHttpRequest();
+            // 设置请求方法与路径
+            request.open("get", url);
+            // 不发送数据到服务器
+            request.send(null);
+            //XHR对象获取到返回信息后执行
+            request.onload = function () {
+                // 返回状态为200，即为数据获取成功
+                if (request.status == 200) {
+                    //将数据保存至data
+                    var data = JSON.parse(request.responseText);
+                    //控制台输出
+                    console.log(data);
+                    //选择内容保存
+                    var purl2="https://pixiv.cat/"+ppid+".jpg";
+                    //错误信息
+                    //var msg=data.error.user_message;
+                    //document.getElementById("msg").innerHTML=msg;
+
+                    var purl=data.illust.meta_single_page.original_image_url;
+                    var uid=data.illust.user.id;
+                    var pid=data.illust.id;
+                    var title=data.illust.title;
+                    var cap=data.illust.caption; 
+                    var user=data.illust.user.name;
+                    var tags=" ";
+                    for (i = 0; i < 3; i++) {
+                      tags += data.illust.tags[i].name + "<br>";
+                    }
+                    var nums=data.illust.page_count;
+                    
+                    document.getElementById("purl2").innerHTML=purl2;
+                    document.getElementById("purl").innerHTML=purl;
+                    document.getElementById("pic").src = purl2;
+                    document.getElementById("uid").innerHTML=uid;
+                    document.getElementById("pid").innerHTML=pid;
+                    document.getElementById("title").innerHTML=title;
+                    document.getElementById("cap").innerHTML=cap;
+                    document.getElementById("user").innerHTML=user;
+                    document.getElementById("tags").innerHTML=tags;
+                    document.getElementById("nums").innerHTML=nums;
+
+            }
+        }
+})
+</script>
+</html>
