@@ -9,8 +9,10 @@
 
     </head>
 
-<body>
+<body style="background-color: #000000">
+<p>跳转中</p>
 
+<p>by Ntsc. 2024</p>
 
 
 
@@ -25,8 +27,14 @@
     }
 
     console.log(getQueryString('p')) // mick
+
+    p = getQueryString('p');
+    f = p.charAt(0);
+
     // 跳转到指定的 URL 地址
-    location.href = "https://www.luogu.com.cn/problem/"+getQueryString('p');
+    if (f == 'P')
+        location.href = "https://www.luogu.com.cn/problem/" + p;
+    else location.href = "https://cn.bing.com/search?q=" + p;
 
 </script>
 
