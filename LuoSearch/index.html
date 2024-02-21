@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" id="pc">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <head>
+
+    </head>
+
+<body>
+
+
+
+
+
+</body>
+
+<script>
+    function getQueryString(p) {
+        const url_string = window.location.href;
+        const url = new URL(url_string);
+        return url.searchParams.get(p);
+    }
+
+    console.log(getQueryString('p')) // mick
+    // 跳转到指定的 URL 地址
+    location.href = "https://www.luogu.com.cn/problem/"+getQueryString('p');
+
+</script>
+
+</html>
