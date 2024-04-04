@@ -32,8 +32,8 @@
     f = p.charAt(0);
 
     // 跳转到指定的 URL 地址
-    if (f == 'P')
-        location.href = "https://www.luogu.com.cn/problem/" + p;
+    if (f == 'P')location.href = "https://www.luogu.com.cn/problem/" + p;
+    else if(f == 'L')location.href = "https://www.luogu.com.cn/problem/list?keyword=" + p.substring(1);
     else location.href = "https://cn.bing.com/search?q=" + p;
 
 </script>

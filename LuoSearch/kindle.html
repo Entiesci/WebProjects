@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh" xml:lang="en" id="pc">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="description" content="Fans search Pixiv图片搜索">
+    <meta name="keywords" content="search, search engine, pixiv, photos, pictures">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="searx/0.14.0">
+    <meta name="referrer" content="no-referrer">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Fans Search - 扇搜</title>
+
+    <link rel="stylesheet" href="./files/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="./files/logicodev.min.css" type="text/css">
+
+
+
+    <style>
+        body {
+            background-image: url("https://api.skyil.cn/random?size=pc");
+            background-size: cover;
+            background-position: center
+        }
+
+        .one-pan-tip {
+            cursor: pointer;
+        }
+
+        .one-pan-tip::before {
+            background-position: center;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            box-sizing: border-box;
+            width: 1em;
+            height: 1em;
+            margin: 0 1px .15em 1px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        .one-pan-tip-success::before {
+            content: '';
+            background-image: url()
+        }
+    </style>
+    <meta name="ljjc::status" content="on">
+    <noscript>
+        <style type="text/css">
+            .tab-content>.active_if_nojs,
+            .active_if_nojs {
+                display: block !important;
+                visibility: visible !important;
+            }
+
+            .margin_top_if_nojs {
+                margin-top: 20px;
+            }
+
+            .hide_if_nojs {
+                display: none !important;
+                overflow: none !important;
+            }
+
+            .disabled_if_nojs {
+                pointer-events: none;
+                cursor: default;
+                text-decoration: line-through;
+            }
+        </style>
+    </noscript>
+</head>
+
+<body>
+    <div class="searx-navbar">
+        <span class="pull-right">
+            <a href="https://ntsc-yrx.github.io/Menu" class="entro-nav-btn"
+                style="background-image: url(https://cdn.leakzero.com/fe/menu_ic.png); background-repeat: no-repeat; background-size: 20px auto;background-position: right top;margin-top: 2px;"
+                data-bg="https://cdn.leakzero.com/fe/menu_ic.png"
+                data-active-bg="https://cdn.leakzero.com/fe/menu_ic.png"></a>
+
+        </span>
+    </div>
+    <div class="main">
+
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="text-center col-sm-12 col-md-12">
+                    <h1 id="main-logo" class="text-hide center-block">
+                        <img class="center-block img-responsive" src="./files/logo.png" alt="searx logo">
+                        Fans search
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-center col-sm-12 col-md-12">
+
+                    <style>
+                        .col-sm-12,
+                        .col-md-12 {
+                            position: static;
+                        }
+                    </style>
+
+                    <form method="GET" action="https://www.luogu.com.cn/problem/list" id="search_form">
+                        <!-- col-md-6 col-md-offset-3 -->
+                        <div class="input-group search-container full">
+                            <h3>搜索洛谷</h3> <input type="search" name="keyword" class="form-control input-lg autofocus"
+                                id="q" placeholder="输入 题目名称" autocomplete="off" value="">
+                            <div class="bang-container" id="bang-container">
+                                <div class="bang-boxs">
+                                    <div class="bang-left bangs" id="bang-left"></div>
+                                    <div class="bang-right bangs" id="bang-right"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+
+                    <form method="GET" action="https://cn.bing.com/search" id="search_form">
+                        <!-- col-md-6 col-md-offset-3 -->
+                        <div class="input-group search-container full">
+                            <h3>搜索 BING</h3> <input type="search" name="q" class="form-control input-lg autofocus"
+                                id="q" placeholder="输入 内容" autocomplete="off" value="">
+                            <div class="bang-container" id="bang-container">
+                                <div class="bang-boxs">
+                                    <div class="bang-left bangs" id="bang-left"></div>
+                                    <div class="bang-right bangs" id="bang-right"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+
+
+
+
+                </div>
+                <div class="footer">
+                    <div class="content">
+                        <div class="image-click">
+                            <img src="./files/arrow_up@3x.png" id="arrowImage">
+                        </div>
+                        <div class="header">
+                            <div class="boxs" align="center">
+                                <div class="box">
+                                    <div class="box-text"><a href="https://www.luogu.com.cn/">去洛谷</a></div>
+                                </div>
+                                <div class="box">
+                                    <div class="box-text"><a href="https://codeforces.com/">去CF</a></div>
+                                </div>
+                                <div class="box">
+                                    <div class="box-text"><a href="https://atcoder.jp/">去ATCODER</a></div>
+                                </div>
+                                <div class="box">
+                                    <div class="box-text"><a href="http://noip.ac.cn/p">去NOIP.AC.CN</a></div>
+                                </div>
+                                <!-- <div class="box">
+                                    <div class="box-text"><a href="http://noip.ac.cn/p">去NOIP.AC.CN</a></div>
+                                </div> -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+</body>
+
+</html>
