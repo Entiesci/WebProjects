@@ -30,10 +30,12 @@
 
     p = getQueryString('p');
     f = p.charAt(0);
+    s = p.charAt(0)+p.charAt(1);
 
     // 跳转到指定的 URL 地址
     if (f == 'P')location.href = "https://www.luogu.com.cn/problem/" + p;
     else if(f == 'L')location.href = "https://www.luogu.com.cn/problem/list?keyword=" + p.substring(1);
+    else if(s == 'CF')location.href = "https://www.luogu.com.cn/problem/list?keyword=" + p + "&type=CF&pagse=1";
     else location.href = "https://cn.bing.com/search?q=" + p;
 
 </script>
