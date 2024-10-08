@@ -26,14 +26,14 @@
 		Bmob.updateUserPassword(objectId,data).then(res => {
 			console.log(res)
   		}).catch(err => {
-    		location.href="https://ntsc-yrx.github.io/Error/index.html"
+    		location.href="https://entiesci.github.io/Error/index.html"
   		})
 	}
 	function login(){
 		Bmob.User.login(document.getElementById("username").value,document.getElementById("pwd").value).then(res => {
 			
 		}).catch(err => {
-			location.href="https://ntsc-yrx.github.io/Error/index.html"
+			location.href="https://entiesci.github.io/Error/index.html"
 		});
 	}
 	function upf(){
@@ -47,7 +47,7 @@
   	file.save().then(res => {
 		console.log(res.length);
 		console.log(res);
-		location.href="https://ntsc-yrx.github.io/Error/index.html"
+		location.href="https://entiesci.github.io/Error/index.html"
   	})
 }
 	}

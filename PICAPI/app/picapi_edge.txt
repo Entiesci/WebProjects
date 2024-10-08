@@ -6,4 +6,4 @@ Edge版使用教程
 
 1.创建一个新快捷方式
 2.右键选“属性”
-3.将“目标”更改为“"C:\Program Files (x86)\Microsoft\Edge\Application\msedge_proxy.exe" --profile-directory=Default --app-id=bicmlkjokhojmlmdpeaoedpnlfokocgk --app-url=https://ntsc-yrx.github.io/File/PICAPI/index.html --app-launch-source=4”
+3.将“目标”更改为“"C:\Program Files (x86)\Microsoft\Edge\Application\msedge_proxy.exe" --profile-directory=Default --app-id=bicmlkjokhojmlmdpeaoedpnlfokocgk --app-url=https://entiesci.github.io/File/PICAPI/index.html --app-launch-source=4”

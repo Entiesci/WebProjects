@@ -1,3 +1,3 @@
 # Ntsc的收藏室
-Ntsc-Yrx.github.io   
+entiesci.github.io   
 by Ntsc-yrx
