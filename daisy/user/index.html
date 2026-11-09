@@ -1,0 +1,201 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ntscの收藏室 - 我的</title>
+<!-- for-mobile-apps -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<meta name="keywords" content="Profile Widget Responsive, Login form web template, Sign up Web Templates, Flat Web Templates, Login signup Responsive web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<!-- //for-mobile-apps -->
+<link href='//fonts.googleapis.com/css?family=Poppins:400,600,500,700' rel='stylesheet' type='text/css'>
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<script src="js/jquery-1.11.1.min.js"></script> 
+<!-- //js -->
+<!-- Using Jquery -->
+    <script>
+    jQuery(document).ready(function($) {
+        $('#sidebar-btn').click(function() {
+            $('#sidebar').toggleClass('visible');
+        });
+    });
+    </script>
+<!--circlechart-->
+<script src="js/jquery.circlechart.js"></script>
+<!--circlechart-->
+<script src="js/Bmob-2.2.5.min.js"></script>
+<script>
+	Bmob.initialize("14886c61807ec8a5", "361123");
+	Bomb.debug(true)
+	function get(){
+		let user = Bmob.User.current();
+		var spanTag = document.getElementById("info");
+		spanTag.innerHTML = user.username;
+		}
+	</script>
+
+</head>
+<body>
+<div class="content">
+	<h1>你的信息&nbsp;</h1>
+		<div class="main">
+		<div class="header">
+		<div class="hd-img">
+			<img src="images/2.jpg" alt=" " class="img-responsive" />
+			</div>
+			
+			<h2><span id="info"></span></h2>
+			
+			<div class="skill-info">
+				<ul>
+					<li><div class="demo demo-1" data-percent="20"></div><span>snoozed</span></li>
+					<li><div class="demo demo-2" data-percent="74"></div><span>completed</span> </li>
+					<li><div class="demo demo-3" data-percent="30"></div><span>overdue</span> </li>
+				</ul>
+				<script>
+					$('.demo-1').percentcircle({
+						animate : true,
+						fillColor: 'rgb(119, 161, 173)'
+					});
+						$('.demo-2').percentcircle({
+						animate : true,
+						fillColor: 'rgb(0, 197, 255)'
+					});
+						$('.demo-3').percentcircle({
+						animate : true,
+						fillColor: 'rgb(119, 221, 255)'
+					});
+				</script>
+			</div>
+		</div>
+		<section class="slider">
+			<div class="flexslider">
+				<ul class="slides">
+					<li>
+						<div class="header-bottom_3">
+							<div class="jan">
+								<h3>May 2016</h3>
+							</div>
+							<div class="jan-bottom">
+								<div class="jan-bottom-grid">
+									
+									<div class="jan-bottom-grid-left1">
+										<p>Finish Home Screen</p>
+									</div>
+									<div class="jan-bottom-grid-right">
+										<p>8 AM</p>
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="jan-bottom-grid">
+									
+									<div class="jan-bottom-grid-left1">
+										<p>Lunch Break</p>
+									</div>
+									<div class="jan-bottom-grid-right">
+										<p>12 PM</p>
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="jan-bottom-grid">
+									
+									<div class="jan-bottom-grid-left1">
+										<p>Design Meeting</p>
+									</div>
+									<div class="jan-bottom-grid-right">
+										<p>4 PM</p>
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="jan-bottom-grid">
+									
+									<div class="jan-bottom-grid-left1">
+										<p>Dinner</p>
+									</div>
+									<div class="jan-bottom-grid-right">
+										<p>8 PM</p>
+									</div>
+									<div class="clear"></div>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="header-bottom_3">
+							<div class="jan">
+								<h3>June 2016</h3>
+							</div>
+							<div class="jan-bottom">
+								<div class="jan-bottom-grid">
+									
+									<div class="jan-bottom-grid-left1">
+										<p>Finish Home Screen</p>
+									</div>
+									<div class="jan-bottom-grid-right">
+										<p>10 AM</p>
+									</div>
+									<div class="clear"></div>
+								</div>
+								
+								<div class="jan-bottom-grid">
+									
+									<div class="jan-bottom-grid-left1">
+										<p>Lunch Break</p>
+									</div>
+									<div class="jan-bottom-grid-right">
+										<p>1 PM</p>
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="jan-bottom-grid">
+									
+									<div class="jan-bottom-grid-left1">
+										<p>Design Meeting</p>
+									</div>
+									<div class="jan-bottom-grid-right">
+										<p>5 PM</p>
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="jan-bottom-grid">
+									
+									<div class="jan-bottom-grid-left1">
+										<p>Dinner</p>
+									</div>
+									<div class="jan-bottom-grid-right">
+										<p>9 PM</p>
+									</div>
+									<div class="clear"></div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</section>
+						<!--FlexSlider-->
+								<link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen" />
+								<script defer src="js/jquery.flexslider.js"></script>
+								<script type="text/javascript">
+								$(window).load(function(){
+								  $('.flexslider').flexslider({
+									animation: "slide",
+									start: function(slider){
+									  $('body').removeClass('loading');
+									}
+								  });
+								});
+							  </script>
+						<!--End-slider-script-->
+	</div>
+	<p class="footer">&copy; 2016 Profile Widget. All Rights Reserved | Design by <a href="http://w3layouts.com/"> W3layouts</a></p>
+</div>
+
+</body>
+</html>

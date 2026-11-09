@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>使用jquery读取json格式文件</title>
+	</head>
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<body>
+		
+        <fieldset>
+          <legend>图片信息<input type="button" value="随机" id="btn" /></legend>
+            <ul>
+              <li>图片网址：<span id="purl"></span></li>
+             
+            </ul>
+                
+            </fieldset>
+            <br>
+            <img id="pic" width="100%" style="margin:0 auto;">
+
+		</div>
+	</body>
+	<script type="application/javascript">
+        //监听按钮点击事件
+		$("#btn").click(function() {
+            // 同文件夹下的json文件路径
+            var url = "https://api.btstu.cn/sjbz/api.php?lx=dongman&format=json"
+            // 申明一个XMLHttpRequest
+            var request = new XMLHttpRequest();
+            // 设置请求方法与路径
+            request.open("get", url);
+            // 不发送数据到服务器
+            request.send(null);
+            //XHR对象获取到返回信息后执行
+            request.onload = function () {
+                // 返回状态为200，即为数据获取成功
+                if (request.status == 200) {
+                    //将数据保存至data
+                    var data = JSON.parse(request.responseText);
+                    //控制台输出
+                    console.log(data);
+                    //选择内容保存
+                    var purl=data.imgurl;
+                    document.getElementById("purl").innerHTML=purl;
+                    document.getElementById("pic").src = purl;
+                }
+            }
+		})
+	</script>
+</html>
